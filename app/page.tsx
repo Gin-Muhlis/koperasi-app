@@ -1,6 +1,5 @@
 import DefaultLayout from '@/components/defaultLayout'
-import Image from 'next/image'
-import Link from 'next/link'
+import FormLogin from './components/formLogin'
 
 export default function Home() {
   return (
@@ -17,28 +16,8 @@ export default function Home() {
           <div className="basis-1/2 h-full bg-white p-4 md:p-8 flex flex-col items-center justify-center">
               <span className="text-lg font-bold text-sky-400 mb-5">Masuk Akun</span>
             
-              <form className='w-full'>
-                <div className="w-full mb-3">
-                  {/* <label htmlFor="email" className='label text-black text-sm'>Email</label> */}
-                  <div className="flex items-start justify-start w-full h-8 mb-4">
-                    <div className="w-1 h-full bg-sky-400"></div>
-                    <input type="text" className="flex-1 p-2 bg-slate-200 h-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none focus:border focus:border-solid " placeholder='email@domain.com' />
-                  </div>
-                  <div className="flex items-start justify-start w-full h-8 mb-4">
-                    <div className="w-1 h-full bg-sky-400"></div>
-                    <input type="text" className="flex-1 p-2 bg-slate-200 h-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none focus:border focus:border-solid " placeholder='Password' />
-                  </div>
-                  <Link href="/">
-                    <span className='block text-xs text-red-500 mb-5'>Lupa Password?</span>
-                  </Link>
-                  <button type='submit' className='outline-none border-none bg-sky-400 text-white w-full rounded-full p-1 mb-3'>
-                    Masuk
-                  </button>
-                    <span className='block text-xs text-black mb-4 text-center'>
-                    Belum punya akun? <Link href="/register"><span className='text-sky-500'>Daftar</span></Link>
-                    </span>
-                </div>
-              </form>
+             <FormLogin />
+
           </div>
       </div>
     </DefaultLayout>

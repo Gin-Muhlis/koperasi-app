@@ -1,4 +1,3 @@
-import { bgColor } from '@/constants/color'
 import React, { ReactNode } from 'react'
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
