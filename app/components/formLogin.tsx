@@ -31,7 +31,7 @@ const FormLogin = () => {
                 password: password,
                 callbackUrl: '/'
             })
-
+            console.log(res)
             if (res.ok && res.status === 200) {
                 setIsLoading(false)
 
@@ -78,7 +78,7 @@ const FormLogin = () => {
                         <span className='block text-xs text-red-500 mb-5'>Lupa Password?</span>
                     </Link>
                     
-                    <button type='submit' className='outline-none border-none bg-amber-400 text-white w-full rounded-full p-1 h-9 mb-3' disabled={isLoading}>
+                    <button type='submit' className='outline-none border-none bg-amber-400 text-white w-full rounded-full p-1 h-9 mb-3 flex items-center justify-center' disabled={isLoading}>
                         {isLoading ? <span className="loading loading-infinity loading-md"></span> : 'Masuk'}
                     </button>
                     <span className='block text-xs text-black mb-4 text-center'>

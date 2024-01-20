@@ -16,3 +16,20 @@ export type SideNavItem = {
 export interface IProps {
   searchParams?: { [key: string]: string | string[] | undefined };
 }
+
+export type InitialState = {
+  value: RegisterState;
+};
+
+export type RegisterState = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  gender: string;
+  religion: string;
+  role: string;
+  imageProfile: any;
+  password: string;
+  confirmPassword: string;
+};
