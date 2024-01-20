@@ -10,11 +10,11 @@ type User = {
   token: string;
 };
 
-const authOption: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  secret: "technoG77",
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     Credentials({
       type: "credentials",
@@ -39,13 +39,13 @@ const authOption: NextAuthOptions = {
         if (response.status !== 200 && !response.data) {
           return null;
         } else {
-          return response.data
+          return response.data;
         }
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, account, profile, user }: any) {
+    async jwt({ token, account, user }: any) {
       if (account?.provider === "credentials") {
         token.email = user.data?.email;
         token.username = user.data?.username;
@@ -71,12 +71,13 @@ const authOption: NextAuthOptions = {
 
       return session;
     },
+    
   },
   pages: {
     signIn: "/",
   },
 };
 
-const handler = NextAuth(authOption);
+const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST, authOptions };

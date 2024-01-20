@@ -1,9 +1,14 @@
+"use client"
+
+import { SessionProvider } from 'next-auth/react'
 import React, { ReactNode } from 'react'
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
     return (
-        <div className="w-full min-h-screen flex items-center justify-center px-5 py-10 bg-[#1E1C30]">
-            {children}
+        <div className="w-full min-h-screen">
+            <SessionProvider>
+                {children}
+            </SessionProvider>
         </div>
     )
 }
