@@ -3,13 +3,6 @@ import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 
-type User = {
-  email: string;
-  username: string;
-  role: string;
-  token: string;
-};
-
 const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
@@ -47,26 +40,26 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, user }: any) {
       if (account?.provider === "credentials") {
-        token.email = user.data?.email;
-        token.username = user.data?.username;
+        token.name = user.name;
         token.role = user.role;
-        token.token = user.token;
+        token.imageProfile = user.imageProfile;
+        token.accessToken = user.accessToken;
       }
 
       return token;
     },
     async session({ session, token }: any) {
-      if ("email" in token) {
-        session.user.email = token.email;
-      }
-      if ("username" in token) {
-        session.user.username = token.username;
+      if ("name" in token) {
+        session.user.name = token.name;
       }
       if ("role" in token) {
         session.user.role = token.role;
       }
-      if ("token" in token) {
-        session.user.token = token.token;
+      if ("imageProfile" in token) {
+        session.user.role = token.imageProfile;
+      }
+      if ("accessToken" in token) {
+        session.user.accessToken = token.accessToken;
       }
 
       return session;
@@ -74,7 +67,7 @@ const authOptions: NextAuthOptions = {
     
   },
   pages: {
-    signIn: "/",
+    signIn: "/login",
   },
 };
 

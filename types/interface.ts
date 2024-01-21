@@ -1,8 +1,8 @@
 export type Auth = {
   name: string;
-  email: string;
   role: string;
-  token: string;
+  imageProfile: string;
+  accessToken: string;
 };
 
 export type SideNavItem = {
@@ -32,4 +32,19 @@ export type RegisterState = {
   imageProfile: any;
   password: string;
   confirmPassword: string;
+  isLoading: boolean;
+  error: any;
 };
+
+export type Member = {
+  name: string;
+  uuid: string;
+  email: string;
+  phone_number: number;
+  address: string;
+  gender: string;
+  religion: string;
+  role: string;
+  imageProfile: string;
+  position: string;
+}

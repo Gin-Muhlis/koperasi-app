@@ -9,15 +9,15 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   },
   {
     title: 'Data',
-    path: '/data',
+    path: '/super-admin/data',
     icon: <Icon icon="lucide:folder" width="24" height="24" />,
     submenu: true,
     subMenuItems: [
-      { title: 'Member', path: '/data/member' },
-      { title: 'Kategori', path: '/data/category' },
-      { title: 'Sub-kategori', path: '/data/subKategori' },
-      { title: 'Produk', path: '/data/product' },
-      { title: 'Barang', path: '/data/stuff' },
+      { title: 'Member', path: '/super-admin/data/member' },
+      { title: 'Kategori', path: '/super-admin/data/category' },
+      { title: 'Sub-kategori', path: '/super-admin/data/subKategori' },
+      { title: 'Produk', path: '/super-admin/data/product' },
+      { title: 'Barang', path: '/super-admin/data/stuff' },
     ],
   },
 ];

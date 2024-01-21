@@ -31,7 +31,7 @@ const FormLogin = () => {
                 password: password,
                 callbackUrl: '/'
             })
-            console.log(res)
+            
             if (res.ok && res.status === 200) {
                 setIsLoading(false)
 

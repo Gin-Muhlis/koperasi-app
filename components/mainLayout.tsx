@@ -6,18 +6,20 @@ import { SessionProvider } from 'next-auth/react'
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className='flex min-h-screen items-start justify-start bg-[#1E1C30]'>
-      <Sidebar />
-      <div className="flex-1">
-        <Header />
-        <main className='p-5'>
-          <SessionProvider>
-            {children}
-          </SessionProvider>
-        </main>
-      </div>
+    <>
+      <SessionProvider>
+        <div className='flex min-h-screen items-start justify-between bg-zinc-200'>
+          <Sidebar />
+          <div className="w-full relative md:ml-72">
+            <Header />
+            <main className='w-full p-5'>
+              {children}
+            </main>
+          </div>
+        </div>
+      </SessionProvider>
+    </>
 
-    </div>
   )
 }
 

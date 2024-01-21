@@ -3,26 +3,29 @@
 import { SIDENAV_ITEMS } from '@/constants/SIDENAV_ITEM'
 import { SideNavItem } from '@/types/interface'
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
 
 const Sidebar = () => {
+  const {data: session} = useSession();
+
   return (
-    <div className='w-[300px] h-screen overflow-y-scroll p-4 bg-[#191C24] sidenav'>
+    <div className='w-72 flex-1 h-screen fixed overflow-y-scroll p-4 bg-gradient-to-r from-[rgba(249,232,51,1)] to-[rgba(250,196,59,1)] sidenav'>
       <div className="w-full bg-white rounded-md p-3 flex items-center justify-start gap-3 mb-8">
         <div className="w-11 h-11 rounded-full bg-red-500"></div>
+        <img src={session?.user.imageProfile} alt="" className="w-11 h-11 rounded-full object-cover" />
         <div>
-          <span className="text-sm text-black font-extrabold block">Gin Gin NM</span>
-          <span className="text-xs text-black opacity-70 italic font-semibold">super-admin</span>
+          <span className="text-sm text-black font-extrabold block">{session?.user.name}</span>
+          <span className="text-xs text-black opacity-70 italic font-semibold">{session?.user.role}</span>
         </div>
       </div>
       <div className="flex flex-col space-y-2">
         {SIDENAV_ITEMS.map((item, idx) => {
           return <MenuItem key={idx} item={item} />
         })}
-        <div className={`flex flex-row space-x-4 hover:text-slate-600 items-center p-2 rounded-lg hover:bg-zinc-100 cursor-pointer`} onClick={() => signOut()}>
+        <div className={`flex flex-row space-x-4 text-black items-center p-2 rounded-lg hover:bg-zinc-100 cursor-pointer`} onClick={() => signOut()}>
           <Icon icon="lucide:log-in" width="22" height="22" />
           <span className="font-semibold text-md flex pt-1">Keluar</span>
         </div>
@@ -48,8 +51,8 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
         <>
           <button
             onClick={toggleSubMenu}
-            className={`flex flex-row items-center p-2 rounded-lg  hover:text-slate-600 w-full justify-between hover:bg-zinc-100 ${
-              pathname.includes(item.path) ? 'bg-zinc-100 text-slate-600' : ''
+            className={`flex flex-row items-center p-2 rounded-lg  text-black w-full justify-between hover:bg-zinc-100 ${
+              pathname.includes(item.path) ? 'bg-zinc-100 ' : ''
             }`}
           >
             <div className="flex flex-row space-x-4 items-center">
@@ -70,10 +73,10 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
                     key={idx}
                     href={subItem.path}
                     className={`${
-                      subItem.path === pathname ? 'font-bold text-slate-300' : ''
+                      subItem.path === pathname ? 'font-bold text-slate-900' : ''
                     }`}
                   >
-                    <span>{subItem.title}</span>
+                    <span className='text-slate-800'>{subItem.title}</span>
                   </Link>
                 );
               })}
@@ -83,8 +86,8 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
       ) : (
         <Link
           href={item.path}
-          className={`flex flex-row space-x-4 items-center p-2 rounded-lg hover:text-slate-600 hover:bg-zinc-100 ${
-            item.path === pathname ? 'bg-zinc-100 text-slate-600' : ''
+          className={`flex flex-row space-x-4 items-center p-2 rounded-l text-black hover:bg-zinc-100 ${
+            item.path === pathname ? 'bg-zinc-100' : ''
           }`}
         >
           {item.icon}
