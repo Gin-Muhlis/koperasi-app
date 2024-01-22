@@ -4,7 +4,7 @@ import { Icon, IconProps } from '@iconify/react';
 export const SIDENAV_ITEMS: SideNavItem[] = [
   {
     title: "Dashboard",
-    path: "/dashboard",
+    path: "/super-admin/dashboard",
     icon:<Icon icon="lucide:home" width="22" height="22" />,
   },
   {

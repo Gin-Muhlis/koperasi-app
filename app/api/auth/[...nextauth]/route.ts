@@ -56,7 +56,7 @@ const authOptions: NextAuthOptions = {
         session.user.role = token.role;
       }
       if ("imageProfile" in token) {
-        session.user.role = token.imageProfile;
+        session.user.imageProfile = token.imageProfile;
       }
       if ("accessToken" in token) {
         session.user.accessToken = token.accessToken;

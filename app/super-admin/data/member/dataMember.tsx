@@ -1,17 +1,19 @@
 "use client"
 import { getMembers } from '@/api/api-features';
-import { Member } from '@/types/interface';
+import { MemberState } from '@/types/interface';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import axios from 'axios';
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from 'react';
+import DeleteMember from './deleteMember';
 
 const DataMember: React.FC = () => {
     const { data: session } = useSession();
-    const [memberData, setMemberData] = useState<Member[]>();
+    const [memberData, setMemberData] = useState<MemberState[]>();
     const [loading, setLoading] = useState<boolean>(true);
 
     const getData = async (token: string) => {
+        console.log(session)
         const response = await getMembers(token)
 
         setMemberData(response.data.data)
@@ -44,8 +46,6 @@ const DataMember: React.FC = () => {
                         <th>Alamat</th>
                         <th>Jabatan</th>
                         <th>Agama</th>
-                        <th  className='text-center'>Jenis Kelamin</th>
-                        <th>Gambar</th>
                         <th className='text-center'>Aksi</th>
                     </tr>
                 </thead>
@@ -59,17 +59,12 @@ const DataMember: React.FC = () => {
                             <td>{item.address}</td>
                             <td>{item.position}</td>
                             <td>{item.religion}</td>
-                            <td className='text-center'>{item.gender}</td>
-                            <td>
-                                <img src={`${item.imageProfile}`} alt="user image" className='w-12 h-12 object-cover' />
-                            </td>
                             <td className='flex items-center justify-center gap-1'>
                                 <button className="btn btn-xs bg-green-600 text-white border-none">
-                                    <Icon icon="solar:pen-bold" width="17" height="17" />
+                                    <Icon icon="solar:pen-bold" width="15" height="15" />
                                 </button>
-                                <button className="btn btn-xs bg-red-600 text-white border-none">
-                                    <Icon icon="mdi:trash" width="17" height="17" />
-                                </button>
+                                <DeleteMember {...item} />
+
                             </td>
                         </tr>))}
                 </tbody>

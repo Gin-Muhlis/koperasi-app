@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import registerReducer from "./features/register-slice";
+import memberReducer from "./features/member-slice";
 
 export const store = configureStore({
     reducer: {
-        registerReducer
+        registerReducer,
+        memberReducer,
     },
 })
 

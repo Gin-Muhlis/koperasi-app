@@ -36,15 +36,26 @@ export type RegisterState = {
   error: any;
 };
 
-export type Member = {
+export type MemberState = {
+  id: number;
   name: string;
   uuid: string;
   email: string;
-  phone_number: number;
   address: string;
+  phone_number: string;
   gender: string;
+  identify_number: number;
   religion: string;
-  role: string;
-  imageProfile: string;
   position: string;
-}
+  imageProfile: any;
+  date_activation: number;
+  role: string;
+  username: string;
+  password: string;
+  active: boolean;
+  last_login_ip: string;
+  last_login_time: string;
+  isLoading: boolean;
+  error: any;
+  success: boolean;
+};

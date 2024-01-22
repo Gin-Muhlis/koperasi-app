@@ -3,8 +3,8 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import React, { useState } from 'react'
 
-const AlertError = ({ message }: { message: string }) => {
-  const [show, setShow] = useState(true)
+const AlertError = ({ message, isShow }: { message: string, isShow: boolean }) => {
+  const [show, setShow] = useState(isShow)
 
   return (
     <>
