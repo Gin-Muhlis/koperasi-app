@@ -11,8 +11,9 @@ import React, { useState } from 'react'
 
 const Sidebar = () => {
   const {data: session} = useSession();
-
+  
   const handleLogout = async () => {
+    
     const response = await logout(session?.user.accessToken)
 
     if (response.status === 200) {

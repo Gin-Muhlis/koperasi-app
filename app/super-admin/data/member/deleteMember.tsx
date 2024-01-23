@@ -31,11 +31,13 @@ const DeleteMember = (params: MemberState) => {
 
         const response = await deleteMember(params.id, session?.user.accessToken);
 
+        
         if (response.status === 200) {
             setSuccess('Data member berhasil dihapus')
         } else {
             setError('Data member gagal dihapus')
         }
+        
         setModal(false);
         setIsLoading(false);
         router.refresh();
@@ -65,7 +67,7 @@ const DeleteMember = (params: MemberState) => {
                 </div>
             </div>
             {success && <AlertSuccess message={success} isShow={true} />}
-            {success && <AlertError message={error} isShow={true} />}
+            {error && <AlertError message={error} isShow={true} />}
         </div>
     )
 }

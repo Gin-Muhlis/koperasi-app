@@ -75,7 +75,7 @@ const FormLogin = () => {
 
                     </div>
                     <Link href="/">
-                        <span className='block text-xs text-red-500 mb-5'>Lupa Password?</span>
+                        <span className='inline-block text-xs text-red-500 mb-5'>Lupa Password?</span>
                     </Link>
                     
                     <button type='submit' className='outline-none border-none bg-amber-400 text-white w-full rounded-full p-1 h-9 mb-3 flex items-center justify-center' disabled={isLoading}>

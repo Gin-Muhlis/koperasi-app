@@ -33,7 +33,7 @@ export async function registerAPI(data: RegisterState) {
 // PAI Logout
 export async function logout(token: string | undefined) {
   try {
-    const response = await axios.post(`${API_URL}/logout`, {
+    const response = await axios.post(`${API_URL}/logout`, {}, {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",

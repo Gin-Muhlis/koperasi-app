@@ -13,7 +13,6 @@ const DataMember: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     const getData = async (token: string) => {
-        console.log(session)
         const response = await getMembers(token)
 
         setMemberData(response.data.data)
@@ -28,8 +27,8 @@ const DataMember: React.FC = () => {
 
     if (loading) {
         return (
-            <div>
-                <p className='text-amber-400 text-lg'>Mengambil data...</p>
+            <div className="flex text-amber-400">
+                <span className="loading loading-bars loading-md"></span>
             </div>
         )
     }
