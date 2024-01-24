@@ -11,7 +11,7 @@ import AlertSuccess from '@/app/components/alertSuccess';
 import AlertError from '@/app/components/alertError';
 
 
-const DeleteMember = (params: MemberState) => {
+const DeleteMember = ({member}: {member: MemberState}) => {
     const { data: session } = useSession()
     const [modal, setModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -29,19 +29,18 @@ const DeleteMember = (params: MemberState) => {
 
         setIsLoading(true);
 
-        const response = await deleteMember(params.id, session?.user.accessToken);
+        const response = await deleteMember(member.id, session?.user.accessToken);
 
+        setModal(false);
+        setIsLoading(false);
+        
         
         if (response.status === 200) {
             setSuccess('Data member berhasil dihapus')
+            router.refresh();
         } else {
             setError('Data member gagal dihapus')
         }
-        
-        setModal(false);
-        setIsLoading(false);
-        router.refresh();
-
     }
 
     return (
@@ -53,8 +52,8 @@ const DeleteMember = (params: MemberState) => {
             <input type="checkbox" checked={modal} onChange={handleModal} className='modal-toggle' />
             <div className="modal">
                 <div className="modal-box bg-white">
-                    <h3 className="font-bold text-lg mb-5">Hapus Kategori {params.name}?</h3>
-                    <p className='mb-5 text-red-600'>Data yang dihapus tidak dapat dikembalikan!</p>
+                    <h3 className="font-bold text-lg mb-5">Hapus Member </h3>
+                    <p className='mb-5 text-red-600'>Data {member.name} akan dihapus</p>
                     <form onSubmit={handleSubmit}>
                         <div className="modal-action">
                             <button type='button' onClick={handleModal} className="btn btn-sm">Batal</button>

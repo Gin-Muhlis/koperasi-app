@@ -1,31 +1,49 @@
 "use client"
-
-import { createMember } from '@/api/api-features'
+import { editMember } from '@/api/api-features'
 import AlertError from '@/app/components/alertError'
 import AlertSuccess from '@/app/components/alertSuccess'
-import { stateAddMember, resetStateMember } from '@/redux/features/addMember-slice'
+import { stateEditMember, resetStateMember } from '@/redux/features/editMember-slice'
 import { appDispatch, useAppSelector } from '@/redux/store'
-import { RoleState } from '@/types/interface'
+import { MemberState, RoleState } from '@/types/interface'
+import { Icon } from '@iconify/react/dist/iconify.js'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import React, { SyntheticEvent, useEffect, useState } from 'react'
+import React, { SyntheticEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
+const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[] }) => {
     const { data: session } = useSession()
-    const [imageProfile, setImageProfile] = useState(null)
-    const [previewImage, setPreviewImage] = useState<any>(null)
+    const [imageProfile, setImageProfile] = useState(member.imageProfile)
+    const [previewImage, setPreviewImage] = useState<string | null>(null)
     const [modal, setModal] = useState(false);
-    const selector = useAppSelector(state => state.addMemmberReducer)
+    const selector = useAppSelector(state => state.editMemberReducer)
     const dispatch = useDispatch<appDispatch>()
     const router = useRouter();
 
     const handleModal = () => {
+        dispatch(resetStateMember())
         setModal(!modal)
+        dispatch(stateEditMember({ type: "SET_ID", value: member.id }))
+        dispatch(stateEditMember({ type: "SET_NAME", value: member.name }))
+        dispatch(stateEditMember({ type: "SET_EMAIL", value: member.email }))
+        dispatch(stateEditMember({ type: "SET_ADDRESS", value: member.address }))
+        dispatch(stateEditMember({ type: "SET_PHONE", value: member.phone_number }))
+        dispatch(stateEditMember({ type: "SET_GENDER", value: member.gender }))
+        dispatch(stateEditMember({ type: "SET_RELIGION", value: member.religion }))
+        dispatch(stateEditMember({ type: "SET_POSITION", value: member.position }))
+        dispatch(stateEditMember({ type: "SET_USERNAME", value: member.username }))
+        dispatch(stateEditMember({ type: "SET_ACTIVE", value: member.active }))
+        dispatch(stateEditMember({ type: "SET_ROLE", value: member.role }))
+        
     }
 
     const handleInput = (name: string, value: any) => {
-        dispatch(stateAddMember({ type: `SET_${name}`, value: value }))
+        dispatch(stateEditMember({ type: `SET_${name}`, value: value }))
+    }
+
+    const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.checked
+        dispatch(stateEditMember({ type: "SET_ACTIVE", value }))
     }
 
     const handleImageInput = (e: any) => {
@@ -49,50 +67,52 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
 
     const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault()
-        dispatch(stateAddMember({ type: `SET_IS_LOADING`, value: true }))
+        dispatch(stateEditMember({ type: `SET_IS_LOADING`, value: true }))
 
         const data = {
             ...selector,
             imageProfile: imageProfile
         }
 
-        const response = await createMember(data, session?.user.accessToken)
-        console.log(response)
-        dispatch(stateAddMember({ type: `SET_IS_LOADING`, value: false }))
+        const response = await editMember(data, session?.user.accessToken, previewImage)
+        setModal(false);
+
+        dispatch(stateEditMember({ type: `SET_IS_LOADING`, value: false }))
 
         if (response.status === 200) {
             dispatch(resetStateMember())
-            dispatch(stateAddMember({ type: 'SET_SUCCESS', value: response.data.message }))
+            dispatch(stateEditMember({ type: 'SET_SUCCESS', value: response.data.message }))
+            router.refresh()
 
         } else if (response.status === 422) {
             const errorsData = response.data.errors
-                const keys = Object.keys(errorsData)
-                const firstKey = keys[0]
-                const message = errorsData[firstKey][0]
+            const keys = Object.keys(errorsData)
+            const firstKey = keys[0]
+            const message = errorsData[firstKey][0]
 
-                dispatch(stateAddMember({ type: `SET_ERROR`, value: message }))
+            dispatch(stateEditMember({ type: `SET_ERROR`, value: message }))
         } else {
-            dispatch(stateAddMember({ type: `SET_ERROR`, value: 'terjadi kesalahan dengan sistem!' }))
+            dispatch(stateEditMember({ type: `SET_ERROR`, value: 'terjadi kesalahan dengan sistem!' }))
         }
-        router.refresh()
-
     }
 
     return (
         <>
-            <button className="btn btn-sm bg-amber-400 border-none text-white mb-10 block" onClick={handleModal}>Tambah Data</button>
+
+            <button className="btn btn-xs bg-green-600 text-white border-none" onClick={handleModal}>
+                <Icon icon="solar:pen-bold" width="15" height="15" />
+            </button>
             <input type="checkbox" checked={modal} onChange={handleModal} className='modal-toggle' />
             <div className="modal">
                 <div className="modal-box w-11/12 max-w-4xl bg-white">
-                    <h3 className="font-bold text-lg text-black">Tambah Data Member</h3>
-                    {/*  */}
+                    <h3 className="font-bold text-lg mb-5">Edit Member</h3>
                     <form onSubmit={handleSubmit} className='w-full' encType='multipart/form-data'>
                         <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-4 mb-4">
                             <div className='mb-3'>
                                 <label htmlFor="name" className='label text-black text-xs'>Nama Lengkap</label>
                                 <div className="flex items-start justify-start w-full h-8 mb-1">
                                     <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" value={selector.name} onChange={(e) => handleInput("NAME", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " id='name' />
+                                    <input type="text" value={selector.name} onChange={(e) => handleInput("NAME", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
                                 </div>
 
                             </div>
@@ -100,28 +120,28 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
                                 <label htmlFor="email" className='label text-black text-xs'>Email</label>
                                 <div className="flex items-start justify-start w-full h-8">
                                     <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="email" value={selector.email} onChange={(e) => handleInput("EMAIL", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " id='email' />
+                                    <input type="email" value={selector.email} onChange={(e) => handleInput("EMAIL", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
                                 </div>
                             </div>
                             <div className='mb-3'>
                                 <label htmlFor="phone" className='label text-black text-xs'>No Telepon</label>
                                 <div className="flex items-start justify-start w-full h-8">
                                     <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="number" value={selector.phone_number} onChange={(e) => handleInput("PHONE", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " id='phone' />
+                                    <input type="number" value={selector.phone_number} onChange={(e) => handleInput("PHONE", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
                                 </div>
                             </div>
                             <div className='mb-3'>
                                 <label htmlFor="address" className='label text-black text-xs'>Alamat</label>
                                 <div className="flex items-start justify-start w-full h-8">
                                     <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" value={selector.address} onChange={(e) => handleInput("ADDRESS", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " id='address' />
+                                    <input type="text" value={selector.address} onChange={(e) => handleInput("ADDRESS", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
                                 </div>
                             </div>
                             <div className='mb-3'>
                                 <label htmlFor="gender" className='label text-black text-xs'>Jenis kelamin</label>
                                 <div className="flex items-start justify-start w-full h-8">
                                     <div className="w-1 h-full bg-amber-400"></div>
-                                    <select value={selector.gender} onChange={(e) => handleInput("GENDER", e.target.value)} id="gender" className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none ">
+                                    <select value={selector.gender} onChange={(e) => handleInput("GENDER", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none ">
                                         <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" disabled value="pilih">Silahkan pilih jenis kelamin</option>
                                         <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" value="L">Laki-laki</option>
                                         <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" value="P">Perempuan</option>
@@ -132,14 +152,14 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
                                 <label htmlFor="religion" className='label text-black text-xs'>Agama</label>
                                 <div className="flex items-start justify-start w-full h-8">
                                     <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" value={selector.religion} onChange={(e) => handleInput("RELIGION", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " id='religion' />
+                                    <input type="text" value={selector.religion} onChange={(e) => handleInput("RELIGION", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
                                 </div>
                             </div>
                             <div className='mb-3'>
                                 <label htmlFor="role" className='label text-black text-xs'>Jabatan/Posisi</label>
                                 <div className="flex items-start justify-start w-full h-8">
                                     <div className="w-1 h-full bg-amber-400"></div>
-                                    <select id="role" value={selector.position} onChange={(e) => handleInput("POSITION", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none ">
+                                    <select value={selector.role} onChange={(e) => handleInput("ROLE", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none ">
                                         <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" disabled value="pilih">Silahkan pilih Jabatan</option>
                                         <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" value="pns">PNS</option>
                                         <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" value="p3k">P3K</option>
@@ -150,16 +170,16 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
                             <div className='mb-3'>
                                 <label htmlFor="image" className='label text-black text-xs'>Gambar Profile</label>
 
-                                {previewImage ? <img src={previewImage} className="w-14 h-14 mb-1 object-cover" /> : <div className="w-14 h-14 bg-slate-200 opacity-70 mb-1"></div>}
+                                {previewImage ? <img src={previewImage} className="w-14 h-14 mb-1 object-cover" /> : <img src={imageProfile} className="w-14 h-14 mb-1 object-cover" />}
                                 <div className="flex items-start justify-start w-full h-8">
-                                    <input type="file" accept=".jpg, .jpeg, .png" onChange={handleImageInput} id='image' className='text-sm' />
+                                    <input type="file" accept=".jpg, .jpeg, .png" onChange={handleImageInput} className='text-sm' />
                                 </div>
                             </div>
                             <div className='mb-3'>
                                 <label htmlFor="username" className='label text-black text-xs'>Username</label>
                                 <div className="flex items-start justify-start w-full h-8">
                                     <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" value={selector.username} onChange={(e) => handleInput("USERNAME", e.target.value)} className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`} id='username' />
+                                    <input type="text" value={selector.username} onChange={(e) => handleInput("USERNAME", e.target.value)} className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`} />
                                 </div>
 
                             </div>
@@ -167,12 +187,12 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
                                 <label htmlFor="password" className='label text-black text-xs'>Password</label>
                                 <div className="flex items-start justify-start w-full h-8">
                                     <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="password" value={selector.password} onChange={(e) => handleInput("PASSWORD", e.target.value)} className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`} id='password' />
+                                    <input type="password" value={selector.password} onChange={(e) => handleInput("PASSWORD", e.target.value)} className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`} />
                                 </div>
 
                             </div>
                             <div className='mb-3'>
-                                <label  className='label text-black text-xs'>Role Member</label>
+                                <label className='label text-black text-xs'>Role Member</label>
                                 <div className="flex items-start justify-start w-full h-8">
                                     <select  value={selector.role} onChange={(e) => handleInput('ROLE', e.target.value)} className='select w-full bg-slate-200 select-sm'>
                                         <option value="pilih" disabled >Pilihkah Pilih Role</option>
@@ -183,9 +203,13 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
                                 </div>
 
                             </div>
-
+                            <div className='mb-3'>
+                                <label htmlFor="active" className='label text-black text-xs'>Aktif</label>
+                                <div className="flex items-start justify-start w-full h-8">
+                                    <input type="checkbox" className="toggle toggle-warning" onChange={handleChecked} checked={selector.active} />
+                                </div>
+                            </div>
                         </div>
-
                         <div className="modal-action">
                             <button type='button' onClick={handleModal} className="btn btn-sm">Batal</button>
 
@@ -193,16 +217,15 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
                                 {selector.isLoading ? <span className="loading loading-spinner loading-xs"></span> : 'Simpan'}
                             </button>
                         </div>
+
                     </form>
-                    {/*  */}
-
-
                 </div>
             </div>
+
             {selector.success && <AlertSuccess message={selector.success} isShow={true} />}
             {selector.error && <AlertError message={selector.error} isShow={true} />}
         </>
     )
 }
 
-export default AddMember
+export default EditMember

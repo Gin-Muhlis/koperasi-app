@@ -8,7 +8,7 @@ const AlertError = ({ message, isShow }: { message: string, isShow: boolean }) =
 
   return (
     <>
-      {show && <div className='p-4 bg-red-500 rounded fixed bottom-7 right-7 text-white flex items-center gap-1'>
+      {show && <div className='z-50 p-4 bg-red-500 rounded fixed bottom-7 right-7 text-white flex items-center gap-1'>
         <Icon icon="mingcute:alert-fill" width={24} height={24} />
         <span className=" font-semibold text-md alert-access">
           {message}

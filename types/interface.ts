@@ -59,3 +59,8 @@ export type MemberState = {
   error: any;
   success: boolean;
 };
+
+export type RoleState = {
+  id: number;
+  name: string;
+}

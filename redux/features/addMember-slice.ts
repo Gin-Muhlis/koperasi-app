@@ -3,27 +3,37 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
 const initialState = {
+    id: 0,
     name: "",
     email: "",
     phone_number: "",
     address: "",
     gender: "pilih",
     religion: "",
+    position: "pilih",
     role: "pilih",
     password: "",
     username: "",
+    active: true,
     isLoading: false,
     error: false,
     success: false
   } as MemberState;
 
-export const member = createSlice({
+export const addMember = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    addMember: (state, action: PayloadAction<{ type: string; value: any }>) => {
+    stateAddMember: (state, action: PayloadAction<{ type: string; value: any }>) => {
       const { type, value } = action.payload;
       switch (type) {
+        case "SET_ID":
+          return {
+            ...state,
+            id: value,
+          };
+
+          break;
         case "SET_NAME":
           return {
             ...state,
@@ -59,6 +69,12 @@ export const member = createSlice({
           return {
             ...state,
             religion: value,
+          };
+          break;
+        case "SET_POSITION":
+          return {
+            ...state,
+            position: value,
           };
           break;
         case "SET_ROLE":
@@ -101,11 +117,12 @@ export const member = createSlice({
           return state;
       }
     },
-    addMemberSuccess: () => {
+   
+    resetStateMember: () => {
       return initialState
     }
   },
 });
 
-export const { addMember, addMemberSuccess } = member.actions;
-export default member.reducer;
+export const { stateAddMember, resetStateMember } = addMember.actions;
+export default addMember.reducer;
