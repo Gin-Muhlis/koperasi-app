@@ -1,7 +1,8 @@
 "use client"
-import { editMember } from '@/api/api-features'
+
 import AlertError from '@/app/components/alertError'
 import AlertSuccess from '@/app/components/alertSuccess'
+import { editMember } from '@/app/utils/featuresApi'
 import { stateEditMember, resetStateMember } from '@/redux/features/editMember-slice'
 import { appDispatch, useAppSelector } from '@/redux/store'
 import { MemberState, RoleState } from '@/types/interface'
@@ -13,9 +14,12 @@ import { useDispatch } from 'react-redux'
 
 const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[] }) => {
     const { data: session } = useSession()
-    const [imageProfile, setImageProfile] = useState(member.imageProfile)
-    const [previewImage, setPreviewImage] = useState<string | null>(null)
-    const [modal, setModal] = useState(false);
+    const [imageProfile, setImageProfile] = useState<File | string | Blob | undefined>(member.imageProfile)
+    const [previewImage, setPreviewImage] = useState<string | undefined>(undefined)
+    const [modal, setModal] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [success, setSuccess] = useState<string | boolean>(false)
+    const [error, setError] = useState<string | boolean>(false)
     const selector = useAppSelector(state => state.editMemberReducer)
     const dispatch = useDispatch<appDispatch>()
     const router = useRouter();
@@ -60,14 +64,14 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
 
             render.readAsDataURL(file);
         } else {
-            setPreviewImage(null)
+            setPreviewImage(undefined)
         }
 
     }
 
     const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault()
-        dispatch(stateEditMember({ type: `SET_IS_LOADING`, value: true }))
+        setIsLoading(true)
 
         const data = {
             ...selector,
@@ -77,12 +81,12 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
         const response = await editMember(data, session?.user.accessToken, previewImage)
         setModal(false);
 
-        dispatch(stateEditMember({ type: `SET_IS_LOADING`, value: false }))
+        setIsLoading(false)
 
         if (response.status === 200) {
             dispatch(resetStateMember())
-            dispatch(stateEditMember({ type: 'SET_SUCCESS', value: response.data.message }))
-            router.refresh()
+            
+            setSuccess(response.data.message)
 
         } else if (response.status === 422) {
             const errorsData = response.data.errors
@@ -90,10 +94,12 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
             const firstKey = keys[0]
             const message = errorsData[firstKey][0]
 
-            dispatch(stateEditMember({ type: `SET_ERROR`, value: message }))
+            setError(message)
         } else {
-            dispatch(stateEditMember({ type: `SET_ERROR`, value: 'terjadi kesalahan dengan sistem!' }))
+            setError('Terjadi kesalahan dengan sistem!')
         }
+        router.refresh()
+
     }
 
     return (
@@ -170,7 +176,7 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
                             <div className='mb-3'>
                                 <label htmlFor="image" className='label text-black text-xs'>Gambar Profile</label>
 
-                                {previewImage ? <img src={previewImage} className="w-14 h-14 mb-1 object-cover" /> : <img src={imageProfile} className="w-14 h-14 mb-1 object-cover" />}
+                                {previewImage ? <img src={previewImage} className="w-14 h-14 mb-1 object-cover" /> : <img src={imageProfile?.toString()} className="w-14 h-14 mb-1 object-cover" />}
                                 <div className="flex items-start justify-start w-full h-8">
                                     <input type="file" accept=".jpg, .jpeg, .png" onChange={handleImageInput} className='text-sm' />
                                 </div>
@@ -213,8 +219,8 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
                         <div className="modal-action">
                             <button type='button' onClick={handleModal} className="btn btn-sm">Batal</button>
 
-                            <button type='submit' className='btn btn-sm bg-amber-400 text-sm text-white border-none'>
-                                {selector.isLoading ? <span className="loading loading-spinner loading-xs"></span> : 'Simpan'}
+                            <button type='submit' className='btn btn-sm bg-amber-400 text-sm text-white border-none' disabled={isLoading}>
+                                {isLoading ? <span className="loading loading-spinner loading-xs"></span> : 'Simpan'}
                             </button>
                         </div>
 
@@ -222,8 +228,8 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
                 </div>
             </div>
 
-            {selector.success && <AlertSuccess message={selector.success} isShow={true} />}
-            {selector.error && <AlertError message={selector.error} isShow={true} />}
+            {success && <AlertSuccess message={success.toString()} isShow={true} />}
+            {error && <AlertError message={error.toString()} isShow={true} />}
         </>
     )
 }

@@ -15,9 +15,6 @@ const initialState = {
     password: "",
     username: "",
     active: true,
-    isLoading: false,
-    error: false,
-    success: false
   } as MemberState;
 
 export const addMember = createSlice({
@@ -93,24 +90,6 @@ export const addMember = createSlice({
           return {
             ...state,
             username: value,
-          };
-          break;
-        case "SET_IS_LOADING":
-          return {
-            ...state,
-            isLoading: value,
-          };
-          break;
-        case "SET_ERROR":
-          return {
-            ...state,
-            error: value,
-          };
-          break;
-        case "SET_SUCCESS":
-          return {
-            ...state,
-            success: value,
           };
           break;
         default:

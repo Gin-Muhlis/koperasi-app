@@ -13,9 +13,9 @@ const FormLogin = () => {
     const [errorMessage, setErrorMessage] = useState<any>(false)
     const [passwordShow, setPasswordShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<string | boolean>(false)
 
     const { push } = useRouter()
-
 
     const handleShowPassword = () => {
         setPasswordShow(!passwordShow)
@@ -54,7 +54,7 @@ const FormLogin = () => {
             }
         } catch (error) {
             setIsLoading(false)
-            console.log(error)
+            setError('Terjadi kesalahan dengan sistem!')
         }
     }
 
@@ -62,7 +62,6 @@ const FormLogin = () => {
         <>
             <form className='w-full' onSubmit={handleLogin}>
                 <div className="w-full mb-3">
-                    {/* <label htmlFor="email" className='label text-black text-sm'>Email</label> */}
                     <div className="flex items-start justify-start w-full h-8 mb-4">
                         <div className="w-1 h-full bg-amber-400"></div>
                         <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className="flex-1 p-2 bg-slate-200 h-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none focus:border focus:border-solid " placeholder='email@domain.com' />
@@ -95,6 +94,7 @@ const FormLogin = () => {
                     <Icon icon="jam:close" />
                 </span>
             </div>}
+            {error && <AlertError message='error' isShow={true} />}
         </>
     )
 }

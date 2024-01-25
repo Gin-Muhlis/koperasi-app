@@ -1,8 +1,8 @@
 "use client"
 
-import { createMember } from '@/api/api-features'
 import AlertError from '@/app/components/alertError'
 import AlertSuccess from '@/app/components/alertSuccess'
+import { createMember } from '@/app/utils/featuresApi'
 import { stateAddMember, resetStateMember } from '@/redux/features/addMember-slice'
 import { appDispatch, useAppSelector } from '@/redux/store'
 import { RoleState } from '@/types/interface'
@@ -13,9 +13,13 @@ import { useDispatch } from 'react-redux'
 
 const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
     const { data: session } = useSession()
-    const [imageProfile, setImageProfile] = useState(null)
-    const [previewImage, setPreviewImage] = useState<any>(null)
+    const [imageProfile, setImageProfile] = useState<File | string | Blob | undefined>()
+    const [previewImage, setPreviewImage] = useState<File | string | undefined>(undefined)
     const [modal, setModal] = useState(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [success, setSuccess] = useState<string | boolean>(false)
+    const [error, setError] = useState<string | boolean>(false)
+
     const selector = useAppSelector(state => state.addMemmberReducer)
     const dispatch = useDispatch<appDispatch>()
     const router = useRouter();
@@ -42,14 +46,14 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
 
             render.readAsDataURL(file);
         } else {
-            setPreviewImage(null)
+            setPreviewImage(undefined)
         }
 
     }
 
     const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault()
-        dispatch(stateAddMember({ type: `SET_IS_LOADING`, value: true }))
+        setIsLoading(true)
 
         const data = {
             ...selector,
@@ -57,12 +61,14 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
         }
 
         const response = await createMember(data, session?.user.accessToken)
-        console.log(response)
-        dispatch(stateAddMember({ type: `SET_IS_LOADING`, value: false }))
+        
+        setIsLoading(false)
+        setModal(!modal)
 
         if (response.status === 200) {
             dispatch(resetStateMember())
-            dispatch(stateAddMember({ type: 'SET_SUCCESS', value: response.data.message }))
+            
+            setSuccess(response.data.message)
 
         } else if (response.status === 422) {
             const errorsData = response.data.errors
@@ -70,9 +76,9 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
                 const firstKey = keys[0]
                 const message = errorsData[firstKey][0]
 
-                dispatch(stateAddMember({ type: `SET_ERROR`, value: message }))
+                setError(message)
         } else {
-            dispatch(stateAddMember({ type: `SET_ERROR`, value: 'terjadi kesalahan dengan sistem!' }))
+            setError('Terjadi kesalahan dengan sistem!')
         }
         router.refresh()
 
@@ -150,7 +156,7 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
                             <div className='mb-3'>
                                 <label htmlFor="image" className='label text-black text-xs'>Gambar Profile</label>
 
-                                {previewImage ? <img src={previewImage} className="w-14 h-14 mb-1 object-cover" /> : <div className="w-14 h-14 bg-slate-200 opacity-70 mb-1"></div>}
+                                {previewImage ? <img src={previewImage.toString()} className="w-14 h-14 mb-1 object-cover" /> : <div className="w-14 h-14 bg-slate-200 opacity-70 mb-1"></div>}
                                 <div className="flex items-start justify-start w-full h-8">
                                     <input type="file" accept=".jpg, .jpeg, .png" onChange={handleImageInput} id='image' className='text-sm' />
                                 </div>
@@ -189,8 +195,8 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
                         <div className="modal-action">
                             <button type='button' onClick={handleModal} className="btn btn-sm">Batal</button>
 
-                            <button type='submit' className='btn btn-sm bg-amber-400 text-sm text-white border-none'>
-                                {selector.isLoading ? <span className="loading loading-spinner loading-xs"></span> : 'Simpan'}
+                            <button type='submit' className='btn btn-sm bg-amber-400 text-sm text-white border-none' disabled={isLoading}>
+                                {isLoading ? <span className="loading loading-spinner loading-xs"></span> : 'Simpan'}
                             </button>
                         </div>
                     </form>
@@ -199,8 +205,8 @@ const AddMember = ({roles}: {roles: RoleState[] | undefined}) => {
 
                 </div>
             </div>
-            {selector.success && <AlertSuccess message={selector.success} isShow={true} />}
-            {selector.error && <AlertError message={selector.error} isShow={true} />}
+            {success && <AlertSuccess message={success.toString()} isShow={true} />}
+            {error && <AlertError message={error.toString()} isShow={true} />}
         </>
     )
 }

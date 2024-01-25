@@ -12,8 +12,6 @@ const initialState = {
     role: "pilih",
     password: "",
     confirmPassword: "",
-    isLoading: false,
-    error: false
   } as RegisterState;
 
 export const register = createSlice({
@@ -76,18 +74,6 @@ export const register = createSlice({
           return {
             ...state,
             confirmPassword: value,
-          };
-          break;
-        case "SET_IS_LOADING":
-          return {
-            ...state,
-            isLoading: value,
-          };
-          break;
-        case "SET_ERROR":
-          return {
-            ...state,
-            error: value,
           };
           break;
         default:

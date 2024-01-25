@@ -1,13 +1,14 @@
 import MainLayout from '@/components/mainLayout'
 import { Metadata } from 'next'
 import React, { Suspense } from 'react'
-import { getMembers, getRoles } from '@/api/api-features'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { MemberState, RoleState } from '@/types/interface'
 import AddMember from './addMember'
 import DeleteMember from './deleteMember'
 import EditMember from './editMember'
+import { getMembers, getRoles } from '@/app/utils/featuresApi'
+import DetailMember from './detailMember'
 
 export const metadata: Metadata = {
   title: 'Member',
@@ -19,8 +20,6 @@ const Member = async () => {
   const session = await getServerSession(authOptions)
   const members: MemberState[] = await getMembers(session?.user.accessToken)
   const roles: RoleState[] = await getRoles(session?.user.accessToken)
-
-  console.log(members)
 
   return (
     <MainLayout>
@@ -36,8 +35,8 @@ const Member = async () => {
           <table className="table w-full table-sm">
             <thead className='bg-amber-400 text-black'>
               <tr>
-                <th>No</th>
-                <th>Name</th>
+                <th className='text-center'>No</th>
+                <th>Nama</th>
                 <th>Email</th>
                 <th>No Telepon</th>
                 <th>Alamat</th>
@@ -49,7 +48,7 @@ const Member = async () => {
             <tbody className='text-slate-800 text-sm'>
               {members?.map((item, index) => (
                 <tr key={item.id}>
-                  <th>{index + 1}</th>
+                  <th className='text-center'>{index + 1}</th>
                   <td>{item.name}</td>
                   <td>{item.email}</td>
                   <td>{item.phone_number}</td>
@@ -58,6 +57,7 @@ const Member = async () => {
                   <td>{item.religion}</td>
                   <td className='flex items-center justify-center gap-1'>
                     <EditMember member={item} roles={roles} />
+                    <DetailMember member={item} />
                     <DeleteMember member={item} />
                   </td>
                 </tr>))}

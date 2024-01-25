@@ -29,11 +29,9 @@ export type RegisterState = {
   gender: string;
   religion: string;
   role: string;
-  imageProfile: any;
+  imageProfile: File | string |null;
   password: string;
   confirmPassword: string;
-  isLoading: boolean;
-  error: any;
 };
 
 export type MemberState = {
@@ -47,7 +45,7 @@ export type MemberState = {
   identify_number: number;
   religion: string;
   position: string;
-  imageProfile: any;
+  imageProfile: File | string | Blob | undefined;
   date_activation: number;
   role: string;
   username: string;
@@ -55,9 +53,6 @@ export type MemberState = {
   active: boolean;
   last_login_ip: string;
   last_login_time: string;
-  isLoading: boolean;
-  error: any;
-  success: boolean;
 };
 
 export type RoleState = {

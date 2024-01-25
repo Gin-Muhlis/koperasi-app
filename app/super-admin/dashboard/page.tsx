@@ -17,7 +17,7 @@ const Dashboard = async ({ searchParams }: IProps) => {
     <MainLayout>
       <Content />
 
-      {searchParams?.message && <AlertError message={searchParams.message.toString()} />}
+      {searchParams?.message && <AlertError message={searchParams.message.toString()} isShow={true} />}
     </MainLayout>
   )
 }

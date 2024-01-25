@@ -25,7 +25,7 @@ const authOptions: NextAuthOptions = {
         const data = { email, password };
 
         let response: any = await axios.post(
-          `${process.env.PUBLIC_API_URL}/login`,
+          `${process.env.NEXT_PUBLIC_API_URL}/login`,
           data
         );
 
