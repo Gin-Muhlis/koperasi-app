@@ -1,36 +1,40 @@
-import MainLayout from '@/components/mainLayout'
-import { Metadata } from 'next'
-import React, { Suspense } from 'react'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { MemberState, RoleState } from '@/types/interface'
-import AddMember from './addMember'
-import DeleteMember from './deleteMember'
-import EditMember from './editMember'
-import { getMembers, getRoles } from '@/app/utils/featuresApi'
-import DetailMember from './detailMember'
+import MainLayout from "@/components/mainLayout";
+import { Metadata } from "next";
+import React, { Suspense } from "react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { MemberState, RoleState } from "@/types/interface";
+import AddMember from "./addMember";
+import DeleteMember from "./deleteMember";
+import EditMember from "./editMember";
+import { getMembers, getRoles } from "@/app/utils/featuresApi";
+import DetailMember from "./detailMember";
+import { DataTable } from "@/components/data-table";
+import { columns } from "./columns";
 
 export const metadata: Metadata = {
-  title: 'Member',
-  description: 'Data member dari Zie Koperasi',
-}
-
+  title: "Member",
+  description: "Data member dari Zie Koperasi",
+};
 
 const Member = async () => {
-  const session = await getServerSession(authOptions)
-  const members: MemberState[] = await getMembers(session?.user.accessToken)
-  const roles: RoleState[] = await getRoles(session?.user.accessToken)
+  const session = await getServerSession(authOptions);
+  const members: MemberState[] = await getMembers(session?.user.accessToken);
+  const roles: RoleState[] = await getRoles(session?.user.accessToken);
 
   return (
     <MainLayout>
       <div className="bg-white rounded p-4 w-full">
-        <h1 className="text-3xl font-bold mb-5 inline-block text-black pb-1 border-b-4 border-b-solid border-b-amber-400">
+        <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-amber-400">
           Member
         </h1>
 
-        <AddMember roles={roles} />
+        <div className="mb-10">
+          <AddMember roles={roles} />
+        </div>
 
-        <div className="relative overflow-x-auto">
+        <DataTable columns={columns} data={members} />
+        {/* <div className="relative overflow-x-auto">
 
           <table className="table w-full table-sm">
             <thead className='bg-amber-400 text-black'>
@@ -63,12 +67,10 @@ const Member = async () => {
                 </tr>))}
             </tbody>
           </table>
-        </div>
+        </div> */}
       </div>
-
-
     </MainLayout>
-  )
-}
+  );
+};
 
-export default Member
+export default Member;
