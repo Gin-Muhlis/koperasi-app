@@ -15,7 +15,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     subMenuItems: [
       { title: 'Member', path: '/super-admin/data/member' },
       { title: 'Kategori', path: '/super-admin/data/category' },
-      { title: 'Sub-kategori', path: '/super-admin/data/subKategori' },
+      { title: 'Sub-kategori', path: '/super-admin/data/subCategory' },
       { title: 'Produk', path: '/super-admin/data/product' },
       { title: 'Barang', path: '/super-admin/data/stuff' },
     ],

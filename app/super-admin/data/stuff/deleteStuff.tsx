@@ -3,12 +3,12 @@
 import React from 'react';
 import { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { MemberState } from '@/types/interface';
+import { MemberState, StuffState } from '@/types/interface';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSession } from 'next-auth/react';
 import AlertSuccess from '@/app/components/alertSuccess';
 import AlertError from '@/app/components/alertError';
-import { deleteMember } from '@/app/utils/featuresApi';
+import { deleteMember, deleteStuff } from '@/app/utils/featuresApi';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,7 +23,7 @@ import {
 import Loader from '@/app/components/loader';
 
 
-const DeleteMember = ({ member }: { member: MemberState }) => {
+const DeleteStuff = ({ stuff }: { stuff: StuffState }) => {
     const { data: session } = useSession()
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState<string | boolean>(false)
@@ -37,14 +37,13 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
 
         setIsLoading(true);
 
-        const response = await deleteMember(member.id, session?.user.accessToken);
-
+        const response = await deleteStuff(stuff.id, session?.user.accessToken);
         if (response.status === 200) {
-            setIsLoading(false)
+            setIsLoading(false);
             setSuccess(response.data.message)
             router.refresh();
         } else {
-            setIsLoading(false)
+            setIsLoading(false);
             setError('Data member gagal dihapus')
         }
     }
@@ -54,7 +53,7 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
             <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <span className="w-5 h-5 rounded bg-red-500 text-white flex items-center justify-center cursor-pointer">
-
+                       
                         <Icon icon="lucide:trash-2" width="16" height="16" />
                     </span>
                 </AlertDialogTrigger>
@@ -62,7 +61,7 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah kamu yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Data {member.name} akan dihapus!
+                            Data {stuff.name} akan dihapus!
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -80,4 +79,4 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
     )
 }
 
-export default DeleteMember;
+export default DeleteStuff;

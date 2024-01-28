@@ -232,3 +232,225 @@ export async function deleteCategory(
     return error.response
   }
 }
+
+// API GET Sub-Category
+export async function getSubCategories(token: string | undefined) {
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sub-category`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API CREATE Sub-Category
+export async function createSubCategory(
+  data: FormData,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sub-category/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API UPDATE Sub-Category
+export async function updateSubCategory(
+  id: number,
+  data: FormData,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sub-category/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API DELETE Sub-Category
+export async function deleteSubCategory(
+  id: number,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/sub-category/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API GET Product
+export async function getProducts(token: string | undefined) {
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/product`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API CREATE Product
+export async function createProduct(
+  data: FormData,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/product/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API DELETE Product
+export async function deleteProduct(
+  id: number,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/product/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API UPDATE Product
+export async function updateProduct(
+  id: number,
+  data: FormData,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/product/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API GET Stuff
+export async function getStuffs(token: string | undefined) {
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/stuff`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API CREATE Stuff
+export async function createStuff(
+  data: FormData,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/stuff/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API UPDATE Stuff
+export async function updateStuff(
+  id: number,
+  data: FormData,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/stuff/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API DELETE Stuff
+export async function deleteStuff(
+  id: number,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/stuff/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}

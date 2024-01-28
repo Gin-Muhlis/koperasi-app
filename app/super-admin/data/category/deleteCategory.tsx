@@ -24,19 +24,22 @@ import {
 
 const DeleteCategory = ({ category }: { category: CategoryState }) => {
     const { data: session } = useSession()
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [success, setSuccess] = useState<string | boolean>(false)
     const [error, setError] = useState<string | boolean>(false)
 
     const router = useRouter();
 
     const handleDelete = async () => {
-
+        setIsLoading(true)
         const response = await deleteCategory(category.id, session?.user.accessToken);
 
         if (response.status === 200) {
+            setIsLoading(false)
             setSuccess(response.data.message)
             router.refresh();
         } else {
+            setIsLoading(false)
             setError('Data member gagal dihapus')
         }
     }
@@ -46,7 +49,7 @@ const DeleteCategory = ({ category }: { category: CategoryState }) => {
             <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <span className="w-5 h-5 rounded bg-red-500 text-white flex items-center justify-center cursor-pointer">
-                       
+
                         <Icon icon="lucide:trash-2" width="16" height="16" />
                     </span>
                 </AlertDialogTrigger>
@@ -59,7 +62,9 @@ const DeleteCategory = ({ category }: { category: CategoryState }) => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Batal</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDelete} className="bg-red-500">Hapus</AlertDialogAction>
+                        <AlertDialogAction onClick={handleDelete} className="bg-red-500" disabled={isLoading}>
+                            {isLoading ? <Loader /> : 'Hapus'}
+                        </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

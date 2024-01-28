@@ -65,3 +65,29 @@ export type CategoryState = {
   uuid: string;
   name: string;
 }
+
+export type SubCategoryState = {
+  id: number;
+  uuid: string;
+  code: number;
+  name: string;
+  type: 'debit' | 'kredit';
+  category: string;
+  category_id: string;
+}
+
+export type ProductState = {
+  id: number;
+  uuid: string;
+  name: string;
+}
+
+export type StuffState = {
+  id: number;
+  uuid: string;
+  name: string;
+  price: number;
+  image: File | string | Blob | undefined;
+  product_id: number;
+  product_name: string;
+}
