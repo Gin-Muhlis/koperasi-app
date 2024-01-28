@@ -3,33 +3,32 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { MemberState, RoleState } from "@/types/interface";
-import { getMembers, getRoles } from "@/app/utils/featuresApi";
+import { CategoryState } from "@/types/interface";
+import { getCategories } from "@/app/utils/featuresApi";
 import Content from "./content";
-import AddMember from "./addMember";
+import AddCategory from "./addCategory";
 
 export const metadata: Metadata = {
-  title: "Member",
-  description: "Data member dari Zie Koperasi",
+  title: "Kategori",
+  description: "Data kategori dari Zie Koperasi",
 };
 
 const Member = async () => {
   const session = await getServerSession(authOptions);
-  const members: MemberState[] = await getMembers(session?.user.accessToken);
-  const roles: RoleState[] = await getRoles(session?.user.accessToken);
+  const categories: CategoryState[] = await getCategories(session?.user.accessToken);
 
   return (
     <MainLayout>
       <div className="bg-white rounded p-4 w-full">
         <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-amber-400">
-          Member
+          Kategori
         </h1>
 
         <div className="mb-5">
-          <AddMember roles={roles} />
+          <AddCategory />
         </div>
 
-        <Content members={members} roles={roles} />
+        <Content categories={categories} />
 
       </div>
 

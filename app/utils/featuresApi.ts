@@ -70,28 +70,13 @@ export async function getMembers(token: string | undefined) {
 
 // API CREATE Member
 export async function createMember(
-  data: MemberState,
+  data: FormData,
   token: string | undefined
 ) {
   try {
-    const formData = new FormData();
+    
 
-    formData.append("username", data.username);
-    formData.append("password", data.password);
-    formData.append("email", data.email);
-    formData.append("name", data.name);
-    formData.append("address", data.address);
-    formData.append("phone_number", data.phone_number);
-    formData.append("position", data.position);
-    formData.append("gender", data.gender);
-    formData.append("religion", data.religion);
-    formData.append("role", data.role);
-
-    if (data.imageProfile !== null) {
-      formData.append("image", data.imageProfile as Blob);
-    }
-
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/member`, formData, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/member`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -122,33 +107,13 @@ export async function deleteMember(id: number, token: string | undefined) {
 }
 
 // API CREATE Member
-export async function editMember(
-  data: MemberState,
+export async function updateMember(
+  id: number,
+  data: FormData,
   token: string | undefined,
-  previewImage: string | undefined
 ) {
   try {
-    const formData = new FormData();
-
-    formData.append("_method", "PUT");
-    formData.append("username", data.username);
-    formData.append("password", data.password);
-    formData.append("email", data.email);
-    formData.append("name", data.name);
-    formData.append("address", data.address);
-    formData.append("phone_number", data.phone_number);
-    formData.append("position", data.role);
-    formData.append("gender", data.gender);
-    formData.append("religion", data.religion);
-    formData.append("religion", data.religion);
-    formData.append("active", data.active ? "1" : "0");
-
-
-    if (previewImage !== undefined) {
-      formData.append("image", data.imageProfile as Blob);
-    }
-
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/member/${data.id}`, formData, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/member/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -189,6 +154,80 @@ export async function getProfile(token: string | undefined) {
     })
 
     return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API GET Category
+export async function getCategories(token: string | undefined) {
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/category`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API CREATE Category
+export async function createCategory(
+  data: FormData,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/category/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API UPDATE Category
+export async function updateCategory(
+  id: number,
+  data: FormData,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/category/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// API UPDATE Category
+export async function deleteCategory(
+  id: number,
+  token: string | undefined,
+) {
+  try {
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/category/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response
   } catch (error: any) {
     return error.response
   }

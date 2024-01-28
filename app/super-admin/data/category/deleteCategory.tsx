@@ -3,12 +3,12 @@
 import React from 'react';
 import { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { MemberState } from '@/types/interface';
+import { CategoryState, MemberState } from '@/types/interface';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSession } from 'next-auth/react';
 import AlertSuccess from '@/app/components/alertSuccess';
 import AlertError from '@/app/components/alertError';
-import { deleteMember } from '@/app/utils/featuresApi';
+import { deleteCategory } from '@/app/utils/featuresApi';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -22,22 +22,16 @@ import {
 } from "@/components/ui/alert-dialog"
 
 
-const DeleteMember = ({ member }: { member: MemberState }) => {
+const DeleteCategory = ({ category }: { category: CategoryState }) => {
     const { data: session } = useSession()
-    const [modal, setModal] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState<string | boolean>(false)
     const [error, setError] = useState<string | boolean>(false)
 
     const router = useRouter();
 
-
-
     const handleDelete = async () => {
 
-        setIsLoading(true);
-
-        const response = await deleteMember(member.id, session?.user.accessToken);
+        const response = await deleteCategory(category.id, session?.user.accessToken);
 
         if (response.status === 200) {
             setSuccess(response.data.message)
@@ -60,7 +54,7 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah kamu yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Data {member.name} akan dihapus!
+                            Data {category.name} akan dihapus!
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -76,4 +70,4 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
     )
 }
 
-export default DeleteMember;
+export default DeleteCategory;

@@ -79,7 +79,7 @@ const FormRegister = () => {
   };
 
   return (
-    <form
+    <form 
       onSubmit={handleRegister}
       className="w-full"
       encType="multipart/form-data"

@@ -3,28 +3,37 @@
 import AlertError from "@/app/components/alertError";
 import AlertSuccess from "@/app/components/alertSuccess";
 import { createMember } from "@/app/utils/featuresApi";
-import {
-  stateAddMember,
-  resetStateMember,
-} from "@/redux/features/addMember-slice";
-import { appDispatch, useAppSelector } from "@/redux/store";
-import { RoleState } from "@/types/interface";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { SyntheticEvent, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
+import Loader from "@/app/components/loader";
+
+import { Button } from "@/components/ui/button"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectGroup,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import * as z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { createMemberSchema } from "@/app/utils/formSchema";
+import { RoleState } from "@/types/interface";
+
+const formSchema = createMemberSchema;
 
 const AddMember = ({ roles }: { roles: RoleState[] | undefined }) => {
   const { data: session } = useSession();
@@ -38,21 +47,72 @@ const AddMember = ({ roles }: { roles: RoleState[] | undefined }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | boolean>(false);
   const [error, setError] = useState<string | boolean>(false);
-
-  const selector = useAppSelector((state) => state.addMemmberReducer);
-  const dispatch = useDispatch<appDispatch>();
   const router = useRouter();
 
   const handleModal = () => {
     setModal(!modal);
   };
 
-  const handleInput = (name: string, value: any) => {
-    dispatch(stateAddMember({ type: `SET_${name}`, value: value }));
-  };
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      address: "",
+      phone_number: "",
+      religion: "",
+      gender: "L",
+      position: "pns",
+      username: "",
+      password: "",
+      role: "member"
+    },
+  })
 
-  const handleImageInput = (e: any) => {
-    const file = e.target.files[0];
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true)
+    const formData = new FormData();
+
+    formData.append("username", values.username);
+    formData.append("password", values.password);
+    formData.append("email", values.email);
+    formData.append("name", values.name);
+    formData.append("address", values.address);
+    formData.append("phone_number", values.phone_number);
+    formData.append("position", values.position);
+    formData.append("gender", values.gender);
+    formData.append("religion", values.religion);
+    formData.append("role", values.role);
+
+    if (imageProfile) {
+      formData.append("image", imageProfile);
+    }
+
+    const response = await createMember(formData, session?.user.accessToken)
+
+    setIsLoading(false)
+
+    if (response.status === 200) {
+      setModal(!modal)
+      setImageProfile(undefined)
+      setPreviewImage(undefined)
+      form.reset();
+      router.refresh();
+      setSuccess(response.data.message)
+    } else if (response.status === 422) {
+      const errorsData = response.data.errors
+      const keys = Object.keys(errorsData)
+      const firstKey = keys[0]
+      const message = errorsData[firstKey][0]
+
+      setError(message)
+    } else {
+      setError(response.data.message)
+    }
+  }
+
+  const handleImageInput = (event: any) => {
+    const file = event.target.files[0];
 
     if (file) {
       setImageProfile(file);
@@ -69,446 +129,207 @@ const AddMember = ({ roles }: { roles: RoleState[] | undefined }) => {
     }
   };
 
-  const handleSubmit = async (event: SyntheticEvent) => {
-    event.preventDefault();
-    setIsLoading(true);
-
-    const data = {
-      ...selector,
-      imageProfile: imageProfile,
-    };
-
-    const response = await createMember(data, session?.user.accessToken);
-
-    setIsLoading(false);
-    setModal(!modal);
-
-    if (response.status === 200) {
-      dispatch(resetStateMember());
-
-      setSuccess(response.data.message);
-    } else if (response.status === 422) {
-      const errorsData = response.data.errors;
-      const keys = Object.keys(errorsData);
-      const firstKey = keys[0];
-      const message = errorsData[firstKey][0];
-
-      setError(message);
-    } else {
-      setError("Terjadi kesalahan dengan sistem!");
-    }
-    router.refresh();
-  };
 
   return (
     <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="bg-amber-400">Tambah Data</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Tambah data member</DialogTitle>
-          </DialogHeader>
-          <form
-            onSubmit={handleSubmit}
-            encType="multipart/form-data"
-            className="grid gap-4 py-4"
-          >
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                value={selector.name}
-                onChange={(e) => handleInput("NAME", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={selector.email}
-                onChange={(e) => handleInput("EMAIL", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
-                No Telp
-              </Label>
-              <Input
-                id="phone"
-                value={selector.phone_number}
-                onChange={(e) => handleInput("PHONE", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="address" className="text-right">
-                Alamatx
-              </Label>
-              <Input
-                id="address"
-                value={selector.address}
-                onChange={(e) => handleInput("ADDRESS", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={selector.email}
-                onChange={(e) => handleInput("EMAIL", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={selector.email}
-                onChange={(e) => handleInput("EMAIL", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={selector.email}
-                onChange={(e) => handleInput("EMAIL", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={selector.email}
-                onChange={(e) => handleInput("EMAIL", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={selector.email}
-                onChange={(e) => handleInput("EMAIL", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={selector.email}
-                onChange={(e) => handleInput("EMAIL", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={selector.email}
-                onChange={(e) => handleInput("EMAIL", e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-          </form>
-          <DialogFooter>
-            <Button type="submit">Simpan</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <Button className="text-white bg-amber-400" onClick={handleModal}>Tambah Data</Button>
+      <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
+        <div className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
+          <div className="p-4 border-b border-b-slate-300 mb-4">
+            <h3 className="font-bold text-lg text-black">Tambah Data Member</h3>
+          </div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="p-4 grid grid-col-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nama</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nama Lengkap" {...field} disabled={isLoading} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Email" {...field} disabled={isLoading} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-      {/* <Button className="bg-amber-400 border-none text-white mb-10 block">
-        Tambah Data
-      </Button>
-      <input
-        type="checkbox"
-        checked={modal}
-        onChange={handleModal}
-        className="modal-toggle"
-      />
-      <div className={`modal ${modal ? "modal-open" : ""}`}>
-        <div className="modal-box w-11/12 max-w-4xl bg-white">
-          <h3 className="font-bold text-lg text-black">Tambah Data Member</h3>
- 
-          <form
-            onSubmit={handleSubmit}
-            className="w-full"
-            encType="multipart/form-data"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-4 mb-4">
-              <div className="mb-3">
-                <label htmlFor="name" className="label text-black text-xs">
-                  Nama Lengkap
-                </label>
-                <div className="flex items-start justify-start w-full h-8 mb-1">
-                  <div className="w-1 h-full bg-amber-400"></div>
-                  <input
-                    type="text"
-                    value={selector.name}
-                    onChange={(e) => handleInput("NAME", e.target.value)}
-                    className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-                    id="name"
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="email" className="label text-black text-xs">
-                  Email
-                </label>
-                <div className="flex items-start justify-start w-full h-8">
-                  <div className="w-1 h-full bg-amber-400"></div>
-                  <input
-                    type="email"
-                    value={selector.email}
-                    onChange={(e) => handleInput("EMAIL", e.target.value)}
-                    className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-                    id="email"
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="phone" className="label text-black text-xs">
-                  No Telepon
-                </label>
-                <div className="flex items-start justify-start w-full h-8">
-                  <div className="w-1 h-full bg-amber-400"></div>
-                  <input
-                    type="number"
-                    value={selector.phone_number}
-                    onChange={(e) => handleInput("PHONE", e.target.value)}
-                    className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-                    id="phone"
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="address" className="label text-black text-xs">
-                  Alamat
-                </label>
-                <div className="flex items-start justify-start w-full h-8">
-                  <div className="w-1 h-full bg-amber-400"></div>
-                  <input
-                    type="text"
-                    value={selector.address}
-                    onChange={(e) => handleInput("ADDRESS", e.target.value)}
-                    className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-                    id="address"
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="gender" className="label text-black text-xs">
-                  Jenis kelamin
-                </label>
-                <div className="flex items-start justify-start w-full h-8">
-                  <div className="w-1 h-full bg-amber-400"></div>
-                  <select
-                    value={selector.gender}
-                    onChange={(e) => handleInput("GENDER", e.target.value)}
-                    id="gender"
-                    className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none "
-                  >
-                    <option
-                      className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                      disabled
-                      value="pilih"
-                    >
-                      Silahkan pilih jenis kelamin
-                    </option>
-                    <option
-                      className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                      value="L"
-                    >
-                      Laki-laki
-                    </option>
-                    <option
-                      className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                      value="P"
-                    >
-                      Perempuan
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="religion" className="label text-black text-xs">
-                  Agama
-                </label>
-                <div className="flex items-start justify-start w-full h-8">
-                  <div className="w-1 h-full bg-amber-400"></div>
-                  <input
-                    type="text"
-                    value={selector.religion}
-                    onChange={(e) => handleInput("RELIGION", e.target.value)}
-                    className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-                    id="religion"
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="role" className="label text-black text-xs">
-                  Jabatan/Posisi
-                </label>
-                <div className="flex items-start justify-start w-full h-8">
-                  <div className="w-1 h-full bg-amber-400"></div>
-                  <select
-                    id="role"
-                    value={selector.position}
-                    onChange={(e) => handleInput("POSITION", e.target.value)}
-                    className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none "
-                  >
-                    <option
-                      className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                      disabled
-                      value="pilih"
-                    >
-                      Silahkan pilih Jabatan
-                    </option>
-                    <option
-                      className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                      value="pns"
-                    >
-                      PNS
-                    </option>
-                    <option
-                      className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                      value="p3k"
-                    >
-                      P3K
-                    </option>
-                    <option
-                      className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                      value="cpns"
-                    >
-                      CPNS
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="image" className="label text-black text-xs">
-                  Gambar Profile
-                </label>
+                <FormField
+                  control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Alamat</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Alamat" {...field} disabled={isLoading} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                {previewImage ? (
-                  <img
-                    src={previewImage.toString()}
-                    className="w-14 h-14 mb-1 object-cover"
-                  />
-                ) : (
-                  <div className="w-14 h-14 bg-slate-200 opacity-70 mb-1"></div>
-                )}
-                <div className="flex items-start justify-start w-full h-8">
-                  <input
-                    type="file"
-                    accept=".jpg, .jpeg, .png"
-                    onChange={handleImageInput}
-                    id="image"
-                    className="text-sm"
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="username" className="label text-black text-xs">
-                  Username
-                </label>
-                <div className="flex items-start justify-start w-full h-8">
-                  <div className="w-1 h-full bg-amber-400"></div>
-                  <input
-                    type="text"
-                    value={selector.username}
-                    onChange={(e) => handleInput("USERNAME", e.target.value)}
-                    className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`}
-                    id="username"
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="password" className="label text-black text-xs">
-                  Password
-                </label>
-                <div className="flex items-start justify-start w-full h-8">
-                  <div className="w-1 h-full bg-amber-400"></div>
-                  <input
-                    type="password"
-                    value={selector.password}
-                    onChange={(e) => handleInput("PASSWORD", e.target.value)}
-                    className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`}
-                    id="password"
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label className="label text-black text-xs">Role Member</label>
-                <div className="flex items-start justify-start w-full h-8">
-                  <select
-                    value={selector.role}
-                    onChange={(e) => handleInput("ROLE", e.target.value)}
-                    className="select w-full bg-slate-200 select-sm"
-                  >
-                    <option value="pilih" disabled>
-                      Pilihkah Pilih Role
-                    </option>
-                    {roles?.map((item, index) => (
-                      <option key={item.id} value={item.name}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
+                <FormField
+                  control={form.control}
+                  name="phone_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>No Telp</FormLabel>
+                      <FormControl>
+                        <Input placeholder="No Telepon" {...field} disabled={isLoading} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="religion"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Agama</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Agama" {...field} disabled={isLoading} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="gender"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Jenis Kelamin</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Pilih jenis kelamin" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="L">Laki-laki</SelectItem>
+                          <SelectItem value="P">Perempuan</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <div className="modal-action">
-              <button
-                type="button"
-                onClick={handleModal}
-                className="btn btn-sm"
-              >
-                Batal
-              </button>
+                <FormField
+                  control={form.control}
+                  name="position"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Jabatan</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Silahkan pilih jabatan" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="pns">PNS</SelectItem>
+                          <SelectItem value="p3k">P3K</SelectItem>
+                          <SelectItem value="cpns">CPNS</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <button
-                type="submit"
-                className="btn btn-sm bg-amber-400 text-sm text-white border-none"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <span className="loading loading-spinner loading-xs"></span>
-                ) : (
-                  "Simpan"
-                )}
-              </button>
-            </div>
-          </form>
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Gambar</FormLabel>
+                      {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <div className="w-14 h-14 bg-slate-300 rounded mb-2"></div>}
+                      <FormControl>
+                        <Input type="file" {...field} accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Username" {...field} disabled={isLoading} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>password</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="password" {...field} disabled={isLoading}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="role"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Role</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Silahkan pilih jabatan" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Jabatan/Posisi</SelectLabel>
+                            {roles && roles.map((role) => (
+                              <SelectItem key={role.id} value={role.name}>{role.name}</SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="p-4 flex items-center justify-end gap-3">
+                <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
+                <Button type="submit" className="bg-amber-400 text-white" disabled={isLoading}>
+                  {isLoading ? <Loader /> : 'Simpan'}
+                </Button>
+              </div>
+            </form>
+          </Form>
         </div>
-      </div> */}
+
+      </div>
       {success && <AlertSuccess message={success.toString()} isShow={true} />}
       {error && <AlertError message={error.toString()} isShow={true} />}
     </>

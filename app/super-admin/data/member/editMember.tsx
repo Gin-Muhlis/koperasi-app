@@ -1,93 +1,110 @@
-"use client"
+"use client";
 
-import AlertError from '@/app/components/alertError'
-import AlertSuccess from '@/app/components/alertSuccess'
-import { editMember } from '@/app/utils/featuresApi'
-import { stateEditMember, resetStateMember } from '@/redux/features/editMember-slice'
-import { appDispatch, useAppSelector } from '@/redux/store'
-import { MemberState, RoleState } from '@/types/interface'
-import { Icon } from '@iconify/react/dist/iconify.js'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import React, { SyntheticEvent, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import AlertError from "@/app/components/alertError";
+import AlertSuccess from "@/app/components/alertSuccess";
+import { updateMember } from "@/app/utils/featuresApi";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import Loader from "@/app/components/loader";
 
-const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[] }) => {
-    const { data: session } = useSession()
-    const [imageProfile, setImageProfile] = useState<File | string | Blob | undefined>(member.imageProfile)
-    const [previewImage, setPreviewImage] = useState<string | undefined>(undefined)
-    const [modal, setModal] = useState<boolean>(false);
+import { Button } from "@/components/ui/button"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectGroup,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import * as z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { updateMemberSchema } from "@/app/utils/formSchema";
+import { MemberState, RoleState } from "@/types/interface";
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { Switch } from "@/components/ui/switch";
+
+const formSchema = updateMemberSchema;
+
+const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[] | undefined }) => {
+    const { data: session } = useSession();
+    const [imageProfile, setImageProfile] = useState<
+        File | string | Blob | undefined
+    >(member.imageProfile);
+    const [previewImage, setPreviewImage] = useState<File | string | undefined>(
+        undefined
+    );
+    const [modal, setModal] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [success, setSuccess] = useState<string | boolean>(false)
-    const [error, setError] = useState<string | boolean>(false)
-    const selector = useAppSelector(state => state.editMemberReducer)
-    const dispatch = useDispatch<appDispatch>()
+    const [success, setSuccess] = useState<string | boolean>(false);
+    const [error, setError] = useState<string | boolean>(false);
     const router = useRouter();
 
     const handleModal = () => {
-        dispatch(resetStateMember())
-        setModal(!modal)
-        dispatch(stateEditMember({ type: "SET_ID", value: member.id }))
-        dispatch(stateEditMember({ type: "SET_NAME", value: member.name }))
-        dispatch(stateEditMember({ type: "SET_EMAIL", value: member.email }))
-        dispatch(stateEditMember({ type: "SET_ADDRESS", value: member.address }))
-        dispatch(stateEditMember({ type: "SET_PHONE", value: member.phone_number }))
-        dispatch(stateEditMember({ type: "SET_GENDER", value: member.gender }))
-        dispatch(stateEditMember({ type: "SET_RELIGION", value: member.religion }))
-        dispatch(stateEditMember({ type: "SET_POSITION", value: member.position }))
-        dispatch(stateEditMember({ type: "SET_USERNAME", value: member.username }))
-        dispatch(stateEditMember({ type: "SET_ACTIVE", value: member.active }))
-        dispatch(stateEditMember({ type: "SET_ROLE", value: member.role }))
-        
-    }
+        setModal(!modal);
+    };
 
-    const handleInput = (name: string, value: any) => {
-        dispatch(stateEditMember({ type: `SET_${name}`, value: value }))
-    }
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: member.name,
+            email: member.email,
+            address: member.address,
+            phone_number: member.phone_number,
+            religion: member.religion,
+            gender: member.gender,
+            position: member.position,
+            username: member.username,
+            role: member.role,
+            active: member.active == 1 ? true : false
+        },
+    })
 
-    const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.checked
-        dispatch(stateEditMember({ type: "SET_ACTIVE", value }))
-    }
-
-    const handleImageInput = (e: any) => {
-        const file = e.target.files[0]
-
-        if (file) {
-            setImageProfile(file)
-
-            const render = new FileReader()
-
-            render.onloadend = () => {
-                setPreviewImage(render.result as string)
-            }
-
-            render.readAsDataURL(file);
-        } else {
-            setPreviewImage(undefined)
-        }
-
-    }
-
-    const handleSubmit = async (event: SyntheticEvent) => {
-        event.preventDefault()
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        console.log(values)
+       
         setIsLoading(true)
+        const formData = new FormData();
 
-        const data = {
-            ...selector,
-            imageProfile: imageProfile
+        formData.append("_method", "PUT");
+        formData.append("username", values.username);
+        formData.append("email", values.email);
+        formData.append("name", values.name);
+        formData.append("address", values.address);
+        formData.append("phone_number", values.phone_number);
+        formData.append("position", values.position);
+        formData.append("gender", values.gender);
+        formData.append("religion", values.religion);
+        formData.append("role", values.role);
+        formData.append("active", values.active ? '1' : '0');
+        formData.append("password", values.password as string);
+
+        if (previewImage) {
+            formData.append("image", imageProfile as Blob);
         }
 
-        const response = await editMember(data, session?.user.accessToken, previewImage)
-        setModal(false);
-
+        const response = await updateMember(member.id, formData, session?.user.accessToken)
+        console.log(response)
         setIsLoading(false)
 
         if (response.status === 200) {
-            dispatch(resetStateMember())
-            
+            setModal(!modal)
+            setImageProfile(undefined)
+            setPreviewImage(undefined)
+            form.reset();
+            router.refresh();
             setSuccess(response.data.message)
-
         } else if (response.status === 422) {
             const errorsData = response.data.errors
             const keys = Object.keys(errorsData)
@@ -96,142 +113,251 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
 
             setError(message)
         } else {
-            setError('Terjadi kesalahan dengan sistem!')
+            setError(response.data.message)
         }
-        router.refresh()
-
     }
+
+    const handleImageInput = (event: any) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            setImageProfile(file);
+
+            const render = new FileReader();
+
+            render.onloadend = () => {
+                setPreviewImage(render.result as string);
+            };
+
+            render.readAsDataURL(file);
+        } else {
+            setPreviewImage(undefined);
+        }
+    };
+
 
     return (
         <>
+            <span className="w-5 h-5 rounded bg-green-500 text-white flex items-center justify-center cursor-pointer" onClick={handleModal}>
+                <Icon icon="lucide:square-pen" width="16" height="16" />
+            </span>
+            <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
+                <div className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
+                    <div className="p-4 border-b border-b-slate-300 mb-4">
+                        <h3 className="font-bold text-lg text-black">Edit Data Member</h3>
+                    </div>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <div className="p-4 grid grid-col-1 md:grid-cols-2 gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Nama</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Nama Lengkap" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Email</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Email" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-            <button className="btn btn-xs bg-green-600 text-white border-none" onClick={handleModal}>
-                <Icon icon="solar:pen-bold" width="15" height="15" />
-            </button>
-            <input type="checkbox" checked={modal} onChange={handleModal} className='modal-toggle' />
-            <div className="modal">
-                <div className="modal-box w-11/12 max-w-4xl bg-white">
-                    <h3 className="font-bold text-lg mb-5">Edit Member</h3>
-                    <form onSubmit={handleSubmit} className='w-full' encType='multipart/form-data'>
-                        <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-4 mb-4">
-                            <div className='mb-3'>
-                                <label htmlFor="name" className='label text-black text-xs'>Nama Lengkap</label>
-                                <div className="flex items-start justify-start w-full h-8 mb-1">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" value={selector.name} onChange={(e) => handleInput("NAME", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
+                                <FormField
+                                    control={form.control}
+                                    name="address"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Alamat</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Alamat" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="email" className='label text-black text-xs'>Email</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="email" value={selector.email} onChange={(e) => handleInput("EMAIL", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="phone" className='label text-black text-xs'>No Telepon</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="number" value={selector.phone_number} onChange={(e) => handleInput("PHONE", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="address" className='label text-black text-xs'>Alamat</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" value={selector.address} onChange={(e) => handleInput("ADDRESS", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="gender" className='label text-black text-xs'>Jenis kelamin</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <select value={selector.gender} onChange={(e) => handleInput("GENDER", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none ">
-                                        <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" disabled value="pilih">Silahkan pilih jenis kelamin</option>
-                                        <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" value="L">Laki-laki</option>
-                                        <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" value="P">Perempuan</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="religion" className='label text-black text-xs'>Agama</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" value={selector.religion} onChange={(e) => handleInput("RELIGION", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="role" className='label text-black text-xs'>Jabatan/Posisi</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <select value={selector.role} onChange={(e) => handleInput("ROLE", e.target.value)} className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none ">
-                                        <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" disabled value="pilih">Silahkan pilih Jabatan</option>
-                                        <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" value="pns">PNS</option>
-                                        <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" value="p3k">P3K</option>
-                                        <option className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none" value="cpns">CPNS</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="image" className='label text-black text-xs'>Gambar Profile</label>
+                                <FormField
+                                    control={form.control}
+                                    name="phone_number"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>No Telp</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="No Telepon" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="religion"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Agama</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Agama" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="gender"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Jenis Kelamin</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Pilih jenis kelamin" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="L">Laki-laki</SelectItem>
+                                                    <SelectItem value="P">Perempuan</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                                {previewImage ? <img src={previewImage} className="w-14 h-14 mb-1 object-cover" /> : <img src={imageProfile?.toString()} className="w-14 h-14 mb-1 object-cover" />}
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <input type="file" accept=".jpg, .jpeg, .png" onChange={handleImageInput} className='text-sm' />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="username" className='label text-black text-xs'>Username</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" value={selector.username} onChange={(e) => handleInput("USERNAME", e.target.value)} className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`} />
-                                </div>
+                                <FormField
+                                    control={form.control}
+                                    name="position"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Jabatan</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                                                <FormControl>
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Silahkan pilih jabatan" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="pns">PNS</SelectItem>
+                                                    <SelectItem value="p3k">P3K</SelectItem>
+                                                    <SelectItem value="cpns">CPNS</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
+                                <FormField
+                                    control={form.control}
+                                    name="image"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Gambar</FormLabel>
+                                            {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <img src={imageProfile?.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" />}
+                                            <FormControl>
+                                                <Input type="file" {...field} accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="username"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Username</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Username" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>password</FormLabel>
+                                            <FormControl>
+                                                <Input type="password" placeholder="password" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="role"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Role</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                                                <FormControl>
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Silahkan pilih jabatan" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        <SelectLabel>Jabatan/Posisi</SelectLabel>
+                                                        {roles && roles.map((role) => (
+                                                            <SelectItem key={role.id} value={role.name}>{role.name}</SelectItem>
+                                                        ))}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="active"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="block mb-2">Aktif</FormLabel>
+                                            <FormControl>
+                                                <Switch
+                                                    checked={field.value}
+                                                    onCheckedChange={field.onChange}
+                                                    disabled={isLoading}
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
-                            <div className='mb-3'>
-                                <label htmlFor="password" className='label text-black text-xs'>Password</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="password" value={selector.password} onChange={(e) => handleInput("PASSWORD", e.target.value)} className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`} />
-                                </div>
-
+                            <div className="p-4 flex items-center justify-end gap-3">
+                                <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
+                                <Button type="submit" className="bg-amber-400 text-white" disabled={isLoading}>
+                                    {isLoading ? <Loader /> : 'Simpan'}
+                                </Button>
                             </div>
-                            <div className='mb-3'>
-                                <label className='label text-black text-xs'>Role Member</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <select  value={selector.role} onChange={(e) => handleInput('ROLE', e.target.value)} className='select w-full bg-slate-200 select-sm'>
-                                        <option value="pilih" disabled >Pilihkah Pilih Role</option>
-                                        {roles?.map((item, index) => (
-                                            <option key={item.id} value={item.name} >{item.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="active" className='label text-black text-xs'>Aktif</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <input type="checkbox" className="toggle toggle-warning" onChange={handleChecked} checked={selector.active} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="modal-action">
-                            <button type='button' onClick={handleModal} className="btn btn-sm">Batal</button>
-
-                            <button type='submit' className='btn btn-sm bg-amber-400 text-sm text-white border-none' disabled={isLoading}>
-                                {isLoading ? <span className="loading loading-spinner loading-xs"></span> : 'Simpan'}
-                            </button>
-                        </div>
-
-                    </form>
+                        </form>
+                    </Form>
                 </div>
-            </div>
 
+            </div>
             {success && <AlertSuccess message={success.toString()} isShow={true} />}
             {error && <AlertError message={error.toString()} isShow={true} />}
         </>
-    )
-}
+    );
+};
 
-export default EditMember
+export default EditMember;

@@ -1,120 +1,78 @@
-"use client"
+"use client";
 
-import { MemberState } from '@/types/interface'
-import { Icon } from '@iconify/react/dist/iconify.js'
-import React, { useState } from 'react'
+import React, { useState } from "react";
+
+import { Button } from "@/components/ui/button"
+import { MemberState, RoleState } from "@/types/interface";
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+
 
 const DetailMember = ({ member }: { member: MemberState }) => {
-    const [modal, setModal] = useState<boolean>(false);
+    const [modal, setModal] = useState(false);
 
     const handleModal = () => {
-        
-        setModal(!modal)
-      
-        
-    }
-  
+        setModal(!modal);
+    };
 
 
     return (
         <>
-
-            <button className="btn btn-xs bg-blue-600 text-white border-none" onClick={handleModal}>
-                <Icon icon="solar:eye-bold" width="15" height="15" />
-            </button>
-            <input type="checkbox" checked={modal} onChange={handleModal} className='modal-toggle' />
-            <div className="modal">
-                <div className="modal-box w-11/12 max-w-4xl bg-white">
-                    <h3 className="font-bold text-lg mb-5">Detail Member</h3>
-                    <div className='w-full'>
-                        <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-4 mb-4">
-                            <div className='mb-3'>
-                                <label htmlFor="name" className='label text-black text-xs'>Nama Lengkap</label>
-                                <div className="flex items-start justify-start w-full h-8 mb-1">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" defaultValue={member.name} readOnly  className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="email" className='label text-black text-xs'>Email</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="email" defaultValue={member.email} readOnly className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="phone" className='label text-black text-xs'>No Telepon</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" defaultValue={member.phone_number} readOnly className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="address" className='label text-black text-xs'>Alamat</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" defaultValue={member.address} readOnly className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="gender" className='label text-black text-xs'>Jenis kelamin</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" defaultValue={member.gender == "L" ? "Laki-laki" : "Perempuan"} readOnly className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="religion" className='label text-black text-xs'>Agama</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" defaultValue={member.religion} readOnly className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="role" className='label text-black text-xs'>Jabatan/Posisi</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" defaultValue={member.position} readOnly className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="image" className='label text-black text-xs'>Gambar Profile</label>
-
-                                <img src={member.imageProfile?.toString()} className="w-14 h-14 mb-1 object-cover" />
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="username" className='label text-black text-xs'>Username</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <div className="w-1 h-full bg-amber-400"></div>
-                                    <input type="text" defaultValue={member.username}  className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`} />
-                                </div>
-
-                            </div>
-                            <div className='mb-3'>
-                                <label className='label text-black text-xs'>Role Member</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                <input type="text" defaultValue={member.role} readOnly className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none " />
-                                </div>
-
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="active" className='label text-black text-xs'>Aktif</label>
-                                <div className="flex items-start justify-start w-full h-8">
-                                    <input type="checkbox" readOnly className="toggle toggle-warning"  checked={member.active} />
-                                </div>
-                            </div>
+            <span className="w-5 h-5 rounded bg-blue-500 text-white flex items-center justify-center cursor-pointer" onClick={handleModal}>
+                <Icon icon="lucide:eye" width="16" height="16" />
+            </span>
+            <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
+                <div className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
+                    <div className="p-4 border-b border-b-slate-300 mb-4">
+                        <h3 className="font-bold text-lg text-black">Edit Data Member</h3>
+                    </div>
+                    <div className="p-4 grid grid-col-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <Label>Nama</Label>
+                            <Input value={member.name} readOnly />
                         </div>
-                        <div className="modal-action">
-                            <button type='button' onClick={handleModal} className="btn btn-sm">Tutup</button>
+                        <div>
+                            <Label>Email</Label>
+                            <Input value={member.email} readOnly />
                         </div>
-
+                        <div>
+                            <Label>Alamat</Label>
+                            <Input value={member.address} readOnly />
+                        </div>
+                        <div>
+                            <Label>No Telp</Label>
+                            <Input value={member.phone_number} readOnly />
+                        </div>
+                        <div>
+                            <Label>Jabatan</Label>
+                            <Input value={member.position} readOnly />
+                        </div>
+                        <div>
+                            <Label>Gambar Profile</Label>
+                            <img src={member.imageProfile?.toString()} alt="Gambar member" className="w-14 h-14 rounded object-cover" />
+                        </div>
+                        <div>
+                            <Label>Username</Label>
+                            <Input value={member.username} readOnly />
+                        </div>
+                        <div>
+                            <Label>Role</Label>
+                            <Input value={member.role} readOnly />
+                        </div>
+                        <div>
+                            <Label className="block mb-2">Aktif</Label>
+                            <Switch checked={member.active == 1 ? true : false}  />
+                        </div>
+                    </div>
+                    <div className="p-4 flex items-center justify-end gap-3">
+                        <Button type="button" className="text-white" onClick={handleModal}>Tutup</Button>
                     </div>
                 </div>
             </div>
-
         </>
-    )
-}
+    );
+};
 
-export default DetailMember
+export default DetailMember;

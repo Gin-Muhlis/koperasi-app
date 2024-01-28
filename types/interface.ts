@@ -41,21 +41,27 @@ export type MemberState = {
   email: string;
   address: string;
   phone_number: string;
-  gender: string;
+  gender: 'L' | 'P';
   identify_number: number;
   religion: string;
-  position: string;
+  position: 'pns' | 'p3k' | 'cpns';
   imageProfile: File | string | Blob | undefined;
   date_activation: number;
-  role: string;
+  role: 'member' | 'super-admin';
   username: string;
   password: string;
-  active: boolean;
+  active: number;
   last_login_ip: string;
   last_login_time: string;
 };
 
 export type RoleState = {
   id: number;
+  name: string;
+}
+
+export type CategoryState = {
+  id: number;
+  uuid: string;
   name: string;
 }

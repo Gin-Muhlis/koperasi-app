@@ -8,7 +8,7 @@ const AlertSuccess = ({ message, isShow }: { message: string | boolean, isShow: 
 
   return (
     <>
-      {show && <div className='z-50 p-4 bg-success rounded fixed bottom-7 right-7 text-white flex items-center gap-1'>
+      {show && <div className='z-50 p-4 bg-green-500 rounded fixed bottom-7 right-7 text-white flex items-center gap-1'>
         <Icon icon="mingcute:alert-fill" width={24} height={24} />
         <span className=" font-semibold text-md alert-access">
           {message}

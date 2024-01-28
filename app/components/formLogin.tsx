@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { SyntheticEvent, useEffect, useState } from 'react'
 import AlertError from './alertError'
+import Loader from './loader'
 
 const FormLogin = () => {
     const [email, setEmail] = useState("")
@@ -31,12 +32,12 @@ const FormLogin = () => {
                 password: password,
                 callbackUrl: '/'
             })
-            
+
             if (res.ok && res.status === 200) {
                 setIsLoading(false)
 
                 const updatedSession = await getSession();
-                
+
                 push(`${updatedSession?.user?.role}/dashboard`)
             } else {
                 setIsLoading(false)
@@ -76,9 +77,9 @@ const FormLogin = () => {
                     <Link href="/">
                         <span className='inline-block text-xs text-red-500 mb-5'>Lupa Password?</span>
                     </Link>
-                    
+            
                     <button type='submit' className='outline-none border-none bg-amber-400 text-white w-full rounded-full p-1 h-9 mb-3 flex items-center justify-center' disabled={isLoading}>
-                        {isLoading ? <span className="loading loading-infinity loading-md"></span> : 'Masuk'}
+                        {isLoading ? <Loader /> : 'Masuk'}
                     </button>
                     <span className='block text-xs text-black mb-4 text-center'>
                         Belum punya akun? <Link href="/register"><span className='text-amber-500'>Daftar</span></Link>
