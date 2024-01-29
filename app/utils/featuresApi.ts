@@ -512,21 +512,19 @@ export async function deleteStuff(id: number, token: string | undefined) {
   }
 }
 
-// API Sub-Category Saving
-export async function getSubCategoriesSaving(token: string | undefined) {
+// API CREATE SAVING
+export async function createSavingMembers(data: any, token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/saving/sub-category`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/saving-members`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
       }
-    );
+    })
 
-    return response.data.data;
+    return response
   } catch (error: any) {
-    return error.response;
+    return error.response
   }
 }
+

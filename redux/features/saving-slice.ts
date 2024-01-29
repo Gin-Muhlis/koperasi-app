@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  typeSaving: null,
-  idTypesaving: null,
+  typeSaving: "",
+  idTypesaving: "",
   month: 0,
   year: 0,
   amount: 0,
@@ -26,7 +26,7 @@ export const saving = createSlice({
             typeSaving: value,
           };
           break;
-        case "SET_ID,TYPE_SAVING":
+        case "SET_ID_TYPE_SAVING":
           return {
             ...state,
             idTypeSaving: value,
@@ -54,6 +54,12 @@ export const saving = createSlice({
           return {
             ...state,
             members: value,
+          };
+          break;
+        case "SET_DESCRIPTION":
+          return {
+            ...state,
+            description: value,
           };
           break;
         default:
