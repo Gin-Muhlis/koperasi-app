@@ -10,7 +10,7 @@ import AddSubCategory from "./addSubCategory";
 
 export const metadata: Metadata = {
   title: "Kategori",
-  description: "Data kategori dari Zie Koperasi",
+  description: "Data sub kategori dari Zie Koperasi",
 };
 
 const SubCategory = async () => {

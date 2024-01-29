@@ -1,4 +1,4 @@
-import { RegisterState, InitialState } from "@/types/interface";
+import { RegisterState } from "@/types/interface";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 

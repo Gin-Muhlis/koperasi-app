@@ -1,18 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import registerReducer from "./features/register-slice";
-import addMemmberReducer from "./features/addMember-slice";
-import editMemberReducer from "./features/editMember-slice";
+import savingReducer from "./features/saving-slice";
 
 export const store = configureStore({
-    reducer: {
-        registerReducer,
-        addMemmberReducer,
-        editMemberReducer,
-    },
-})
+  reducer: {
+    registerReducer,
+    savingReducer,
+  },
+});
 
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;
 export type appDispatch = typeof store.dispatch;
 
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
