@@ -29,7 +29,7 @@ export type RegisterState = {
   gender: string;
   religion: string;
   role: string;
-  imageProfile: File | string |null;
+  imageProfile: File | string | null;
   password: string;
   confirmPassword: string;
 };
@@ -41,13 +41,14 @@ export type MemberState = {
   email: string;
   address: string;
   phone_number: string;
-  gender: 'L' | 'P';
+  gender: "L" | "P";
   identify_number: number;
   religion: string;
-  position: 'pns' | 'p3k' | 'cpns';
+  position: "pns" | "p3k" | "cpns";
   imageProfile: File | string | Blob | undefined;
+  payment_member: number;
   date_activation: number;
-  role: 'member' | 'super-admin';
+  role: "member" | "super-admin";
   username: string;
   password: string;
   active: number;
@@ -58,29 +59,29 @@ export type MemberState = {
 export type RoleState = {
   id: number;
   name: string;
-}
+};
 
 export type CategoryState = {
   id: number;
   uuid: string;
   name: string;
-}
+};
 
 export type SubCategoryState = {
   id: number;
   uuid: string;
   code: number;
   name: string;
-  type: 'debit' | 'kredit';
+  type: "debit" | "kredit";
   category: string;
   category_id: string;
-}
+};
 
 export type ProductState = {
   id: number;
   uuid: string;
   name: string;
-}
+};
 
 export type StuffState = {
   id: number;
@@ -90,4 +91,13 @@ export type StuffState = {
   image: File | string | Blob | undefined;
   product_id: number;
   product_name: string;
-}
+};
+
+export type PaymentDeterminationState = {
+  id: number;
+  uuid: string;
+  name: string;
+  sub_category: string;
+  amount: number;
+  payment_month: string;
+};

@@ -513,18 +513,43 @@ export async function deleteStuff(id: number, token: string | undefined) {
 }
 
 // API CREATE SAVING
-export async function createSavingMembers(data: any, token: string | undefined) {
+export async function createSavingMembers(
+  data: any,
+  token: string | undefined
+) {
   try {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/saving-members`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json"
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/saving-members`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
       }
-    })
+    );
 
-    return response
+    return response;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
 }
 
+// API GET Payment Determination
+export async function getPayments(token: string | undefined) {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/payment-determination`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "applicatioin/json",
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.Response;
+  }
+}

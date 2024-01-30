@@ -3,11 +3,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   typeSaving: "",
   idTypesaving: "",
-  month: 0,
-  year: 0,
+  month: "01",
+  year: new Date().getFullYear(),
   amount: 0,
   description: "",
   members: "[]",
+  isSelectAll: false,
 };
 
 export const saving = createSlice({
@@ -62,12 +63,21 @@ export const saving = createSlice({
             description: value,
           };
           break;
+        case "SET_IS_SELECT_ALL":
+          return {
+            ...state,
+            isSelectAll: value,
+          };
+          break;
         default:
           return state;
       }
     },
+    resetState: () => {
+      return initialState;
+    },
   },
 });
 
-export const { createSaving } = saving.actions;
+export const { createSaving, resetState } = saving.actions;
 export default saving.reducer;

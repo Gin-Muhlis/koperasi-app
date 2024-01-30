@@ -1,6 +1,6 @@
 "use client";
 
-import { MemberState, PaymentDeterminationState } from "@/types/interface";
+import { MemberState } from "@/types/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import React from "react";
 import { DataTable } from "./data-table";
@@ -11,13 +11,7 @@ import { appDispatch, useAppSelector } from "@/redux/store";
 import { createSaving, resetState } from "@/redux/features/saving-slice";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-const Member = ({
-  members,
-  payments,
-}: {
-  members: MemberState[];
-  payments: PaymentDeterminationState[];
-}) => {
+const Member = ({ members }: { members: MemberState[] }) => {
   const dispatch = useDispatch<appDispatch>();
   const selector = useAppSelector((state) => state.savingReducer);
 
@@ -136,36 +130,25 @@ const Member = ({
           </span>
           <div className="grid grid-cols-2 gap-3 mb-2">
             {JSON.parse(selector.members).length > 0 &&
-              JSON.parse(selector.members).map((item: any) => {
-                let payment = payments.filter(
-                  (payment) =>
-                    payment.name == item.name &&
-                    payment.payment_month ==
-                      `${selector.month}-${selector.year}`
-                );
-
-                return (
-                  <div
-                    key={item.id}
-                    className="rounded p-2 bg-gradient-to-r from-[rgba(249,232,51,1)] to-[rgba(250,196,59,1)] sidenav flex items-center justify-start gap-4"
-                  >
-                    <img
-                      src={item.imageProfile}
-                      className="w-12 h-12 object-cover rounded-full bg-white"
-                    />
-                    <div className="flex flex-col items-start justify-start flex-1">
-                      <span className="text-sm text-black font-bold">
-                        {item.name}, {item.position}
-                      </span>
-                      <span className="text-xs italic text-black">
-                        {payment.length > 0
-                          ? `Rp. ${payment[0].amount}`
-                          : "jumlah pebayaran tidak diketahui"}
-                      </span>
-                    </div>
+              JSON.parse(selector.members).map((item: any) => (
+                <div
+                  key={item.id}
+                  className="rounded p-2 bg-gradient-to-r from-[rgba(249,232,51,1)] to-[rgba(250,196,59,1)] sidenav flex items-center justify-start gap-4"
+                >
+                  <img
+                    src={item.imageProfile}
+                    className="w-12 h-12 object-cover rounded-full bg-white"
+                  />
+                  <div className="flex flex-col items-start justify-start flex-1">
+                    <span className="text-sm text-black font-bold">
+                      {item.name}
+                    </span>
+                    <span className="text-xs italic text-black">
+                      {item.position}
+                    </span>
                   </div>
-                );
-              })}
+                </div>
+              ))}
           </div>
         </div>
       </div>

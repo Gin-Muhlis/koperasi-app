@@ -29,7 +29,7 @@ const SaveSaving = ({
   const handleSaveSaving = async () => {
     setIsLoading(true);
     const subCategory: SubCategoryState | undefined = subCategories.find(
-      (item) => item.name == "simpanan wajib"
+      (item) => item.name == "tabungan rekreasi"
     );
 
     const arrayIdMembers = JSON.parse(selector.members).map(
@@ -41,11 +41,11 @@ const SaveSaving = ({
       month_year: `${selector.month}-${selector.year}`,
       sub_category_id: subCategory?.id,
       description: selector.description,
+      amount: selector.amount,
       type_saving: subCategory?.name,
     };
 
     const response = await createSavingMembers(data, session?.user.accessToken);
-    console.log(response);
 
     if (response.status == 200) {
       setIsLoading(false);

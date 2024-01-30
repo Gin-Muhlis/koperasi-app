@@ -212,3 +212,20 @@ export const editStuffSchema = z.object({
     invalid_type_error: "Kategori tidak valid"
   }))
 })
+
+export const addPaymentDeterminationSchema = z.object({
+  sub_category_id: z.string({
+    required_error: "Sub kategori tidak boleh kosong",
+    invalid_type_error: "Sub kategori tidak valid",
+  }),
+
+  amount: z.number({
+    required_error: "Jumlah tidak boleh kosong",
+    invalid_type_error: "Jumlah tidak valid",
+  }),
+
+  payment_month: z.string({
+    required_error: "Bulan pembayaran tidak boleh kosong",
+    invalid_type_error: "Bulan pembayaran tidak valid",
+  }),
+});

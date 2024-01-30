@@ -22,14 +22,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { SelectGroup } from "@radix-ui/react-select";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -67,7 +59,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div>
-        <div className="flex items-center justify-between py-4 gap-3">
+        <div className="flex">
           <Input
             placeholder="Cari nama"
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -76,23 +68,6 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-sm"
           />
-          <Select
-            value={table.getColumn("position")?.getFilterValue() as string}
-            onValueChange={(value) =>
-              table.getColumn("position")?.setFilterValue(value)
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Filter jabatan" />
-            </SelectTrigger>
-            <SelectGroup>
-              <SelectContent>
-                <SelectItem value="pns">PNS</SelectItem>
-                <SelectItem value="p3k">P3K</SelectItem>
-                <SelectItem value="cpns">CPNS</SelectItem>
-              </SelectContent>
-            </SelectGroup>
-          </Select>
         </div>
       </div>
       <div className="rounded-md border">

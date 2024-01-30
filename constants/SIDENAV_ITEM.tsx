@@ -18,6 +18,10 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
       { title: "Sub-kategori", path: "/super-admin/data/subCategory" },
       { title: "Produk", path: "/super-admin/data/product" },
       { title: "Barang", path: "/super-admin/data/stuff" },
+      {
+        title: "Ketentuan Pembayaran",
+        path: "/super-admin/data/paymentDetermination",
+      },
     ],
   },
   // {
@@ -36,9 +40,17 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     icon: <Icon icon="lucide:file-box" width="24" height="24" />,
     submenu: true,
     subMenuItems: [
-      { title: "Simpanan Wajib", path: "/super-admin/saving/wajib" },
       { title: "Simpanan Pokok", path: "/super-admin/saving/pokok" },
+      { title: "Simpanan Wajib", path: "/super-admin/saving/wajib" },
       { title: "Simpanan Sukarela", path: "/super-admin/saving/sukarela" },
+      {
+        title: "Tabungan Rekreasi",
+        path: "/super-admin/saving/tabungan-rekreasi",
+      },
+      {
+        title: "Qurban/Infaq",
+        path: "/super-admin/saving/qurban-infaq",
+      },
     ],
   },
   // {

@@ -14,7 +14,6 @@ const Payment = () => {
   const handleInput = (event: any): void => {
     dispatch(createSaving({ type: "SET_AMOUNT", value: event.target.value }));
   };
-  
   return (
     <div>
       <Label>Jumlah</Label>
@@ -22,7 +21,7 @@ const Payment = () => {
         <div className="border border-solid rounded p-2 text-center flex items-center justify-center text-md">
           <span>Rp.</span>
         </div>
-        <Input type="number" defaultValue={selector.amount} onChange={handleInput} />
+        <Input type="number" value={selector.amount} onChange={handleInput} />
       </div>
     </div>
   );

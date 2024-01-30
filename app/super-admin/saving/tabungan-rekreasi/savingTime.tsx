@@ -19,20 +19,7 @@ const SavingTime = () => {
   const selector = useAppSelector((state) => state.savingReducer);
   const currentyear = new Date().getFullYear();
   const nextYear = currentyear + 1;
-const months = [
-  "01",
-  "02",
-  "03",
-  "04",
-  "05",
-  "06",
-  "07",
-  "08",
-  "09",
-  10,
-  11,
-  12,
-];
+  const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', 10, 11, 12];
 
   const handleChange = (type: string, value: string) => {
     dispatch(createSaving({ type: `SET_${type}`, value }));

@@ -1,6 +1,5 @@
 "use client";
 
-
 import { MemberState } from "@/types/interface";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
@@ -12,24 +11,26 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import AlertError from "@/app/components/alertError";
 import { getProfile, logout } from "@/app/utils/featuresApi";
+import { useDispatch } from "react-redux";
+import { appDispatch } from "@/redux/store";
+import { resetState } from "@/redux/features/saving-slice";
 
 const Sidebar = () => {
   const { data: session } = useSession();
-  const [memberProfile, setMemberProfile] = useState<MemberState>()
+  const [memberProfile, setMemberProfile] = useState<MemberState>();
   const [error, setError] = useState<string | boolean>(false);
 
   const getDataProfile = async (token: string | undefined) => {
-    const response = await getProfile(token)
+    const response = await getProfile(token);
 
-    setMemberProfile(response)
-  }
+    setMemberProfile(response);
+  };
 
   useEffect(() => {
     if (session) {
-      getDataProfile(session?.user.accessToken)
+      getDataProfile(session?.user.accessToken);
     }
-  }, [session])
-  
+  }, [session]);
 
   const handleLogout = async () => {
     const response = await logout(session?.user.accessToken);
@@ -83,6 +84,11 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
   const toggleSubMenu = () => {
     setSubMenuOpen(!subMenuOpen);
   };
+  const dispatch = useDispatch<appDispatch>();
+
+  const handleResetState = () => {
+    dispatch(resetState());
+  };
 
   return (
     <div className="">
@@ -118,6 +124,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
                         ? "font-bold text-slate-900"
                         : ""
                     }`}
+                    onClick={handleResetState}
                   >
                     <span className="text-slate-800">{subItem.title}</span>
                   </Link>
