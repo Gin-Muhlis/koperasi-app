@@ -18,7 +18,7 @@ const Tagihan = async () => {
   const positionCategories: PositionCategory[] = await getPositionCategories(
     session?.user.accessToken
   );
-  console.log(positionCategories);
+  
   return (
     <MainLayout>
       <div className="bg-white rounded p-4 w-full">

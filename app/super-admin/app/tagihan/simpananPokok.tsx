@@ -9,9 +9,19 @@ import {
   Select,
   SelectContent,
   SelectGroup,
+  SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SelectItem, SelectTrigger } from "@radix-ui/react-select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 import { Input } from "@/components/ui/input";
 import { useDispatch } from "react-redux";
 import { appDispatch, useAppSelector } from "@/redux/store";
@@ -27,21 +37,21 @@ const TabSimpananPokok = ({
   const dispatch = useDispatch<appDispatch>();
   const selector = useAppSelector((state) => state.invoiceReducer);
   const [selectedMember, setSelectedMember] = useState<any>([]);
-  let inputState: any = [];
+  
 
-  const updateInputData = (inputData: any, id: number, amount: number) => {
-    const existingItemIndex = inputData.findIndex(
+  const updateInputData = (id: number, amount: number) => {
+    const existingItemIndex = selectedMember.findIndex(
       (item: any) => item.id === id
     );
 
     if (existingItemIndex >= 0) {
       // Update the existing item
-      const updatedItems = [...inputData];
+      const updatedItems = [...selectedMember];
       updatedItems[existingItemIndex] = { id, amount };
-      return updatedItems;
+      setSelectedMember(updatedItems);
     } else {
       // Add a new item
-      return [...inputData, { id, amount }];
+      setSelectedMember([...selectedMember, { id, amount }]);
     }
   };
 
@@ -49,15 +59,12 @@ const TabSimpananPokok = ({
     const id = event.target.getAttribute("data-id");
     const amount = event.target.value;
 
-    const updatedInputData = updateInputData(selectedMember, id, amount);
-
-    inputState = updatedInputData;
+    updateInputData(id, amount);
   };
 
   const handleAddMember = (id: number) => {
-    setSelectedMember(inputState);
-    const payment = inputState.find((item: any) => item.id == id);
-    const arrayData = inputState;
+    const payment = selectedMember.find((item: any) => item.id == id);
+    const arrayData = selectedMember;
 
     arrayData.push(payment);
 
@@ -69,79 +76,65 @@ const TabSimpananPokok = ({
     );
   };
 
-  console.log(selectedMember);
 
-  const columns: ColumnDef<TypeTabPrincipalSaving>[] = [
-    {
-      accessorKey: "member_name",
-      header: "Nama",
-    },
-    {
-      accessorKey: "member_position",
-      header: "jabatan",
-    },
-    {
-      id: "category",
-      header: "Kategori",
-      cell: ({ row }) => {
-        return (
-          <select data-id={row.original.id}>
-            {positionCategories.map((item) => (
-              <option value={item.position} key={item.id}>
-                {item.position}
-              </option>
-            ))}
-          </select>
-        );
-      },
-    },
-    {
-      id: "amount",
-      header: "Jumlah",
-      cell: ({ row }) => {
-        let isInputed = selectedMember.find(
-          (item: any) => item.id == row.original.id
-        );
-        return (
-          <>
-            <Input
-              type="number"
-              min={0}
-              onChange={handleInputAmount}
-              data-id={row.original.id}
-              value={isInputed ? isInputed.amount : 0}
-            />
-          </>
-        );
-      },
-    },
-    {
-      id: "actions",
-      header: () => <div className="text-center">Aksi</div>,
-      cell: ({ row }) => {
-        let paymentData = JSON.parse(selector.listSimpananPokok).find(
-          (item: any) => item.id == row.original.id
-        );
-        return (
-          <div className="flex items-center justify-center gap-1">
-            {paymentData ? (
-              <Button className="bg-red-400 text-white">Batal</Button>
-            ) : (
-              <Button
-                className="bg-amber-400 text-white"
-                onClick={() => handleAddMember(row.original.id)}
-              >
-                Tambah
-              </Button>
-            )}
-          </div>
-        );
-      },
-    },
-  ];
   return (
-    <div className="w-full">
-      <DataTable columns={columns} data={data} />
+    <div className="w-full flex flex-col gap-5">
+      <table className="border border-solid">
+        <thead className="border border-solid">
+          <tr>
+            <th className="text-start p-3">Nama</th>
+            <th className="text-start p-3">Jabatan</th>
+            <th className="text-start p-3">Kategori</th>
+            <th className="text-start p-3">Jumlah</th>
+            <th className="text-center p-3">Aksi</th>
+          </tr>
+        </thead>
+        <tbody className="border border-solid">
+        {data.map((item) => (<tr key={item.id}>
+            <td className="p-3">{item.member_name}</td> 
+            <td className="p-3">{item.member_position}</td>
+            <td className="text-center p-3">
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="pilih kategori" />
+              </SelectTrigger>
+              <SelectGroup>
+                <SelectContent>
+                  <SelectItem value="pns">PNS</SelectItem>
+                  <SelectItem value="p3k">P3K</SelectItem>
+                  <SelectItem value="cpns">CPNS</SelectItem>
+                </SelectContent>
+              </SelectGroup>
+            </Select>
+            </td>
+            <td className="p-3">
+              <Input type="number" placeholder="Jumlah pembayaran" />
+            </td>
+            <td className="text-center p-3">
+              <Button className="text-white bg-amber-400">Tambah</Button>
+            </td>
+          </tr>))}
+        </tbody>
+      </table>
+      <div className="w-full flex flex-end">
+      <Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="#" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">1</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="#" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+
+      </div>
     </div>
   );
 };
