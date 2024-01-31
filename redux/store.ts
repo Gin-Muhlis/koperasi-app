@@ -3,12 +3,14 @@ import { TypedUseSelectorHook, useSelector } from "react-redux";
 import registerReducer from "./features/register-slice";
 import savingReducer from "./features/saving-slice";
 import paymentDeterminationReducer from "./features/paymenMember-slice";
+import invoiceReducer from "./features/invoice-slice";
 
 export const store = configureStore({
   reducer: {
     registerReducer,
     savingReducer,
     paymentDeterminationReducer,
+    invoiceReducer,
   },
 });
 

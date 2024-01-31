@@ -21,7 +21,15 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { SelectGroup } from "@radix-ui/react-select";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -49,17 +57,38 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <>
+    <div>
       <div>
-        <div className="flex items-center py-4">
+        <div className="flex items-center justify-between py-4 gap-3">
           <Input
-            placeholder="Cari berdasarkan nama"
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            placeholder="Cari nama"
+            value={
+              (table.getColumn("member_name")?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
+              table.getColumn("member_name")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
+          <Select
+            value={
+              table.getColumn("member_position")?.getFilterValue() as string
+            }
+            onValueChange={(value) =>
+              table.getColumn("member_position")?.setFilterValue(value)
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Filter jabatan" />
+            </SelectTrigger>
+            <SelectGroup>
+              <SelectContent>
+                <SelectItem value="pns">PNS</SelectItem>
+                <SelectItem value="p3k">P3K</SelectItem>
+                <SelectItem value="cpns">CPNS</SelectItem>
+              </SelectContent>
+            </SelectGroup>
+          </Select>
         </div>
       </div>
       <div className="rounded-md border">
@@ -112,30 +141,24 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
-    </>
+    </div>
   );
 }

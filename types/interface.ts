@@ -101,3 +101,17 @@ export type PaymentDeterminationState = {
   amount: number;
   payment_month: string;
 };
+
+export type TypeTabPrincipalSaving = {
+  id: number;
+  member_name: string;
+  member_position: string;
+};
+
+export type PositionCategory = {
+  id: number;
+  position: string;
+  pokok: number;
+  min_wajib: number;
+  min_wajib_khusus: number;
+};

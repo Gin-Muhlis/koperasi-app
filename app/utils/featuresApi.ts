@@ -553,3 +553,41 @@ export async function getPayments(token: string | undefined) {
     return error.Response;
   }
 }
+
+// API GET Payment Principal Member
+export async function getPrincivalSavings(token: string | undefined) {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/tab/principal-saving`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "applicatioin/json",
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.Response;
+  }
+}
+
+// API GET Position Category
+export async function getPositionCategories(token: string | undefined) {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/position-category`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "applicatioin/json",
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.Response;
+  }
+}

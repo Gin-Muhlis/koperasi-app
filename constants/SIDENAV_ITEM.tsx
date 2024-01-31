@@ -8,6 +8,15 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     icon: <Icon icon="lucide:home" width="22" height="22" />,
   },
   {
+    title: "App",
+    path: "/super-admin/app",
+    icon: <Icon icon="lucide:folder" width="24" height="24" />,
+    submenu: true,
+    subMenuItems: [
+      { title: "Tagihan Gabungan", path: "/super-admin/app/tagihan" },
+    ],
+  },
+  {
     title: "Data",
     path: "/super-admin/data",
     icon: <Icon icon="lucide:folder" width="24" height="24" />,

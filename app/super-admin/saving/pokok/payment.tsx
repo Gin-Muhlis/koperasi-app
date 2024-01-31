@@ -14,6 +14,7 @@ const Payment = () => {
   const handleInput = (event: any): void => {
     dispatch(createSaving({ type: "SET_AMOUNT", value: event.target.value }));
   };
+  
   return (
     <div>
       <Label>Jumlah</Label>

@@ -8,8 +8,7 @@ import { DataTable } from "./data-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch } from "react-redux";
 import { appDispatch, useAppSelector } from "@/redux/store";
-import { createSaving, resetState } from "@/redux/features/saving-slice";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { createSaving } from "@/redux/features/saving-slice";
 
 const Member = ({ members }: { members: MemberState[] }) => {
   const dispatch = useDispatch<appDispatch>();
@@ -157,3 +156,4 @@ const Member = ({ members }: { members: MemberState[] }) => {
 };
 
 export default Member;
+
