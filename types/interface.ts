@@ -102,11 +102,12 @@ export type PaymentDeterminationState = {
   payment_month: string;
 };
 
-export type TypeTabPrincipalSaving = {
+export type TypeTab = {
   id: number;
   member_name: string;
   member_position: string;
 };
+
 
 export type PositionCategory = {
   id: number;
@@ -115,6 +116,7 @@ export type PositionCategory = {
   wajib: number;
   wajib_khusus: number;
 };
+
 export type Member = {
  id: number;
  amount: number;

@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState = {
   listSimpananPokok: "[]",
   listSimpananWajib: "[]",
+  listSimpananWajibKhusus: "[]",
   listSimpananSukarela: "[]",
   listTabunganRekreasi: "[]",
   listPiutang: "[]",
@@ -31,10 +32,16 @@ const invoice = createSlice({
             listSimpananWajib: value,
           };
           break;
+        case "SET_SIMPANAN_WAJIB_KHUSUS":
+          return {
+            ...state,
+            listSimpananWajibKhusus: value,
+          };
+          break;
         case "SET_SIMPANAN_SUKARELA":
           return {
             ...state,
-            listSimpnanSukarela: value,
+            listSimpananSukarela: value,
           };
           break;
         case "SET_TABUNGAN_REKREASI":

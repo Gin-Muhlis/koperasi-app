@@ -1,6 +1,6 @@
 "use client";
 
-import { Member, PositionCategory, TypeTab } from "@/types/interface";
+import { PositionCategory, MemberState, Member } from "@/types/interface";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,11 +25,11 @@ import { appDispatch, useAppSelector } from "@/redux/store";
 import { setInvoice } from "@/redux/features/invoice-slice";
 import { resetState } from "../../../../redux/features/invoice-slice";
 
-const TabSimpananPokok = ({
+const TabSimpananWajibKhusus = ({
   data,
   positionCategories,
 }: {
-  data: TypeTab[];
+  data: MemberState[];
   positionCategories: PositionCategory[];
 }) => {
   const dispatch = useDispatch<appDispatch>();
@@ -37,7 +37,7 @@ const TabSimpananPokok = ({
   const [selectedMember, setSelectedMember] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-  const [members, setMembers] = useState<TypeTab[]>(data);
+  const [members, setMembers] = useState<MemberState[]>(data);
 
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
@@ -60,6 +60,7 @@ const TabSimpananPokok = ({
     }
   };
 
+
   // const handleInputAmount = (event: any) => {
   //   const id = event.target.getAttribute("data-id");
   //   const amount = event.target.value;
@@ -72,7 +73,7 @@ const TabSimpananPokok = ({
 
     if (isInputed) return isInputed.amount;
 
-    const isData = JSON.parse(selector.listSimpananPokok).find((item: Member) => item.id == id)
+    const isData = JSON.parse(selector.listSimpananWajibKhusus).find((item: Member) => item.id == id)
 
     if (isData) return isData.amount
 
@@ -85,32 +86,32 @@ const TabSimpananPokok = ({
       amount: 0,
     };
 
-    const arrayData = JSON.parse(selector.listSimpananPokok);
+    const arrayData = JSON.parse(selector.listSimpananWajibKhusus);
 
     arrayData.push(payment);
 
     dispatch(
       setInvoice({
-        type: "SET_SIMPANAN_POKOK",
+        type: "SET_SIMPANAN_WAJIB_KHUSUS",
         value: JSON.stringify(arrayData),
       })
     );
   };
 
   const handleDeleteMember = (id: number) => {
-    const arrayData = JSON.parse(selector.listSimpananPokok);
+    const arrayData = JSON.parse(selector.listSimpananWajibKhusus);
     let newMembers = arrayData.filter((item: any) => item.id != id);
     setSelectedMember(newMembers);
     dispatch(
       setInvoice({
-        type: "SET_SIMPANAN_POKOK",
+        type: "SET_SIMPANAN_WAJIB_KHUSUS",
         value: JSON.stringify(newMembers),
       })
     );
   };
 
   const handleButtonAdd = (id: number) => {
-    const isInputed = JSON.parse(selector.listSimpananPokok).find(
+    const isInputed = JSON.parse(selector.listSimpananWajibKhusus).find(
       (item: any) => item.id == id
     );
 
@@ -135,8 +136,21 @@ const TabSimpananPokok = ({
     }
   };
 
+  const handleChangeCategory = (amount: string, id: number) => {
+    const listPayments = selectedMember;
+
+    const isPaymentIndex = listPayments.findIndex((item: any) => item.id == id);
+    if (isPaymentIndex >= 0) {
+      listPayments[isPaymentIndex] = { id, amount };
+      setSelectedMember(listPayments);
+    } else {
+      const newMembers = [...listPayments, { id, amount }];
+      setSelectedMember(newMembers);
+    }
+  };
+
   const filterMembersByPosition = (value: string) => {
-    const newMembers = data.filter((member) => member.member_position == value);
+    const newMembers = data.filter((member) => member.position == value);
 
     setMembers(newMembers);
   };
@@ -154,7 +168,7 @@ const TabSimpananPokok = ({
     setSelectedMember(selectMember);
     dispatch(
       setInvoice({
-        type: "SET_SIMPANAN_POKOK",
+        type: "SET_SIMPANAN_WAJIB_KHUSUS",
         value: JSON.stringify(selectMember),
       })
     );
@@ -189,8 +203,8 @@ const TabSimpananPokok = ({
         <tbody className="border border-solid">
           {currentItems.map((item) => (
             <tr key={item.id}>
-              <td className="p-3">{item.member_name}</td>
-              <td className="p-3">{item.member_position}</td>
+              <td className="p-3">{item.name}</td>
+              <td className="p-3">{item.position}</td>
               <td className="text-center p-3">
                 <select
                   value={handleValueAmount(item.id)}
@@ -202,7 +216,7 @@ const TabSimpananPokok = ({
                     Kategori
                   </option>
                   {positionCategories.map((category) => (
-                    <option key={category.id} value={category.pokok}>
+                    <option key={category.id} value={category.wajib_khusus}>
                       {category.position}
                     </option>
                   ))}
@@ -239,7 +253,7 @@ const TabSimpananPokok = ({
   );
 };
 
-export default TabSimpananPokok;
+export default TabSimpananWajibKhusus;
 
 function PaginationSection({
   totalItems,
