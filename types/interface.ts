@@ -112,6 +112,10 @@ export type PositionCategory = {
   id: number;
   position: string;
   pokok: number;
-  min_wajib: number;
-  min_wajib_khusus: number;
+  wajib: number;
+  wajib_khusus: number;
 };
+export type Member = {
+ id: number;
+ amount: number;
+}
