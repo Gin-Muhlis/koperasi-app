@@ -3,29 +3,38 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TabSimpananPokok from "./simpananPokok";
-import { MemberState, PositionCategory, TypeTab } from "@/types/interface";
+import {
+  MemberState,
+  PositionCategory,
+  Receivable,
+  TypeTab,
+} from "@/types/interface";
 import TabSimpananWajib from "./simpananWajib";
 import TabSimpananWajibKhusus from "./simpananWajibKhusus";
 import TabSimpananSukarela from "./simpananSukarela";
+import TabTabunganRekreasi from "./tabunganRekreasi";
 
 const TabContent = ({
   principalSavings,
   positionCategories,
-  members
+  members,
+  receivables,
 }: {
   principalSavings: TypeTab[];
   positionCategories: PositionCategory[];
-  members: MemberState[]
+  members: MemberState[];
+  receivables: Receivable[];
 }) => {
   return (
     <Tabs defaultValue="simpanan_pokok" className="w-full flex-1">
       <TabsList className="w-full">
         <TabsTrigger value="simpanan_pokok">Simpanan Pokok</TabsTrigger>
         <TabsTrigger value="simpanan_wajib">Simpanan Wajib</TabsTrigger>
-        <TabsTrigger value="simpanan_wajib_khusus">Simpanan Wajib Khusus</TabsTrigger>
+        <TabsTrigger value="simpanan_wajib_khusus">
+          Simpanan Wajib Khusus
+        </TabsTrigger>
         <TabsTrigger value="simpanan_sukarela">Simpanan Sukarela</TabsTrigger>
         <TabsTrigger value="tabungan_rekreasi">Tabungan Rekreasi</TabsTrigger>
-        <TabsTrigger value="piutang">Piutang</TabsTrigger>
       </TabsList>
       <TabsContent value="simpanan_pokok" className="w-full">
         <TabSimpananPokok
@@ -34,28 +43,25 @@ const TabContent = ({
         />
       </TabsContent>
       <TabsContent value="simpanan_wajib" className="w-full">
-      <TabSimpananWajib
+        <TabSimpananWajib
           data={members}
           positionCategories={positionCategories}
         />
       </TabsContent>
       <TabsContent value="simpanan_wajib_khusus" className="w-full">
-      <TabSimpananWajibKhusus
+        <TabSimpananWajibKhusus
           data={members}
           positionCategories={positionCategories}
         />
       </TabsContent>
       <TabsContent value="simpanan_sukarela" className="w-full">
-      <TabSimpananSukarela
+        <TabSimpananSukarela
           data={members}
           positionCategories={positionCategories}
         />
       </TabsContent>
       <TabsContent value="tabungan_rekreasi" className="w-full">
-        Make changes to your account here.
-      </TabsContent>
-      <TabsContent value="piutang" className="w-full">
-        Make changes to your account here.
+        <TabTabunganRekreasi data={members} />
       </TabsContent>
     </Tabs>
   );

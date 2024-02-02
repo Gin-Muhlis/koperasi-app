@@ -6,7 +6,7 @@ const initialState = {
   listSimpananWajibKhusus: "[]",
   listSimpananSukarela: "[]",
   listTabunganRekreasi: "[]",
-  listPiutang: "[]",
+  listPiutangSp: "[]",
 };
 
 const invoice = createSlice({
@@ -50,10 +50,10 @@ const invoice = createSlice({
             listTabunganRekreasi: value,
           };
           break;
-        case "SET_PIUTANG":
+        case "SET_PIUTANG_SP":
           return {
             ...state,
-            listPiutang: value,
+            listPiutangSp: value,
           };
           break;
         default:

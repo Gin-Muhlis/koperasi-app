@@ -108,7 +108,6 @@ export type TypeTab = {
   member_position: string;
 };
 
-
 export type PositionCategory = {
   id: number;
   position: string;
@@ -118,6 +117,24 @@ export type PositionCategory = {
 };
 
 export type Member = {
- id: number;
- amount: number;
-}
+  id: number;
+  amount: number;
+};
+
+export type Receivable = {
+  id: number;
+  name: string;
+  position: string;
+  total_payment: number;
+  duration: number;
+  paid: number;
+  remain_payment: number;
+};
+
+export type TotalColumn = {
+  totalPokok: number;
+  totalWajib: number;
+  totalWajibKhusus: number;
+  totalSukarela: number;
+  totalTabunganRekreasi: number;
+};

@@ -43,7 +43,6 @@ const TabSimpananPokok = ({
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = members.slice(firstItemIndex, lastItemIndex);
 
-
   const updateInputData = (amount: number, id: number, ) => {
     const existingItemIndex = selectedMember.findIndex(
       (item: any) => item.id === id

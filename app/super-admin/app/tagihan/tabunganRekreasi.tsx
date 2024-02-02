@@ -23,15 +23,7 @@ import { Input } from "@/components/ui/input";
 import { useDispatch } from "react-redux";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import { setInvoice } from "@/redux/features/invoice-slice";
-import { resetState } from "../../../../redux/features/invoice-slice";
-
-const TabSimpananSukarela = ({
-  data,
-  positionCategories,
-}: {
-  data: MemberState[];
-  positionCategories: PositionCategory[];
-}) => {
+const TabTabunganRekreasi = ({ data }: { data: MemberState[] }) => {
   const dispatch = useDispatch<appDispatch>();
   const selector = useAppSelector((state) => state.invoiceReducer);
   const [selectedMember, setSelectedMember] = useState<any>([]);
@@ -49,12 +41,10 @@ const TabSimpananSukarela = ({
     );
 
     if (existingItemIndex >= 0) {
-      // Update the existing item
       const updatedItems = [...selectedMember];
       updatedItems[existingItemIndex] = { id, amount };
       setSelectedMember(updatedItems);
     } else {
-      // Add a new item
       setSelectedMember([...selectedMember, { id, amount }]);
     }
   };
@@ -66,7 +56,7 @@ const TabSimpananSukarela = ({
   };
 
   const handleValueAmount = (id: number): number => {
-    const isInputed = JSON.parse(selector.listSimpananSukarela).find(
+    const isInputed = JSON.parse(selector.listTabunganRekreasi).find(
       (item: any) => item.id == id
     );
 
@@ -81,32 +71,32 @@ const TabSimpananSukarela = ({
       amount: 0,
     };
 
-    const arrayData = JSON.parse(selector.listSimpananSukarela);
+    const arrayData = JSON.parse(selector.listTabunganRekreasi);
 
     arrayData.push(payment);
 
     dispatch(
       setInvoice({
-        type: "SET_SIMPANAN_SUKARELA",
+        type: "SET_TABUNGAN_REKREASI",
         value: JSON.stringify(arrayData),
       })
     );
   };
 
   const handleDeleteMember = (id: number) => {
-    const arrayData = JSON.parse(selector.listSimpananSukarela);
+    const arrayData = JSON.parse(selector.listTabunganRekreasi);
     let newMembers = arrayData.filter((item: any) => item.id != id);
-    setSelectedMember(newMembers);
+
     dispatch(
       setInvoice({
-        type: "SET_SIMPANAN_SUKARELA",
+        type: "SET_TABUNGAN_REKREASI",
         value: JSON.stringify(newMembers),
       })
     );
   };
 
   const handleButtonAdd = (id: number) => {
-    const isInputed = JSON.parse(selector.listSimpananSukarela).find(
+    const isInputed = JSON.parse(selector.listTabunganRekreasi).find(
       (item: any) => item.id == id
     );
 
@@ -150,7 +140,7 @@ const TabSimpananSukarela = ({
     setSelectedMember(selectMember);
     dispatch(
       setInvoice({
-        type: "SET_SIMPANAN_SUKARELA",
+        type: "SET_TABUNGAN_REKREASI",
         value: JSON.stringify(selectMember),
       })
     );
@@ -194,7 +184,7 @@ const TabSimpananSukarela = ({
                   defaultValue={handleValueAmount(item.id)}
                   onChange={handleInputAmount}
                   min={0}
-                  disabled={JSON.parse(selector.listSimpananSukarela).find(
+                  disabled={JSON.parse(selector.listTabunganRekreasi).find(
                     (member: Member) => member.id == item.id
                   )}
                 />
@@ -221,7 +211,7 @@ const TabSimpananSukarela = ({
   );
 };
 
-export default TabSimpananSukarela;
+export default TabTabunganRekreasi;
 
 function PaginationSection({
   totalItems,

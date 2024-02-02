@@ -3,11 +3,12 @@ import React from "react";
 import TabContent from "./tab";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { MemberState, PositionCategory, TypeTab } from "@/types/interface";
+import { MemberState, PositionCategory, Receivable, TypeTab } from "@/types/interface";
 import {
   getMembers,
   getPositionCategories,
   getPrincivalSavings,
+  getReceivables,
 } from "@/app/utils/featuresApi";
 import DetailPayment from "./detailPayment";
 
@@ -20,6 +21,7 @@ const Tagihan = async () => {
     session?.user.accessToken
   );
   const members: MemberState[] = await getMembers(session?.user.accessToken);
+  const receivables: Receivable[] = await getReceivables(session?.user.accessToken);
   
   return (
     <MainLayout>
@@ -32,8 +34,9 @@ const Tagihan = async () => {
             principalSavings={principalSavings}
             positionCategories={positionCategories}
             members={members}
+            receivables={receivables}
           />
-          <DetailPayment />
+          <DetailPayment members={members} />
         </div>
       </div>
     </MainLayout>
