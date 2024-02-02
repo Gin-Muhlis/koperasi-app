@@ -16,7 +16,7 @@ const Content = ({ products }: { products: ProductState[] }) => {
         },
         {
             id: "actions",
-            header: "Aksi",
+            header:() => <div className="text-center">Aksi</div>,
             cell: ({ row }) => {
                 const product = row.original;
 

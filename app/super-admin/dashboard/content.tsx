@@ -7,7 +7,9 @@ const Content = () => {
     
     return (
         <div>
-            dashboard admin
+            <div className="w-full p-4 text-white bg-black rounded">
+                <h1 className='text-lg'>Selamat Datang di Zie Koperasi</h1>
+            </div>
         </div>
     )
 }

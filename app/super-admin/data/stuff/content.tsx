@@ -31,7 +31,7 @@ const Content = ({ stuffs, products }: { stuffs: StuffState[], products: Product
         },
         {
             id: "actions",
-            header: "Aksi",
+            header: () => <div className="text-center">Aksi</div>,
             cell: ({ row }) => {
                 const stuff = row.original;
 

@@ -7,6 +7,7 @@ import React, { SyntheticEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../utils/featuresApi";
 import AlertError from "./alertError";
+import { Button } from "@/components/ui/button";
 
 const FormRegister = () => {
   const [imageProfile, setImageProfile] = useState(null);
@@ -292,9 +293,10 @@ const FormRegister = () => {
       </div>
 
       <div className="w-full flex items-center justify-end">
-        <button
+        <Button
+        size={"sm"}
           type="submit"
-          className="btn btn-sm bg-amber-400 text-sm text-white border-none"
+          className=" bg-amber-400 text-white "
           disabled={isLoading}
         >
           {isLoading ? (
@@ -302,7 +304,7 @@ const FormRegister = () => {
           ) : (
             "Daftar"
           )}
-        </button>
+        </Button>
       </div>
      {error && <AlertError message={error.toString()} isShow={true} />}
     </form>

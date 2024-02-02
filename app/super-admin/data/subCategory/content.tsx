@@ -33,7 +33,7 @@ const Content = ({
     },
     {
       id: "actions",
-      header: "Aksi",
+      header: () => <div className="text-center">Aksi</div>,
       cell: ({ row }: { row: any }) => {
         const subCategory = row.original;
 

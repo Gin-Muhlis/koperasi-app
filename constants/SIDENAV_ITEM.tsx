@@ -7,15 +7,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     path: "/super-admin/dashboard",
     icon: <Icon icon="lucide:home" width="22" height="22" />,
   },
-  {
-    title: "App",
-    path: "/super-admin/app",
-    icon: <Icon icon="lucide:folder" width="24" height="24" />,
-    submenu: true,
-    subMenuItems: [
-      { title: "Tagihan Gabungan", path: "/super-admin/app/tagihan" },
-    ],
-  },
+  
   {
     title: "Data",
     path: "/super-admin/data",
@@ -33,16 +25,15 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
       },
     ],
   },
-  // {
-  //   title: "Transaksi",
-  //   path: "/super-admin/transaction",
-  //   icon: <Icon icon="lucide:shopping-cart" width="24" height="24" />,
-  //   submenu: true,
-  //   subMenuItems: [
-  //     { title: "Pembelian", path: "/super-admin/transaction/purchase" },
-  //     { title: "Penjualan", path: "/super-admin/transaction/sale" },
-  //   ],
-  // },
+  {
+    title: "App",
+    path: "/super-admin/app",
+    icon: <Icon icon="lucide:folder" width="24" height="24" />,
+    submenu: true,
+    subMenuItems: [
+      { title: "Tagihan Gabungan", path: "/super-admin/app/tagihan" },
+    ],
+  },
   {
     title: "Simpanan",
     path: "/super-admin/saving",

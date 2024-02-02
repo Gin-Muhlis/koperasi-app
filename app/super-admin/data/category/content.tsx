@@ -16,7 +16,7 @@ const Content = ({ categories }: { categories: CategoryState[] }) => {
         },
         {
             id: "actions",
-            header: "Aksi",
+            header: () => <div className="text-center">Aksi</div>,
             cell: ({ row }: { row: any }) => {
                 const category = row.original;
 

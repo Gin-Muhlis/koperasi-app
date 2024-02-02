@@ -74,9 +74,6 @@ const FormLogin = () => {
                         {passwordShow ? <Icon icon="mingcute:eye-close-fill" width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1 text-amber-500 text-md' /> : <Icon icon="solar:eye-bold" width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1 text-amber-500 text-md' />}
 
                     </div>
-                    <Link href="/">
-                        <span className='inline-block text-xs text-red-500 mb-5'>Lupa Password?</span>
-                    </Link>
             
                     <button type='submit' className='outline-none border-none bg-amber-400 text-white w-full rounded-full p-1 h-9 mb-3 flex items-center justify-center' disabled={isLoading}>
                         {isLoading ? <Loader /> : 'Masuk'}
