@@ -170,14 +170,12 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
         Generate Invoice
       </Button>
       <div
-        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${
-          modal ? "block" : "hidden"
-        }`}
+        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? "block" : "hidden"
+          }`}
       >
         <div
-          className={`w-11/12 bg-white p-5 rounded transition-transform max-h-[90vh] overflow-y-scroll ${
-            modal ? "scale-100" : "scale-0"
-          }`}
+          className={`w-11/12 bg-white p-5 rounded transition-transform max-h-[90vh] overflow-y-scroll ${modal ? "scale-100" : "scale-0"
+            }`}
         >
           <h1 className="text-2xl text-black font-bold mb-7">Data Invoice</h1>
           <div className="w-full mb-2">
@@ -275,7 +273,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
               type="button"
               size={"sm"}
               className="text-white bg-green-500"
-              onClick={handleModal}
             >
               Download Excel
             </Button>

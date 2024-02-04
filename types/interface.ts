@@ -119,6 +119,7 @@ export type PositionCategory = {
 export type Member = {
   id: number;
   amount: number;
+  status: string;
 };
 
 export type Receivable = {

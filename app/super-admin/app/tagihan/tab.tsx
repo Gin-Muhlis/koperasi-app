@@ -57,7 +57,6 @@ const TabContent = ({
       <TabsContent value="simpanan_sukarela" className="w-full">
         <TabSimpananSukarela
           data={members}
-          positionCategories={positionCategories}
         />
       </TabsContent>
       <TabsContent value="tabungan_rekreasi" className="w-full">

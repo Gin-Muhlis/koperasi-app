@@ -24,22 +24,34 @@ const DetailPayment = ({ members }: { members: MemberState[] }) => {
       let totalTabunganRekreasi = 0;
 
       JSON.parse(selector.listSimpananPokok).map((item: any) => {
-        totalPokok += Number(item.amount);
+        if (item.status == "confirmed") {
+          totalPokok += Number(item.amount);
+        }
       });
       JSON.parse(selector.listSimpananWajib).map((item: any) => {
-        totalWajib += Number(item.amount);
+        if (item.status == "confirmed") {
+          totalWajib += Number(item.amount);
+        }
       });
       JSON.parse(selector.listSimpananWajibKhusus).map((item: any) => {
-        totalWajibKhusus += Number(item.amount);
+        if (item.status == "confirmed") {
+          totalWajibKhusus += Number(item.amount);
+        }
       });
       JSON.parse(selector.listSimpananSukarela).map((item: any) => {
-        totalSukarela += Number(item.amount);
+        if (item.status == "confirmed") {
+          totalSukarela += Number(item.amount);
+        }
       });
       JSON.parse(selector.listTabunganRekreasi).map((item: any) => {
-        totalTabunganRekreasi += Number(item.amount);
+        if (item.status == "confirmed") {
+          totalTabunganRekreasi += Number(item.amount);
+        }
       });
       JSON.parse(selector.listPiutangSp).map((item: any) => {
-        totalTabunganRekreasi += Number(item.amount);
+        if (item.status == "confirmed") {
+          totalTabunganRekreasi += Number(item.amount);
+        }
       });
 
       setTotalPokok(totalPokok);
