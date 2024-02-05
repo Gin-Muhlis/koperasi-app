@@ -1,4 +1,4 @@
-import { MemberState, RegisterState } from "@/types/interface";
+import { Member, MemberState, RegisterState } from "@/types/interface";
 import axios from "axios";
 
 // API register
@@ -607,5 +607,42 @@ export async function getReceivables(token: string | undefined) {
     return response.data.data;
   } catch (error: any) {
     return error.Response;
+  }
+}
+
+// API Download Excel Report Payment
+export async function downloadPaymentReport(
+  principalSavings: Member[] | undefined,
+  mandatorySavings: Member[] | undefined,
+  specialMandatorySavings: Member[] | undefined,
+  voluntarySavings: Member[] | undefined,
+  recretionalSavings: Member[] | undefined,
+  token: string | undefined
+) {
+  try {
+    const data = {
+      principal_savings: principalSavings,
+      mandatory_savings: mandatorySavings,
+      special_mandatory_savings: specialMandatorySavings,
+      voluntary_savings: voluntarySavings,
+      recretional_savings: recretionalSavings,
+    };
+
+    const response: any = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/export/payment-report`,
+      data,
+      {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+      }
+    );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
   }
 }

@@ -35,64 +35,77 @@ const TabSimpananPokok = ({
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = members.slice(firstItemIndex, lastItemIndex);
 
-  const updateInputData = (amount: number, id: number, ) => {
-    const listSimpananPokok = JSON.parse(selector.listSimpananPokok)
+  const updateInputData = (amount: number, id: number) => {
+    const listSimpananPokok = JSON.parse(selector.listSimpananPokok);
     const existingItemIndex = listSimpananPokok.findIndex(
       (item: Member) => item.id === id
     );
 
     if (existingItemIndex >= 0) {
-      
       const updatedItems = [...listSimpananPokok];
-      updatedItems[existingItemIndex] = { id, amount, status: 'not_confirmed' };
+      updatedItems[existingItemIndex] = { id, amount, status: "not_confirmed" };
       dispatch(
-            setInvoice({
-              type: "SET_SIMPANAN_POKOK",
-              value: JSON.stringify(updatedItems),
-            })
-          );
+        setInvoice({
+          type: "SET_SIMPANAN_POKOK",
+          value: JSON.stringify(updatedItems),
+        })
+      );
     } else {
-      const newMembers = [...listSimpananPokok, { id, amount, status: 'not_confirmed' }]
+      const newMembers = [
+        ...listSimpananPokok,
+        { id, amount, status: "not_confirmed" },
+      ];
       dispatch(
-            setInvoice({
-              type: "SET_SIMPANAN_POKOK",
-              value: JSON.stringify(newMembers),
-            })
-          );
+        setInvoice({
+          type: "SET_SIMPANAN_POKOK",
+          value: JSON.stringify(newMembers),
+        })
+      );
     }
   };
-  
+
   const handleValueAmount = (id: number) => {
-    const isData = JSON.parse(selector.listSimpananPokok).find((item: Member) => item.id == id)
+    const isData = JSON.parse(selector.listSimpananPokok).find(
+      (item: Member) => item.id == id
+    );
     if (isData) {
-      return isData.amount
+      return isData.amount;
     }
-    
+
     return "";
   };
 
   const handleAddMember = (id: number) => {
-    const listSimpananPokok = JSON.parse(selector.listSimpananPokok)
-    const existingItemIndex = listSimpananPokok.findIndex((item: Member) => item.id == id)
+    const listSimpananPokok = JSON.parse(selector.listSimpananPokok);
+    const existingItemIndex = listSimpananPokok.findIndex(
+      (item: Member) => item.id == id
+    );
 
     if (existingItemIndex >= 0) {
-      const dataExisted: Member = listSimpananPokok[existingItemIndex]
+      const dataExisted: Member = listSimpananPokok[existingItemIndex];
       const updatedItems = [...listSimpananPokok];
-      updatedItems[existingItemIndex] = { id: dataExisted['id'], amount: dataExisted['amount'], status: 'confirmed' };
+      updatedItems[existingItemIndex] = {
+        id: dataExisted["id"],
+        amount: dataExisted["amount"],
+        status: "confirmed",
+      };
       dispatch(
-            setInvoice({
-              type: "SET_SIMPANAN_POKOK",
-              value: JSON.stringify(updatedItems),
-            })
-          );
+        setInvoice({
+          type: "SET_SIMPANAN_POKOK",
+          value: JSON.stringify(updatedItems),
+        })
+      );
     } else {
-      const newMembers = [...listSimpananPokok, { id, amount: 0, status: 'not_confirmed' }]
+      const newMembers = [
+        ...listSimpananPokok,
+        { id, amount: 0, status: "confirmed" },
+      ];
       dispatch(
-            setInvoice({
-              type: "SET_SIMPANAN_POKOK",
-              value: JSON.stringify(newMembers),
-            })
-          );
+        setInvoice({
+          type: "SET_SIMPANAN_POKOK",
+          value: JSON.stringify(newMembers),
+        })
+      );
     }
   };
 
@@ -112,7 +125,7 @@ const TabSimpananPokok = ({
       (item: any) => item.id == id
     );
 
-    if (!isInputed || isInputed.status == 'not_confirmed') {
+    if (!isInputed || isInputed.status == "not_confirmed") {
       return (
         <Button
           className="text-white bg-amber-400"
@@ -145,12 +158,12 @@ const TabSimpananPokok = ({
       if (item.status == "not_confirmed") {
         return {
           ...item,
-          status: "confirmed"
-        }
+          status: "confirmed",
+        };
       } else {
-        return item
+        return item;
       }
-    })
+    });
 
     dispatch(
       setInvoice({
@@ -163,18 +176,20 @@ const TabSimpananPokok = ({
   const handleLengthDataNotConfirmed = () => {
     const listSimpananPokok = JSON.parse(selector.listSimpananPokok);
 
-    return listSimpananPokok.filter((item: Member) => item.status == "not_confirmed").length
-  }
+    return listSimpananPokok.filter(
+      (item: Member) => item.status == "not_confirmed"
+    ).length;
+  };
 
   const handleDisable = (id: number) => {
     const listSimpananPokok = JSON.parse(selector.listSimpananPokok);
 
-    const isInputed = listSimpananPokok.find((item: Member) => item.id == id)
+    const isInputed = listSimpananPokok.find((item: Member) => item.id == id);
     if (isInputed && isInputed.status == "confirmed") {
-      return true
-    } 
-    return false
-  }
+      return true;
+    }
+    return false;
+  };
 
   return (
     <div className="w-full flex flex-col gap-5">
@@ -232,7 +247,9 @@ const TabSimpananPokok = ({
                   placeholder="Jumlah pembayaran"
                   data-id={item.id}
                   value={handleValueAmount(item.id)}
-                  onChange={(event: any) => updateInputData(Number(event.target.value), item.id)}
+                  onChange={(event: any) =>
+                    updateInputData(Number(event.target.value), item.id)
+                  }
                   disabled={handleDisable(item.id)}
                   min={0}
                 />

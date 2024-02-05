@@ -1,12 +1,24 @@
 "use client";
 
+import AlertError from "@/app/components/alertError";
+import AlertSuccess from "@/app/components/alertSuccess";
+import Loader from "@/app/components/loader";
+import { downloadPaymentReport } from "@/app/utils/featuresApi";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/store";
 import { Member, MemberState, TotalColumn } from "@/types/interface";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const [modal, setModal] = useState(false);
+  const [success, setSuccess] = useState<string | boolean>(false);
+  const [error, setError] = useState<string | boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [listId, setListId] = useState<number[]>([]);
+  const [listMembers, setListMembers] = useState<MemberState[]>([]);
   const [colSimpananPokok, setColSimpananPokok] = useState<Member[]>();
   const [colSimpananWajib, setColSimpananWajib] = useState<Member[]>();
   const [colSimpananWajibKhusus, setColSimpananWajibKhusus] =
@@ -15,7 +27,18 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const [colTabunganRekreasi, setColTabunganRekreasi] = useState<Member[]>();
   const [totalCol, setTotalCol] = useState<TotalColumn>();
 
+  const { data: session } = useSession();
+  const router = useRouter();
   const selector = useAppSelector((state) => state.invoiceReducer);
+
+  const handleListMembers = (id: number) => {
+    const isData = listId.find((memberId) => memberId == id);
+    if (!isData) {
+      const updatedList = listId;
+      updatedList.push(id);
+      setListId(updatedList);
+    }
+  };
 
   const handleModal = () => {
     setModal(!modal);
@@ -55,19 +78,25 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
       totalSukarela: 0,
       totalTabunganRekreasi: 0,
     };
+
     listSimpananPokok.map((item) => {
+      handleListMembers(item.id);
       dataTotalColumn = {
         ...dataTotalColumn,
         totalPokok: (dataTotalColumn.totalPokok += Number(item.amount)),
       };
     });
+
     listSimpananWajib.map((item) => {
+      handleListMembers(item.id);
       dataTotalColumn = {
         ...dataTotalColumn,
         totalWajib: (dataTotalColumn.totalWajib += Number(item.amount)),
       };
     });
+
     listSimpananWajibKhusus.map((item) => {
+      handleListMembers(item.id);
       dataTotalColumn = {
         ...dataTotalColumn,
         totalWajibKhusus: (dataTotalColumn.totalWajibKhusus += Number(
@@ -75,13 +104,17 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
         )),
       };
     });
+
     listSimpananSukarela.map((item) => {
+      handleListMembers(item.id);
       dataTotalColumn = {
         ...dataTotalColumn,
         totalSukarela: (dataTotalColumn.totalSukarela += Number(item.amount)),
       };
     });
+
     listTabunganRekreasi.map((item) => {
+      handleListMembers(item.id);
       dataTotalColumn = {
         ...dataTotalColumn,
         totalTabunganRekreasi: (dataTotalColumn.totalTabunganRekreasi += Number(
@@ -91,6 +124,12 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
     });
 
     setTotalCol(dataTotalColumn);
+
+    const filteredMember = members.filter((member) =>
+      listId.includes(member.id)
+    );
+
+    setListMembers(filteredMember);
   };
 
   const handleValueSimpananPokok = (id: number) => {
@@ -160,6 +199,49 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
     );
   };
 
+  const handleDataSaving = () => {
+    setIsLoading(true)
+  }
+
+  // const handleDownloadExcel = async () => {
+  //   setIsLoading(true);
+
+  //   const response = await downloadPaymentReport(
+  //     colSimpananPokok,
+  //     colSimpananWajib,
+  //     colSimpananWajibKhusus,
+  //     colSimpananSukarela,
+  //     colTabunganRekreasi,
+  //     session?.user.accessToken
+  //   );
+
+  //   if (response.status == 200) {
+  //     const blob = await response.data;
+  //     const url = window.URL.createObjectURL(blob);
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", "tagihan_gabungan.xlsx"); // or any other extension
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     link.parentNode?.removeChild(link);
+
+  //     setIsLoading(false);
+  //     router.refresh();
+  //     setSuccess("Download data berhasil");
+  //   } else if (response.status === 422) {
+  //     setIsLoading(false);
+  //     const errorsData = response.data.errors;
+  //     const keys = Object.keys(errorsData);
+  //     const firstKey = keys[0];
+  //     const message = errorsData[firstKey][0];
+
+  //     setError(message);
+  //   } else {
+  //     setIsLoading(false);
+  //     setError(response.data.message);
+  //   }
+  // };
+
   return (
     <>
       <Button
@@ -167,15 +249,17 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
         className="text-white bg-amber-400"
         onClick={handleModal}
       >
-        Generate Invoice
+        Detail Data
       </Button>
       <div
-        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? "block" : "hidden"
-          }`}
+        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${
+          modal ? "block" : "hidden"
+        }`}
       >
         <div
-          className={`w-11/12 bg-white p-5 rounded transition-transform max-h-[90vh] overflow-y-scroll ${modal ? "scale-100" : "scale-0"
-            }`}
+          className={`w-11/12 bg-white p-5 rounded transition-transform max-h-[90vh] overflow-y-scroll ${
+            modal ? "scale-100" : "scale-0"
+          }`}
         >
           <h1 className="text-2xl text-black font-bold mb-7">Data Invoice</h1>
           <div className="w-full mb-2">
@@ -205,7 +289,7 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
                 </tr>
               </thead>
               <tbody>
-                {members.map((item, index) => (
+                {listMembers.map((item, index) => (
                   <tr key={item.id}>
                     <td className="text-center border border-solid p-3">
                       {index + 1}
@@ -272,12 +356,16 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
             <Button
               type="button"
               size={"sm"}
-              className="text-white bg-green-500"
+              className="text-white bg-amber-400"
+              onClick={handleDataSaving}
+              disabled={isLoading}
             >
-              Download Excel
+              {isLoading ? <Loader /> : "Simpan Data"}
             </Button>
           </div>
         </div>
+        {success && <AlertSuccess message={success.toString()} isShow={true} />}
+        {error && <AlertError message={error.toString()} isShow={true} />}
       </div>
     </>
   );
