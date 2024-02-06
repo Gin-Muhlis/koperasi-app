@@ -4,6 +4,7 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TabSimpananPokok from "./simpananPokok";
 import {
+  MandatorySaving,
   MemberState,
   PositionCategory,
   Receivable,
@@ -18,11 +19,13 @@ const TabContent = ({
   principalSavings,
   positionCategories,
   members,
+  mandatorySavings,
   receivables,
 }: {
   principalSavings: TypeTab[];
   positionCategories: PositionCategory[];
   members: MemberState[];
+  mandatorySavings: MandatorySaving[],
   receivables: Receivable[];
 }) => {
   return (
@@ -44,14 +47,14 @@ const TabContent = ({
       </TabsContent>
       <TabsContent value="simpanan_wajib" className="w-full">
         <TabSimpananWajib
-          data={members}
+          data={mandatorySavings}
           positionCategories={positionCategories}
         />
       </TabsContent>
       <TabsContent value="simpanan_wajib_khusus" className="w-full">
         <TabSimpananWajibKhusus
-          data={members}
-          positionCategories={positionCategories}
+        data={mandatorySavings}
+        positionCategories={positionCategories}
         />
       </TabsContent>
       <TabsContent value="simpanan_sukarela" className="w-full">

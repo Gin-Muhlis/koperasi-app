@@ -120,6 +120,7 @@ export type Member = {
   id: number;
   amount: number;
   status: string;
+  month: number;
 };
 
 export type Receivable = {
@@ -139,3 +140,11 @@ export type TotalColumn = {
   totalSukarela: number;
   totalTabunganRekreasi: number;
 };
+
+
+export type MandatorySaving = {
+  id: number;
+  name: string;
+  position: string;
+  month_remain: number
+}

@@ -35,15 +35,17 @@ const TabSimpananPokok = ({
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = members.slice(firstItemIndex, lastItemIndex);
 
-  const updateInputData = (amount: number, id: number) => {
+  const updateInputData = (categoryId: number, id: number) => {
     const listSimpananPokok = JSON.parse(selector.listSimpananPokok);
     const existingItemIndex = listSimpananPokok.findIndex(
       (item: Member) => item.id === id
     );
+    const amount = positionCategories.find((data) => data.id == categoryId)?.pokok
 
     if (existingItemIndex >= 0) {
       const updatedItems = [...listSimpananPokok];
-      updatedItems[existingItemIndex] = { id, amount, status: "not_confirmed" };
+      const data = updatedItems[existingItemIndex];
+      updatedItems[existingItemIndex] = { ...data, amount };
       dispatch(
         setInvoice({
           type: "SET_SIMPANAN_POKOK",
@@ -53,7 +55,7 @@ const TabSimpananPokok = ({
     } else {
       const newMembers = [
         ...listSimpananPokok,
-        { id, amount, status: "not_confirmed" },
+        { id, amount, status: "not_confirmed", categoryId },
       ];
       dispatch(
         setInvoice({
@@ -75,6 +77,17 @@ const TabSimpananPokok = ({
     return "";
   };
 
+  const handleValueCategory = (id: number) => {
+    const isData = JSON.parse(selector.listSimpananPokok).find(
+      (item: Member) => item.id == id
+    );
+    if (isData) {
+      return isData.categoryId;
+    }
+
+    return "";
+  }
+
   const handleAddMember = (id: number) => {
     const listSimpananPokok = JSON.parse(selector.listSimpananPokok);
     const existingItemIndex = listSimpananPokok.findIndex(
@@ -82,11 +95,10 @@ const TabSimpananPokok = ({
     );
 
     if (existingItemIndex >= 0) {
-      const dataExisted: Member = listSimpananPokok[existingItemIndex];
+      const data = listSimpananPokok[existingItemIndex];
       const updatedItems = [...listSimpananPokok];
       updatedItems[existingItemIndex] = {
-        id: dataExisted["id"],
-        amount: dataExisted["amount"],
+        ...data,
         status: "confirmed",
       };
       dispatch(
@@ -98,7 +110,7 @@ const TabSimpananPokok = ({
     } else {
       const newMembers = [
         ...listSimpananPokok,
-        { id, amount: 0, status: "confirmed" },
+        { id, amount: 0, status: "confirmed", categoryId: "" },
       ];
       dispatch(
         setInvoice({
@@ -119,6 +131,7 @@ const TabSimpananPokok = ({
       })
     );
   };
+  console.log(selector)
 
   const handleButtonAdd = (id: number) => {
     const isInputed = JSON.parse(selector.listSimpananPokok).find(
@@ -214,7 +227,7 @@ const TabSimpananPokok = ({
             <th className="text-start p-3">Nama</th>
             <th className="text-start p-3">Jabatan</th>
             <th className="text-center p-3">Kategori</th>
-            <th className="text-start p-3">Jumlah Pembayaran</th>
+            <th className="text-start p-3">Pembayaran</th>
             <th className="text-center p-3">Aksi</th>
           </tr>
         </thead>
@@ -228,14 +241,15 @@ const TabSimpananPokok = ({
                   onChange={(event) =>
                     updateInputData(Number(event.target.value), item.id)
                   }
-                  defaultValue={0}
                   disabled={handleDisable(item.id)}
+                  className={`bg-transparent ${handleDisable(item.id) ? 'opacity-50' : ''}`}
+                  value={handleValueCategory(item.id)}
                 >
-                  <option value="0" disabled>
+                  <option value="" className="bg-transparent font-sans" disabled>
                     Kategori
                   </option>
                   {positionCategories.map((category) => (
-                    <option key={category.id} value={category.pokok}>
+                    <option key={category.id} value={category.id} className="bg-transparent font-sans">
                       {category.position}
                     </option>
                   ))}
@@ -244,13 +258,10 @@ const TabSimpananPokok = ({
               <td className="p-3">
                 <Input
                   type="number"
-                  placeholder="Jumlah pembayaran"
+                  placeholder="Pembayaran"
                   data-id={item.id}
                   value={handleValueAmount(item.id)}
-                  onChange={(event: any) =>
-                    updateInputData(Number(event.target.value), item.id)
-                  }
-                  disabled={handleDisable(item.id)}
+                  disabled
                   min={0}
                 />
               </td>

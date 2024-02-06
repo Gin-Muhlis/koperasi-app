@@ -1,6 +1,12 @@
 "use client";
 
-import { Member, MemberState, PositionCategory, TypeTab } from "@/types/interface";
+import {
+  MandatorySaving,
+  Member,
+  MemberState,
+  PositionCategory,
+  TypeTab,
+} from "@/types/interface";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,77 +28,105 @@ const TabSimpananWajib = ({
   data,
   positionCategories,
 }: {
-  data: MemberState[];
+  data: MandatorySaving[];
   positionCategories: PositionCategory[];
 }) => {
   const dispatch = useDispatch<appDispatch>();
   const selector = useAppSelector((state) => state.invoiceReducer);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-  const [members, setMembers] = useState<MemberState[]>(data);
+  const [members, setMembers] = useState<MandatorySaving[]>(data);
 
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = members.slice(firstItemIndex, lastItemIndex);
 
-  const updateInputData = (amount: number, id: number, ) => {
-    const listSimpananWajib = JSON.parse(selector.listSimpananWajib)
+  const currentYear = new Date().getFullYear();
+
+  const updateInputData = (categoryId: number, id: number) => {
+    const listSimpananWajib = JSON.parse(selector.listSimpananWajib);
     const existingItemIndex = listSimpananWajib.findIndex(
       (item: any) => item.id === id
     );
 
+    const amount = positionCategories.find((data) => data.id == categoryId)?.wajib;
+
     if (existingItemIndex >= 0) {
-      
       const updatedItems = [...listSimpananWajib];
-      updatedItems[existingItemIndex] = { id, amount, status: 'not_confirmed' };
+      const data = updatedItems[existingItemIndex];
+      updatedItems[existingItemIndex] = {
+        ...data,
+        amount
+      };
       dispatch(
-            setInvoice({
-              type: "SET_SIMPANAN_WAJIB",
-              value: JSON.stringify(updatedItems),
-            })
-          );
+        setInvoice({
+          type: "SET_SIMPANAN_WAJIB",
+          value: JSON.stringify(updatedItems),
+        })
+      );
     } else {
-      const newMembers = [...listSimpananWajib, { id, amount, status: 'not_confirmed' }]
+      const newMembers = [
+        ...listSimpananWajib,
+        { id, amount, status: "not_confirmed", month: 1, categoryId },
+      ];
       dispatch(
-            setInvoice({
-              type: "SET_SIMPANAN_WAJIB",
-              value: JSON.stringify(newMembers),
-            })
-          );
+        setInvoice({
+          type: "SET_SIMPANAN_WAJIB",
+          value: JSON.stringify(newMembers),
+        })
+      );
     }
   };
-  
+
   const handleValueAmount = (id: number) => {
-    const isData = JSON.parse(selector.listSimpananWajib).find((item: Member) => item.id == id)
+    const isData = JSON.parse(selector.listSimpananWajib).find(
+      (item: Member) => item.id == id
+    );
     if (isData) {
-      return isData.amount
+      return isData.amount;
     }
-    
+
+    return "";
+  };
+
+  const handleValueCategory = (id: number) => {
+    const isData = JSON.parse(selector.listSimpananWajib).find(
+      (item: Member) => item.id == id
+    );
+    if (isData) {
+      return isData.categoryId;
+    }
+
     return "";
   };
 
   const handleAddMember = (id: number) => {
-    const listSimpananWajib = JSON.parse(selector.listSimpananWajib)
-    const existingItemIndex = listSimpananWajib.findIndex((item: Member) => item.id == id)
+    const listSimpananWajib = JSON.parse(selector.listSimpananWajib);
+    const existingItemIndex = listSimpananWajib.findIndex(
+      (item: Member) => item.id == id
+    );
 
     if (existingItemIndex >= 0) {
-      const dataExisted: Member = listSimpananWajib[existingItemIndex]
       const updatedItems = [...listSimpananWajib];
-      updatedItems[existingItemIndex] = { id: dataExisted['id'], amount: dataExisted['amount'], status: 'confirmed' };
+      const data = updatedItems[existingItemIndex];
+      updatedItems[existingItemIndex] = { ...data, status: "confirmed" };
       dispatch(
-            setInvoice({
-              type: "SET_SIMPANAN_WAJIB",
-              value: JSON.stringify(updatedItems),
-            })
-          );
+        setInvoice({
+          type: "SET_SIMPANAN_WAJIB",
+          value: JSON.stringify(updatedItems),
+        })
+      );
     } else {
-      const newMembers = [...listSimpananWajib, { id, amount: 0, status: 'not_confirmed' }]
+      const newMembers = [
+        ...listSimpananWajib,
+        { id, amount: 0, status: "confirmed", month: 1, categoryId: "" },
+      ];
       dispatch(
-            setInvoice({
-              type: "SET_SIMPANAN_WAJIB",
-              value: JSON.stringify(newMembers),
-            })
-          );
+        setInvoice({
+          type: "SET_SIMPANAN_WAJIB",
+          value: JSON.stringify(newMembers),
+        })
+      );
     }
   };
 
@@ -112,7 +146,7 @@ const TabSimpananWajib = ({
       (item: any) => item.id == id
     );
 
-    if (!isInputed || isInputed.status == 'not_confirmed') {
+    if (!isInputed || isInputed.status == "not_confirmed") {
       return (
         <Button
           className="text-white bg-amber-400"
@@ -145,12 +179,12 @@ const TabSimpananWajib = ({
       if (item.status == "not_confirmed") {
         return {
           ...item,
-          status: "confirmed"
-        }
+          status: "confirmed",
+        };
       } else {
-        return item
+        return item;
       }
-    })
+    });
 
     dispatch(
       setInvoice({
@@ -163,19 +197,59 @@ const TabSimpananWajib = ({
   const handleLengthDataNotConfirmed = () => {
     const listSimpananWajib = JSON.parse(selector.listSimpananWajib);
 
-    return listSimpananWajib.filter((item: Member) => item.status == "not_confirmed").length
-  }
+    return listSimpananWajib.filter(
+      (item: Member) => item.status == "not_confirmed"
+    ).length;
+  };
 
   const handleDisable = (id: number) => {
     const listSimpananWajib = JSON.parse(selector.listSimpananWajib);
 
-    const isInputed = listSimpananWajib.find((item: Member) => item.id == id)
+    const isInputed = listSimpananWajib.find((item: Member) => item.id == id);
     if (isInputed && isInputed.status == "confirmed") {
-      return true
-    } 
-    return false
-  }
+      return true;
+    }
+    return false;
+  };
 
+  const handleMonthRemain = (remainMonth: number) => {
+    let remain = [];
+    for (let i = 1; i <= remainMonth; i++) {
+      remain.push(i);
+    }
+
+    return remain;
+  };
+
+  const handleDisableMonth = (id: number) => {
+    const listSimpananWajib = JSON.parse(selector.listSimpananWajib);
+
+    const isInputed = listSimpananWajib.find((item: Member) => item.id == id);
+    if (!isInputed || (isInputed && isInputed.status == "confirmed")) {
+      return true;
+    }
+    return false;
+  };
+
+  const handleChangeMonth = (month: number, id: number) => {
+    const listSimpananWajib = JSON.parse(selector.listSimpananWajib);
+    const existingItemIndex = listSimpananWajib.findIndex(
+      (item: any) => item.id === id
+    );
+
+    if (existingItemIndex >= 0) {
+      const updatedItems = [...listSimpananWajib];
+      const data = updatedItems[existingItemIndex];
+      updatedItems[existingItemIndex] = { ...data, month };
+      dispatch(
+        setInvoice({
+          type: "SET_SIMPANAN_WAJIB",
+          value: JSON.stringify(updatedItems),
+        })
+      );
+    }
+  };
+  
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="w-1/2">
@@ -199,7 +273,8 @@ const TabSimpananWajib = ({
             <th className="text-start p-3">Nama</th>
             <th className="text-start p-3">Jabatan</th>
             <th className="text-center p-3">Kategori</th>
-            <th className="text-start p-3">Jumlah Pembayaran</th>
+            <th className="text-start p-3">Pembayaran</th>
+            <th className="text-start p-3">Jumlah Bulan</th>
             <th className="text-center p-3">Aksi</th>
           </tr>
         </thead>
@@ -213,14 +288,21 @@ const TabSimpananWajib = ({
                   onChange={(event) =>
                     updateInputData(Number(event.target.value), item.id)
                   }
-                  defaultValue={0}
                   disabled={handleDisable(item.id)}
+                  className={`bg-transparent ${
+                    handleDisable(item.id) ? "opacity-50" : ""
+                  }`}
+                  value={handleValueCategory(item.id)}
                 >
-                  <option value="0" disabled>
+                  <option value="" className="font-sans" disabled>
                     Kategori
                   </option>
                   {positionCategories.map((category) => (
-                    <option key={category.id} value={category.wajib}>
+                    <option
+                      key={category.id}
+                      value={category.id}
+                      className="font-sans"
+                    >
                       {category.position}
                     </option>
                   ))}
@@ -232,10 +314,29 @@ const TabSimpananWajib = ({
                   placeholder="Jumlah pembayaran"
                   data-id={item.id}
                   value={handleValueAmount(item.id)}
-                  onChange={(event: any) => updateInputData(Number(event.target.value), item.id)}
-                  disabled={handleDisable(item.id)}
+                  disabled
                   min={0}
                 />
+              </td>
+              <td className="p-3 text-center">
+                <select
+                  defaultValue={1}
+                  className={`w-full bg-transparent font-sans border border-solid p-2 rounded ${
+                    handleDisableMonth(item.id) ? "opacity-50" : ""
+                  }`}
+                  disabled={handleDisableMonth(item.id)}
+                  onChange={(event) =>
+                    handleChangeMonth(Number(event.target.value), item.id)
+                  }
+                >
+                  {item.month_remain > 0
+                    ? handleMonthRemain(item.month_remain).map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))
+                    : `Selesai untuk ${currentYear}`}
+                </select>
               </td>
               <td className="text-center p-3">{handleButtonAdd(item.id)}</td>
             </tr>

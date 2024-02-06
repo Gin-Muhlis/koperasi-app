@@ -3,8 +3,9 @@ import React from "react";
 import TabContent from "./tab";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { MemberState, PositionCategory, Receivable, TypeTab } from "@/types/interface";
+import { MandatorySaving, MemberState, PositionCategory, Receivable, TypeTab } from "@/types/interface";
 import {
+  getMandatorySavings,
   getMembers,
   getPositionCategories,
   getPrincivalSavings,
@@ -14,14 +15,15 @@ import DetailPayment from "./detailPayment";
 
 const Tagihan = async () => {
   const session = await getServerSession(authOptions);
-  const principalSavings: TypeTab[] = await getPrincivalSavings(
-    session?.user.accessToken
-  );
   const positionCategories: PositionCategory[] = await getPositionCategories(
     session?.user.accessToken
   );
   const members: MemberState[] = await getMembers(session?.user.accessToken);
+  const principalSavings: TypeTab[] = await getPrincivalSavings(
+    session?.user.accessToken
+  );
   const receivables: Receivable[] = await getReceivables(session?.user.accessToken);
+  const mandatorySavings: MandatorySaving[] = await getMandatorySavings(session?.user.accessToken)
   
   return (
     <MainLayout>
@@ -35,6 +37,7 @@ const Tagihan = async () => {
             positionCategories={positionCategories}
             members={members}
             receivables={receivables}
+            mandatorySavings={mandatorySavings}
           />
           <DetailPayment members={members} />
         </div>
