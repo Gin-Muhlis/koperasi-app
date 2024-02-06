@@ -12,6 +12,7 @@ import {
   getReceivables,
 } from "@/app/utils/featuresApi";
 import DetailPayment from "./detailPayment";
+import Time from "./time";
 
 const Tagihan = async () => {
   const session = await getServerSession(authOptions);
@@ -31,6 +32,9 @@ const Tagihan = async () => {
         <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-amber-400">
           Tagihan Gabungan
         </h1>
+        <div className="mb-5">
+          {/* <Time /> */}
+        </div>
         <div className="w-full flex flex-col gap-8">
           <TabContent
             principalSavings={principalSavings}

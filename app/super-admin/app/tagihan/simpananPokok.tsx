@@ -131,8 +131,6 @@ const TabSimpananPokok = ({
       })
     );
   };
-  console.log(selector)
-
   const handleButtonAdd = (id: number) => {
     const isInputed = JSON.parse(selector.listSimpananPokok).find(
       (item: any) => item.id == id

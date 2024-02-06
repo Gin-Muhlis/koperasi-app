@@ -66,7 +66,7 @@ const TabSimpananWajibKhusus = ({
     } else {
       const newMembers = [
         ...listSimpananWajibKhusus,
-        { id, amount, status: "not_confirmed", month: 1, categoryId },
+        { id, amount, status: "not_confirmed", categoryId },
       ];
       dispatch(
         setInvoice({
@@ -118,7 +118,7 @@ const TabSimpananWajibKhusus = ({
     } else {
       const newMembers = [
         ...listSimpananWajibKhusus,
-        { id, amount: 0, status: "confirmed", month: 1, categoryId: "" },
+        { id, amount: 0, status: "confirmed", categoryId: "" },
       ];
       dispatch(
         setInvoice({
@@ -211,44 +211,6 @@ const TabSimpananWajibKhusus = ({
     return false;
   };
 
-  const handleMonthRemain = (remainMonth: number) => {
-    let remain = [];
-    for (let i = 1; i <= remainMonth; i++) {
-      remain.push(i);
-    }
-
-    return remain;
-  };
-
-  const handleDisableMonth = (id: number) => {
-    const listSimpananWajibKhusus = JSON.parse(selector.listSimpananWajibKhusus);
-
-    const isInputed = listSimpananWajibKhusus.find((item: Member) => item.id == id);
-    if (!isInputed || (isInputed && isInputed.status == "confirmed")) {
-      return true;
-    }
-    return false;
-  };
-
-  const handleChangeMonth = (month: number, id: number) => {
-    const listSimpananWajibKhusus = JSON.parse(selector.listSimpananWajibKhusus);
-    const existingItemIndex = listSimpananWajibKhusus.findIndex(
-      (item: any) => item.id === id
-    );
-
-    if (existingItemIndex >= 0) {
-      const updatedItems = [...listSimpananWajibKhusus];
-      const data = updatedItems[existingItemIndex];
-      updatedItems[existingItemIndex] = { ...data, month };
-      dispatch(
-        setInvoice({
-          type: "SET_SIMPANAN_WAJIB_KHUSUS",
-          value: JSON.stringify(updatedItems),
-        })
-      );
-    }
-  };
-  console.log(selector);
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="w-1/2">
@@ -273,7 +235,6 @@ const TabSimpananWajibKhusus = ({
             <th className="text-start p-3">Jabatan</th>
             <th className="text-center p-3">Kategori</th>
             <th className="text-start p-3">Pembayaran</th>
-            <th className="text-start p-3">Jumlah Bulan</th>
             <th className="text-center p-3">Aksi</th>
           </tr>
         </thead>
@@ -316,26 +277,6 @@ const TabSimpananWajibKhusus = ({
                   disabled
                   min={0}
                 />
-              </td>
-              <td className="p-3 text-center">
-                <select
-                  defaultValue={1}
-                  className={`w-full bg-transparent font-sans border border-solid p-2 rounded ${
-                    handleDisableMonth(item.id) ? "opacity-50" : ""
-                  }`}
-                  disabled={handleDisableMonth(item.id)}
-                  onChange={(event) =>
-                    handleChangeMonth(Number(event.target.value), item.id)
-                  }
-                >
-                  {item.month_remain > 0
-                    ? handleMonthRemain(item.month_remain).map((item) => (
-                        <option key={item} value={item}>
-                          {item}
-                        </option>
-                      ))
-                    : `Selesai untuk ${currentYear}`}
-                </select>
               </td>
               <td className="text-center p-3">{handleButtonAdd(item.id)}</td>
             </tr>

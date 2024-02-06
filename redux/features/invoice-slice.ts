@@ -7,6 +7,8 @@ const initialState = {
   listSimpananSukarela: "[]",
   listTabunganRekreasi: "[]",
   listPiutangSp: "[]",
+  month: new Date().getMonth() + 1,
+  year: new Date().getFullYear(),
 };
 
 const invoice = createSlice({
@@ -20,6 +22,18 @@ const invoice = createSlice({
       const { type, value } = action.payload;
 
       switch (type) {
+        case "SET_MONTH": 
+          return {
+            ...state,
+            month: value
+          }
+          break;
+        case "SET_YEAR": 
+          return {
+            ...state,
+            year: value
+          }
+          break;
         case "SET_SIMPANAN_POKOK":
           return {
             ...state,

@@ -120,7 +120,6 @@ export type Member = {
   id: number;
   amount: number;
   status: string;
-  month: number;
 };
 
 export type Receivable = {
