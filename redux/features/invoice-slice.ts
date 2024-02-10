@@ -7,8 +7,10 @@ const initialState = {
   listSimpananSukarela: "[]",
   listTabunganRekreasi: "[]",
   listPiutangSp: "[]",
+  listPiutangDagang: "[]",
   month: new Date().getMonth() + 1,
   year: new Date().getFullYear(),
+  description: "-"
 };
 
 const invoice = createSlice({
@@ -32,6 +34,12 @@ const invoice = createSlice({
           return {
             ...state,
             year: value
+          }
+          break;
+        case "SET_DESCRIPTION": 
+          return {
+            ...state,
+            description: value
           }
           break;
         case "SET_SIMPANAN_POKOK":
@@ -68,6 +76,12 @@ const invoice = createSlice({
           return {
             ...state,
             listPiutangSp: value,
+          };
+          break;
+        case "SET_PIUTANG_DAGANG":
+          return {
+            ...state,
+            listPiutangDagang: value,
           };
           break;
         default:

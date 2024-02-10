@@ -3,8 +3,13 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import React, { useState } from 'react'
 
-const AlertSuccess = ({ message, isShow }: { message: string | boolean, isShow: boolean }) => {
+const AlertSuccess = ({ message, isShow, setSuccess }: { message: string | boolean, isShow: boolean, setSuccess: React.Dispatch<React.SetStateAction<string | boolean>> }) => {
   const [show, setShow] = useState(isShow)
+
+  const handleClose = () => {
+    setShow(false)
+    setSuccess(false)
+  }
 
   return (
     <>
@@ -13,7 +18,7 @@ const AlertSuccess = ({ message, isShow }: { message: string | boolean, isShow: 
         <span className=" font-semibold text-md alert-access">
           {message}
         </span>
-        <span onClick={() => setShow(false)} className='w-6 h-6 cursor-pointer text-md rounded-full flex items-center justify-center bg-white text-black absolute right-[-10px] top-[-10px]'>
+        <span onClick={handleClose} className='w-6 h-6 cursor-pointer text-md rounded-full flex items-center justify-center bg-white text-black absolute right-[-10px] top-[-10px]'>
           <Icon icon="jam:close" />
         </span>
       </div>}

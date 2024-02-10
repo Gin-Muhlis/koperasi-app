@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  MandatorySaving,
   Member,
   MemberState,
   PositionCategory,
@@ -28,14 +27,14 @@ const TabSimpananWajibKhusus = ({
   data,
   positionCategories,
 }: {
-  data: MandatorySaving[];
+  data: MemberState[];
   positionCategories: PositionCategory[];
 }) => {
   const dispatch = useDispatch<appDispatch>();
   const selector = useAppSelector((state) => state.invoiceReducer);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-  const [members, setMembers] = useState<MandatorySaving[]>(data);
+  const [members, setMembers] = useState<MemberState[]>(data);
 
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;

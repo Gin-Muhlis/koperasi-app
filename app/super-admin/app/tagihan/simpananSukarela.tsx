@@ -75,7 +75,8 @@ const TabSimpananSukarela = ({
     if (existingItemIndex >= 0) {
       const dataExisted: Member = listSimpananSukarela[existingItemIndex]
       const updatedItems = [...listSimpananSukarela];
-      updatedItems[existingItemIndex] = { id: dataExisted['id'], amount: dataExisted['amount'], status: 'confirmed' };
+      const data = updatedItems[existingItemIndex]
+      updatedItems[existingItemIndex] = { ...data, status: 'confirmed' };
       dispatch(
         setInvoice({
           type: "SET_SIMPANAN_SUKARELA",
@@ -83,7 +84,7 @@ const TabSimpananSukarela = ({
         })
       );
     } else {
-      const newMembers = [...listSimpananSukarela, { id, amount: 0, status: 'not_confirmed' }]
+      const newMembers = [...listSimpananSukarela, { id, amount: 0, status: 'confirmed' }]
       dispatch(
         setInvoice({
           type: "SET_SIMPANAN_SUKARELA",

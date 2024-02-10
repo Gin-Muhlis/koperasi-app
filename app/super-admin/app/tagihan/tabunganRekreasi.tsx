@@ -75,7 +75,8 @@ const TabSimpananSukarela = ({
     if (existingItemIndex >= 0) {
       const dataExisted: Member = listTabunganRekreasi[existingItemIndex]
       const updatedItems = [...listTabunganRekreasi];
-      updatedItems[existingItemIndex] = { id: dataExisted['id'], amount: dataExisted['amount'], status: 'confirmed' };
+      const data = updatedItems[existingItemIndex];
+      updatedItems[existingItemIndex] = { ...data, status: 'confirmed' };
       dispatch(
         setInvoice({
           type: "SET_TABUNGAN_REKREASI",

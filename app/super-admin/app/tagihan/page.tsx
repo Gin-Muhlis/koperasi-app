@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { MandatorySaving, MemberState, PositionCategory, Receivable, TypeTab } from "@/types/interface";
 import {
-  getMandatorySavings,
+  getAccountsReceivable,
   getMembers,
   getPositionCategories,
   getPrincivalSavings,
@@ -24,7 +24,7 @@ const Tagihan = async () => {
     session?.user.accessToken
   );
   const receivables: Receivable[] = await getReceivables(session?.user.accessToken);
-  const mandatorySavings: MandatorySaving[] = await getMandatorySavings(session?.user.accessToken)
+  const accountsReceivable: Receivable[] = await getAccountsReceivable(session?.user.accessToken);
   
   return (
     <MainLayout>
@@ -33,7 +33,8 @@ const Tagihan = async () => {
           Tagihan Gabungan
         </h1>
         <div className="mb-5">
-          {/* <Time /> */}
+          <h3 className="text-md text-black font-bold mb-2">Waktu</h3>
+          <Time />
         </div>
         <div className="w-full flex flex-col gap-8">
           <TabContent
@@ -41,7 +42,7 @@ const Tagihan = async () => {
             positionCategories={positionCategories}
             members={members}
             receivables={receivables}
-            mandatorySavings={mandatorySavings}
+            accountsReceivable={accountsReceivable}
           />
           <DetailPayment members={members} />
         </div>

@@ -120,14 +120,16 @@ export type Member = {
   id: number;
   amount: number;
   status: string;
+  loanId: number | null
 };
 
 export type Receivable = {
   id: number;
   name: string;
   position: string;
+  loan_id: number;
   total_payment: number;
-  duration: number;
+  monthly: number;
   paid: number;
   remain_payment: number;
 };
@@ -138,6 +140,8 @@ export type TotalColumn = {
   totalWajibKhusus: number;
   totalSukarela: number;
   totalTabunganRekreasi: number;
+  totalPiutangSp: number;
+  totalPiutangDagang: number;
 };
 
 

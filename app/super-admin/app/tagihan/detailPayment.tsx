@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/store";
 import React, { useEffect, useState } from "react";
 import TableDataReport from "./tableDataReport";
-import { MemberState } from "@/types/interface";
+import { Member, MemberState } from "@/types/interface";
 
 const DetailPayment = ({ members }: { members: MemberState[] }) => {
   const [totalPokok, setTotalPokok] = useState<number>(0);
@@ -11,6 +11,8 @@ const DetailPayment = ({ members }: { members: MemberState[] }) => {
   const [totalWajibKhusus, setTotalWajibKhusus] = useState<number>(0);
   const [totalSukarela, setTotalSukarela] = useState<number>(0);
   const [totalTabunganRekreasi, setTotalTabunganRekreasi] = useState<number>(0);
+  const [totalPiutangSp, setTotalPiutangSp] = useState<number>(0);
+  const [totalPiutangDagang, setTotalPiutangDagang] = useState<number>(0);
   const [totalPayment, setTotalPayment] = useState<number>(0);
 
   const selector = useAppSelector((state) => state.invoiceReducer);
@@ -22,35 +24,42 @@ const DetailPayment = ({ members }: { members: MemberState[] }) => {
       let totalWajibKhusus = 0;
       let totalSukarela = 0;
       let totalTabunganRekreasi = 0;
+      let totalPiutangSp = 0;
+      let totalPiutangDagang = 0;
 
-      JSON.parse(selector.listSimpananPokok).map((item: any) => {
+      JSON.parse(selector.listSimpananPokok).map((item: Member) => {
         if (item.status == "confirmed") {
           totalPokok += Number(item.amount);
         }
       });
-      JSON.parse(selector.listSimpananWajib).map((item: any) => {
+      JSON.parse(selector.listSimpananWajib).map((item: Member) => {
         if (item.status == "confirmed") {
           totalWajib += Number(item.amount);
         }
       });
-      JSON.parse(selector.listSimpananWajibKhusus).map((item: any) => {
+      JSON.parse(selector.listSimpananWajibKhusus).map((item: Member) => {
         if (item.status == "confirmed") {
           totalWajibKhusus += Number(item.amount);
         }
       });
-      JSON.parse(selector.listSimpananSukarela).map((item: any) => {
+      JSON.parse(selector.listSimpananSukarela).map((item: Member) => {
         if (item.status == "confirmed") {
           totalSukarela += Number(item.amount);
         }
       });
-      JSON.parse(selector.listTabunganRekreasi).map((item: any) => {
+      JSON.parse(selector.listTabunganRekreasi).map((item: Member) => {
         if (item.status == "confirmed") {
           totalTabunganRekreasi += Number(item.amount);
         }
       });
-      JSON.parse(selector.listPiutangSp).map((item: any) => {
+      JSON.parse(selector.listPiutangSp).map((item: Member) => {
         if (item.status == "confirmed") {
-          totalTabunganRekreasi += Number(item.amount);
+          totalPiutangSp += Number(item.amount);
+        }
+      });
+      JSON.parse(selector.listPiutangDagang).map((item: Member) => {
+        if (item.status == "confirmed") {
+          totalPiutangDagang += Number(item.amount);
         }
       });
 
@@ -59,12 +68,16 @@ const DetailPayment = ({ members }: { members: MemberState[] }) => {
       setTotalWajibKhusus(totalWajibKhusus);
       setTotalSukarela(totalSukarela);
       setTotalTabunganRekreasi(totalTabunganRekreasi);
+      setTotalPiutangSp(totalPiutangSp);
+      setTotalPiutangDagang(totalPiutangDagang);
       setTotalPayment(
         totalPokok +
-          totalWajib +
-          totalWajibKhusus +
-          totalSukarela +
-          totalTabunganRekreasi
+        totalWajib +
+        totalWajibKhusus +
+        totalSukarela +
+        totalTabunganRekreasi +
+        totalPiutangSp +
+        totalPiutangDagang
       );
     }
   }, [selector]);
@@ -96,15 +109,27 @@ const DetailPayment = ({ members }: { members: MemberState[] }) => {
               Rp. {totalSukarela}
             </span>
           </div>
-          <div className="flex items center justify-between gap-3 pb-3 border-b border-solid mb-4">
+          <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
             <span className="text-sm">Tabungan Rekreasi:</span>
             <span className="text-sm font-bold italic">
               Rp. {totalTabunganRekreasi}
             </span>
           </div>
           <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
+            <span className="text-sm">Piutang S/P:</span>
+            <span className="text-sm font-bold italic">
+              Rp. {totalPiutangSp}
+            </span>
+          </div>
+          <div className="flex items center justify-between gap-3 pb-3 border-b border-solid mb-4">
+            <span className="text-sm">Piutang Dagang:</span>
+            <span className="text-sm font-bold italic">
+              Rp. {totalPiutangDagang}
+            </span>
+          </div>
+          <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
             <span className="text-sm">Total Pembayaran:</span>
-            <span className="text-sm font-bold italic">Rp. {totalPayment}</span>
+            <span className="text-md font-bold italic">Rp. {totalPayment}</span>
           </div>
         </div>
       </div>

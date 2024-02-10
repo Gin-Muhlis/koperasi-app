@@ -573,25 +573,6 @@ export async function getPrincivalSavings(token: string | undefined) {
   }
 }
 
-// API GET Payment Principal Member
-export async function getMandatorySavings(token: string | undefined) {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/tab/mandatory-saving`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "applicatioin/json",
-        },
-      }
-    );
-
-    return response.data.data;
-  } catch (error: any) {
-    return error.Response;
-  }
-}
-
 // API GET Position Category
 export async function getPositionCategories(token: string | undefined) {
   try {
@@ -616,6 +597,24 @@ export async function getReceivables(token: string | undefined) {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}/tab/receivable`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "applicatioin/json",
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error: any) {
+    return error.Response;
+  }
+}
+
+// API GET Position Category
+export async function getAccountsReceivable(token: string | undefined) {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/tab/accounts-receivable`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -656,6 +655,51 @@ export async function downloadPaymentReport(
           Authorization: `Bearer ${token}`,
           Accept:
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+      }
+    );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API CREATE Invoice
+export async function createInvoice(
+  principalSavings: Member[] | undefined,
+  mandatorySavings: Member[] | undefined,
+  specialMandatorySavings: Member[] | undefined,
+  voluntarySavings: Member[] | undefined,
+  recretionalSavings: Member[] | undefined,
+  receivables: Member[] | undefined,
+  accountsReceivable: Member[] | undefined,
+  token: string | undefined,
+  monthYear: string,
+  description: string
+) {
+  try {
+    const data = {
+      principal_savings: principalSavings,
+      mandatory_savings: mandatorySavings,
+      special_mandatory_savings: specialMandatorySavings,
+      voluntary_savings: voluntarySavings,
+      recretional_savings: recretionalSavings,
+      receivables,
+      accounts_receivable: accountsReceivable,
+      month_year: monthYear,
+      description
+    };
+    
+
+    const response: any = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/invoice`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept:
+            "application/json",
         },
       }
     );
