@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import { setInvoice } from "@/redux/features/invoice-slice";
 import PaginationSection from "@/app/components/paginationSection";
+import { handleFormat } from "@/app/utils/helper";
 const PiutangSp = ({
     data,
 }: {
@@ -141,17 +142,16 @@ const PiutangSp = ({
                         <tr key={item.id}>
                             <td className="p-3">{item.name}</td>
                             <td className="p-3">{item.position}</td>
-                            <td className="p-3">Rp. {item.total_payment}</td>
-                            <td className="p-3">Rp. {item.paid}</td>
-                            <td className="p-3">Rp. {item.remain_payment}</td>
+                            <td className="p-3">Rp. {handleFormat(item.total_payment)}</td>
+                            <td className="p-3">Rp. {handleFormat(item.paid)}</td>
+                            <td className="p-3">Rp. {handleFormat(item.remain_payment)}</td>
                             <td className="p-3">
                                 <Input
-                                    type="number"
+                                    type="text"
                                     placeholder="Jumlah pembayaran"
                                     data-id={item.id}
-                                    value={item.monthly}
+                                    value={handleFormat(item.monthly)}
                                     disabled
-                                    min={0}
                                 />
                             </td>
                             <td className="text-center p-3">{handleButtonAdd(item.monthly, item.id, item.loan_id)}</td>

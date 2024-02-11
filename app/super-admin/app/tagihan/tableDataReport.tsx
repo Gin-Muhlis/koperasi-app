@@ -7,13 +7,15 @@ import { createInvoice, downloadPaymentReport } from "@/app/utils/featuresApi";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { months } from "@/constants/CONSTS";
 import { setInvoice } from "@/redux/features/invoice-slice";
 import { appDispatch, useAppSelector } from "@/redux/store";
-import { Member, MemberState, TotalColumn } from "@/types/interface";
+import { Invoice, Member, MemberState, TotalColumn } from "@/types/interface";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { handleFormat } from "@/app/utils/helper";
 
 const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const [modal, setModal] = useState(false);
@@ -31,21 +33,22 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const [colPiutangSp, setColPiutangSp] = useState<Member[]>();
   const [colPiutangDagang, setColPiutangDagang] = useState<Member[]>();
   const [totalCol, setTotalCol] = useState<TotalColumn>();
+  const [dataInvoice, setDataInvoice] = useState<Invoice[]>([]);
 
   const { data: session } = useSession();
   const router = useRouter();
   const dispatch = useDispatch<appDispatch>()
   const selector = useAppSelector((state) => state.invoiceReducer);
 
-  
+
   const handleModal = () => {
     setModal(!modal);
-    
+
     const listId: number[] = [];
 
     // simpanan pokok
     const listSimpananPokok: Member[] = JSON.parse(selector.listSimpananPokok);
-    
+
     setColSimpananPokok(listSimpananPokok);
 
     // simpanan wajib
@@ -92,9 +95,10 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
       totalPiutangSp: 0,
       totalPiutangDagang: 0,
     };
-    
+
     listSimpananPokok.map((item) => {
       listId.push(item.id)
+      handleDataInvoice(item.id, 'principal_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalPokok: (dataTotalColumn.totalPokok += Number(item.amount)),
@@ -103,6 +107,7 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listSimpananWajib.map((item) => {
       listId.push(item.id)
+      handleDataInvoice(item.id, 'mandatory_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalWajib: (dataTotalColumn.totalWajib += Number(item.amount)),
@@ -111,6 +116,7 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listSimpananWajibKhusus.map((item) => {
       listId.push(item.id)
+      handleDataInvoice(item.id, 'special_mandatory_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalWajibKhusus: (dataTotalColumn.totalWajibKhusus += Number(
@@ -121,6 +127,7 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listSimpananSukarela.map((item) => {
       listId.push(item.id)
+      handleDataInvoice(item.id, 'voluntary_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalSukarela: (dataTotalColumn.totalSukarela += Number(item.amount)),
@@ -129,6 +136,7 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listTabunganRekreasi.map((item) => {
       listId.push(item.id)
+      handleDataInvoice(item.id, 'recretioan_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalTabunganRekreasi: (dataTotalColumn.totalTabunganRekreasi += Number(
@@ -139,6 +147,7 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listPiutangSp.map((item) => {
       listId.push(item.id)
+      handleDataInvoice(item.id, 'receivable', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalPiutangSp: (dataTotalColumn.totalPiutangSp += Number(
@@ -149,6 +158,7 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listPiutangDagang.map((item) => {
       listId.push(item.id)
+      handleDataInvoice(item.id, 'account_receivable', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalPiutangDagang: (dataTotalColumn.totalPiutangDagang += Number(
@@ -168,10 +178,80 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
     setListMembers(filteredMember);
   };
 
+  const handleDataInvoice = (id: number, type: string, amount: number) => {
+    const existIndexData = dataInvoice.findIndex((item) => item.memberId === id);
+    let updatedListData = [...dataInvoice];
+    console.log(existIndexData)
+    if (existIndexData < 0) {
+      updatedListData.push({
+        memberId: id,
+        principalSaving: 0,
+        mandatorySaving: 0,
+        specialMandatorySaving: 0,
+        voluntarySaving: 0,
+        recretionalSaving: 0,
+        receivable: 0,
+        accountReceivable: 0
+      });
+    }
+
+    const newIndexData = updatedListData.findIndex((item) => item.memberId === id);
+
+    switch (type) {
+      case 'principal_saving':
+        updatedListData[newIndexData] = {
+          ...updatedListData[newIndexData],
+          principalSaving: amount
+        };
+        break;
+      case 'mandatory_saving':
+        updatedListData[newIndexData] = {
+          ...updatedListData[newIndexData],
+          mandatorySaving: amount
+        };
+        break;
+      case 'special_mandatory_saving':
+        updatedListData[newIndexData] = {
+          ...updatedListData[newIndexData],
+          specialMandatorySaving: amount
+        };
+        break;
+      case 'voluntary_saving':
+        updatedListData[newIndexData] = {
+          ...updatedListData[newIndexData],
+          voluntarySaving: amount
+        };
+        break;
+      case 'recretional_saving':
+        updatedListData[newIndexData] = {
+          ...updatedListData[newIndexData],
+          recretionalSaving: amount
+        };
+        break;
+      case 'receivable':
+        updatedListData[newIndexData] = {
+          ...updatedListData[newIndexData],
+          receivable: amount
+        };
+        break;
+      case 'account_receivable':
+        updatedListData[newIndexData] = {
+          ...updatedListData[newIndexData],
+          accountReceivable: amount
+        };
+        break;
+      default:
+        return;
+    }
+    setDataInvoice(updatedListData);
+  };
+  console.log(dataInvoice)
   const handleValueSimpananPokok = (id: number) => {
     const data = colSimpananPokok?.find((member: Member) => member.id == id);
 
-    if (data) return data.amount;
+    if (data) {
+      return data.amount
+    }
 
     return 0;
   };
@@ -179,7 +259,10 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const handleValueSimpananWajib = (id: number) => {
     const data = colSimpananWajib?.find((member: Member) => member.id == id);
 
-    if (data) return data.amount;
+    if (data) {
+      return data.amount
+    }
+
 
     return 0;
   };
@@ -189,7 +272,10 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
       (member: Member) => member.id == id
     );
 
-    if (data) return data.amount;
+    if (data) {
+      return data.amount
+    }
+
 
     return 0;
   };
@@ -197,7 +283,10 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const handleValueSimpananSukarela = (id: number) => {
     const data = colSimpananSukarela?.find((member: Member) => member.id == id);
 
-    if (data) return data.amount;
+    if (data) {
+      return data.amount
+    }
+
 
     return 0;
   };
@@ -205,7 +294,10 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const handleValueTabunganRekreasi = (id: number) => {
     const data = colTabunganRekreasi?.find((member: Member) => member.id == id);
 
-    if (data) return data.amount;
+    if (data) {
+      return data.amount
+    }
+
 
     return 0;
   };
@@ -213,7 +305,10 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const handleValuePiutangSp = (id: number) => {
     const data = colPiutangSp?.find((member: Member) => member.id == id);
 
-    if (data) return data.amount;
+    if (data) {
+      return data.amount
+    }
+
 
     return 0;
   };
@@ -221,7 +316,10 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const handleValuePiutangDagang = (id: number) => {
     const data = colPiutangDagang?.find((member: Member) => member.id == id);
 
-    if (data) return data.amount;
+    if (data) {
+      return data.amount
+    }
+
 
     return 0;
   };
@@ -232,8 +330,8 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
       Number(handleValueSimpananWajib(id)) +
       Number(handleValueSimpananWajibKhusus(id)) +
       Number(handleValueSimpananSukarela(id)) +
-      Number(handleValueTabunganRekreasi(id)) + 
-      Number(handleValuePiutangSp(id)) + 
+      Number(handleValueTabunganRekreasi(id)) +
+      Number(handleValuePiutangSp(id)) +
       Number(handleValuePiutangDagang(id));
     return total;
   };
@@ -258,14 +356,14 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
   };
 
   const handleDescription = (event: any) => {
-    dispatch(setInvoice({type: "SET_DESCRIPTION", value: event.target.value}))
+    dispatch(setInvoice({ type: "SET_DESCRIPTION", value: event.target.value }))
   }
 
   const handleInvoice = async () => {
     setIsLoading(true)
 
     const monthYear = `${selector.month < 10 ? `0${selector.month}` : selector.month}-${selector.year}`
-    
+
     const response = await createInvoice(colSimpananPokok, colSimpananWajib, colSimpananWajibKhusus, colSimpananSukarela, colTabunganRekreasi, colPiutangSp, colPiutangDagang, session?.user.accessToken, monthYear, selector.description)
     setIsLoading(false)
 
@@ -279,49 +377,49 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
       setError(message)
     } else {
-        setError(response.data.message)
+      setError(response.data.message)
     }
 
   }
-  
-  // const handleDownloadExcel = async () => {
-  //   setIsLoading(true);
 
-  //   const response = await downloadPaymentReport(
-  //     colSimpananPokok,
-  //     colSimpananWajib,
-  //     colSimpananWajibKhusus,
-  //     colSimpananSukarela,
-  //     colTabunganRekreasi,
-  //     session?.user.accessToken
-  //   );
+  const handleDownloadExcel = async () => {
+    setIsLoading(true);
 
-  //   if (response.status == 200) {
-  //     const blob = await response.data;
-  //     const url = window.URL.createObjectURL(blob);
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.setAttribute("download", "tagihan_gabungan.xlsx"); // or any other extension
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.parentNode?.removeChild(link);
+    const response = await downloadPaymentReport(
+      colSimpananPokok,
+      colSimpananWajib,
+      colSimpananWajibKhusus,
+      colSimpananSukarela,
+      colTabunganRekreasi,
+      session?.user.accessToken
+    );
 
-  //     setIsLoading(false);
-  //     router.refresh();
-  //     setSuccess("Download data berhasil");
-  //   } else if (response.status === 422) {
-  //     setIsLoading(false);
-  //     const errorsData = response.data.errors;
-  //     const keys = Object.keys(errorsData);
-  //     const firstKey = keys[0];
-  //     const message = errorsData[firstKey][0];
+    if (response.status == 200) {
+      const blob = await response.data;
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "tagihan_gabungan.xlsx"); // or any other extension
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
 
-  //     setError(message);
-  //   } else {
-  //     setIsLoading(false);
-  //     setError(response.data.message);
-  //   }
-  // };
+      setIsLoading(false);
+      router.refresh();
+      setSuccess("Download data berhasil");
+    } else if (response.status === 422) {
+      setIsLoading(false);
+      const errorsData = response.data.errors;
+      const keys = Object.keys(errorsData);
+      const firstKey = keys[0];
+      const message = errorsData[firstKey][0];
+
+      setError(message);
+    } else {
+      setIsLoading(false);
+      setError(response.data.message);
+    }
+  };
 
   return (
     <>
@@ -333,16 +431,14 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
         Detail Data
       </Button>
       <div
-        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${
-          modal ? "block" : "hidden"
-        }`}
+        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? "block" : "hidden"
+          }`}
       >
         <div
-          className={`w-11/12 bg-white p-5 rounded transition-transform max-h-[90vh] overflow-y-scroll ${
-            modal ? "scale-100" : "scale-0"
-          }`}
+          className={`w-11/12 bg-white p-5 rounded transition-transform max-h-[90vh] overflow-y-scroll ${modal ? "scale-100" : "scale-0"
+            }`}
         >
-          <h1 className="text-2xl text-black font-bold mb-7">Data Invoice</h1>
+          <h1 className="text-2xl text-black font-bold mb-7">Data Pembayaran {months[selector.month]} {selector.year}</h1>
           <div className="w-full mb-2">
             <table className="text-sm w-full border border-solid mb-5">
               <thead>
@@ -383,28 +479,28 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
                     </td>
                     <td className="border border-solid p-3">{item.name}</td>
                     <td className="text-center border border-solid p-3">
-                      {handleValueSimpananPokok(item.id)}
+                      {handleFormat(handleValueSimpananPokok(item.id))}
                     </td>
                     <td className="text-center border border-solid p-3">
-                      {handleValueSimpananWajib(item.id)}
+                      {handleFormat(handleValueSimpananWajib(item.id))}
                     </td>
                     <td className="text-center border border-solid p-3">
-                      {handleValueSimpananWajibKhusus(item.id)}
+                      {handleFormat(handleValueSimpananWajibKhusus(item.id))}
                     </td>
                     <td className="text-center border border-solid p-3">
-                      {handleValueSimpananSukarela(item.id)}
+                      {handleFormat(handleValueSimpananSukarela(item.id))}
                     </td>
                     <td className="text-center border border-solid p-3">
-                      {handleValueTabunganRekreasi(item.id)}
+                      {handleFormat(handleValueTabunganRekreasi(item.id))}
                     </td>
                     <td className="text-center border border-solid p-3">
-                      {handleValuePiutangSp(item.id)}
+                      {handleFormat(handleValuePiutangSp(item.id))}
                     </td>
                     <td className="text-center border border-solid p-3">
-                      {handleValuePiutangDagang(item.id)}
+                      {handleFormat(handleValuePiutangDagang(item.id))}
                     </td>
                     <td className="text-center border border-solid p-3">
-                      {handleValueTotalRow(item.id)}
+                      {handleFormat(handleValueTotalRow(item.id))}
                     </td>
                   </tr>
                 ))}
@@ -416,28 +512,28 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
                     Jumlah
                   </td>
                   <td className="text-center border border-solid p-3">
-                    {totalCol?.totalPokok ?? 0}
+                    {totalCol?.totalPokok ? handleFormat(totalCol?.totalPokok) : 0}
                   </td>
                   <td className="text-center border border-solid p-3">
-                    {totalCol?.totalWajib ?? 0}
+                    {totalCol?.totalWajib ? handleFormat(totalCol?.totalWajib) : 0}
                   </td>
                   <td className="text-center border border-solid p-3">
-                    {totalCol?.totalWajibKhusus ?? 0}
+                    {totalCol?.totalWajibKhusus ? handleFormat(totalCol?.totalWajibKhusus) : 0}
                   </td>
                   <td className="text-center border border-solid p-3">
-                    {totalCol?.totalSukarela ?? 0}
+                    {totalCol?.totalSukarela ? handleFormat(totalCol?.totalSukarela) : 0}
                   </td>
                   <td className="text-center border border-solid p-3">
-                    {totalCol?.totalTabunganRekreasi ?? 0}
+                    {totalCol?.totalTabunganRekreasi ? handleFormat(totalCol?.totalTabunganRekreasi) : 0}
                   </td>
                   <td className="text-center border border-solid p-3">
-                    {totalCol?.totalPiutangSp ?? 0}
+                    {totalCol?.totalPiutangSp ? handleFormat(totalCol?.totalPiutangSp) : 0}
                   </td>
                   <td className="text-center border border-solid p-3">
-                    {totalCol?.totalPiutangDagang ?? 0}
+                    {totalCol?.totalPiutangDagang ? handleFormat(totalCol?.totalPiutangDagang) : 0}
                   </td>
                   <td className="text-center border border-solid p-3">
-                    {handleTotalData()}
+                    {handleFormat(handleTotalData())}
                   </td>
                 </tr>
               </tbody>
@@ -466,6 +562,17 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
             >
               {isLoading ? <Loader /> : "Simpan Data"}
+            </Button>
+            <Button
+              type="button"
+              size={"sm"}
+              className="text-white bg-green-400"
+              onClick={handleDownloadExcel}
+              disabled={isLoading}
+
+
+            >
+              {isLoading ? <Loader /> : "Download Excel"}
             </Button>
           </div>
         </div>

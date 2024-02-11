@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import { setInvoice } from "@/redux/features/invoice-slice";
 import PaginationSection from "@/app/components/paginationSection";
+import { handleFormat } from "@/app/utils/helper";
 const TabSimpananSukarela = ({
   data,
 }: {
@@ -31,16 +32,19 @@ const TabSimpananSukarela = ({
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = members.slice(firstItemIndex, lastItemIndex);
 
-  const updateInputData = (amount: number, id: number,) => {
+  const updateInputData = (amount: string, id: number,) => {
     const listSimpananSukarela = JSON.parse(selector.listSimpananSukarela)
     const existingItemIndex = listSimpananSukarela.findIndex(
       (item: Member) => item.id === id
     );
+    
+    const numericValue = amount.replace(/\D/g, '');
+    const payment = numericValue.split(".").join("")
 
     if (existingItemIndex >= 0) {
 
       const updatedItems = [...listSimpananSukarela];
-      updatedItems[existingItemIndex] = { id, amount, status: 'not_confirmed' };
+      updatedItems[existingItemIndex] = { id, amount: payment, status: 'not_confirmed' };
       dispatch(
         setInvoice({
           type: "SET_SIMPANAN_SUKARELA",
@@ -48,7 +52,7 @@ const TabSimpananSukarela = ({
         })
       );
     } else {
-      const newMembers = [...listSimpananSukarela, { id, amount, status: 'not_confirmed' }]
+      const newMembers = [...listSimpananSukarela, { id, amount: payment, status: 'not_confirmed' }]
       dispatch(
         setInvoice({
           type: "SET_SIMPANAN_SUKARELA",
@@ -61,7 +65,7 @@ const TabSimpananSukarela = ({
   const handleValueAmount = (id: number) => {
     const isData = JSON.parse(selector.listSimpananSukarela).find((item: Member) => item.id == id)
     if (isData) {
-      return isData.amount
+      return handleFormat(isData.amount)
     }
 
     return "";
@@ -130,7 +134,7 @@ const TabSimpananSukarela = ({
       );
     }
   };
-
+  console.log(selector)
   const filterMembersByPosition = (value: string) => {
     const newMembers = data.filter((member) => member.position == value);
 
@@ -207,13 +211,11 @@ const TabSimpananSukarela = ({
               <td className="p-3">{item.position}</td>
               <td className="p-3">
                 <Input
-                  type="number"
+                  type="text"
                   placeholder="Jumlah pembayaran"
-                  data-id={item.id}
                   value={handleValueAmount(item.id)}
-                  onChange={(event: any) => updateInputData(Number(event.target.value), item.id)}
+                  onChange={(event: any) => updateInputData(event.target.value, item.id)}
                   disabled={handleDisable(item.id)}
-                  min={0}
                 />
               </td>
               <td className="text-center p-3">{handleButtonAdd(item.id)}</td>

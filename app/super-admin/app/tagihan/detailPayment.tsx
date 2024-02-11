@@ -1,9 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/store";
 import React, { useEffect, useState } from "react";
 import TableDataReport from "./tableDataReport";
 import { Member, MemberState } from "@/types/interface";
+import { handleFormat } from "@/app/utils/helper";
 
 const DetailPayment = ({ members }: { members: MemberState[] }) => {
   const [totalPokok, setTotalPokok] = useState<number>(0);
@@ -81,7 +81,7 @@ const DetailPayment = ({ members }: { members: MemberState[] }) => {
       );
     }
   }, [selector]);
-
+  
   return (
     <>
       <div className="w- full p-4 border border-solid">
@@ -91,45 +91,45 @@ const DetailPayment = ({ members }: { members: MemberState[] }) => {
         <div className="flex flex-col gap-4">
           <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
             <span className="text-sm">Simpanan Pokok:</span>
-            <span className="text-sm font-bold italic"> Rp. {totalPokok}</span>
+            <span className="text-sm font-bold italic"> Rp. {handleFormat(totalPokok)}</span>
           </div>
           <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
             <span className="text-sm">Simpanan Wajib:</span>
-            <span className="text-sm font-bold italic"> Rp. {totalWajib}</span>
+            <span className="text-sm font-bold italic"> Rp. {handleFormat(totalWajib)}</span>
           </div>
           <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
             <span className="text-sm">Simpanan Wajib Khusus:</span>
             <span className="text-sm font-bold italic">
-              Rp. {totalWajibKhusus}
+              Rp. {handleFormat(totalWajibKhusus)}
             </span>
           </div>
           <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
             <span className="text-sm">Simpanan Sukarela:</span>
             <span className="text-sm font-bold italic">
-              Rp. {totalSukarela}
+              Rp. {handleFormat(totalSukarela)}
             </span>
           </div>
           <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
             <span className="text-sm">Tabungan Rekreasi:</span>
             <span className="text-sm font-bold italic">
-              Rp. {totalTabunganRekreasi}
+              Rp. {handleFormat(totalTabunganRekreasi)}
             </span>
           </div>
           <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
             <span className="text-sm">Piutang S/P:</span>
             <span className="text-sm font-bold italic">
-              Rp. {totalPiutangSp}
+              Rp. {handleFormat(totalPiutangSp)}
             </span>
           </div>
           <div className="flex items center justify-between gap-3 pb-3 border-b border-solid mb-4">
             <span className="text-sm">Piutang Dagang:</span>
             <span className="text-sm font-bold italic">
-              Rp. {totalPiutangDagang}
+              Rp. {handleFormat(totalPiutangDagang)}
             </span>
           </div>
           <div className="flex items center justify-between gap-3 pb-3 border-b border-solid">
-            <span className="text-sm">Total Pembayaran:</span>
-            <span className="text-md font-bold italic">Rp. {totalPayment}</span>
+            <span className="text-lg">Total Pembayaran:</span>
+            <span className="text-lg font-bold italic">Rp. {handleFormat(totalPayment)}</span>
           </div>
         </div>
       </div>

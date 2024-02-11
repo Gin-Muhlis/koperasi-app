@@ -5,12 +5,12 @@ import { setInvoice } from '@/redux/features/invoice-slice';
 import { appDispatch, useAppSelector } from '@/redux/store';
 import React from 'react'
 import { useDispatch } from 'react-redux';
+import { months } from '../../../../constants/CONSTS';
 
 const Time = () => {
     const dispatch = useDispatch<appDispatch>();
     const selector = useAppSelector((state) => state.invoiceReducer)
 
-    const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
     const currentYear = new Date().getFullYear();
     const nextYear = currentYear + 1;
 

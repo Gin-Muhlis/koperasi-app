@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import PaginationSection from "@/app/components/paginationSection";
 import { setInvoice } from "@/redux/features/invoice-slice";
+import { handleFormat } from "@/app/utils/helper";
 
 const TabSimpananWajibKhusus = ({
   data,
@@ -81,7 +82,7 @@ const TabSimpananWajibKhusus = ({
       (item: Member) => item.id == id
     );
     if (isData) {
-      return isData.amount;
+      return handleFormat(isData.amount);
     }
 
     return "";
@@ -269,7 +270,7 @@ const TabSimpananWajibKhusus = ({
               </td>
               <td className="p-3">
                 <Input
-                  type="number"
+                  type="text"
                   placeholder="Jumlah pembayaran"
                   data-id={item.id}
                   value={handleValueAmount(item.id)}

@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import PaginationSection from "@/app/components/paginationSection";
 import { setInvoice } from "@/redux/features/invoice-slice";
+import { handleFormat } from "@/app/utils/helper";
 
 const TabSimpananPokok = ({
   data,
@@ -71,7 +72,7 @@ const TabSimpananPokok = ({
       (item: Member) => item.id == id
     );
     if (isData) {
-      return isData.amount;
+      return handleFormat(isData.amount);
     }
 
     return "";
@@ -255,7 +256,7 @@ const TabSimpananPokok = ({
               </td>
               <td className="p-3">
                 <Input
-                  type="number"
+                  type="text"
                   placeholder="Pembayaran"
                   data-id={item.id}
                   value={handleValueAmount(item.id)}

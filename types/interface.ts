@@ -151,3 +151,14 @@ export type MandatorySaving = {
   position: string;
   month_remain: number
 }
+
+export type Invoice = {
+  memberId: number;
+  principalSaving: number;
+  mandatorySaving: number;
+  specialMandatorySaving: number;
+  voluntarySaving: number;
+  recretionalSaving: number;
+  receivable: number;
+  accountReceivable: number;
+}
