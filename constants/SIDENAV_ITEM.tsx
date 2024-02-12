@@ -31,6 +31,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     icon: <Icon icon="lucide:folder" width="24" height="24" />,
     submenu: true,
     subMenuItems: [
+      { title: "Data Invoice", path: "/super-admin/app/data-invoice" },
       { title: "Tagihan Gabungan", path: "/super-admin/app/tagihan" },
     ],
   },

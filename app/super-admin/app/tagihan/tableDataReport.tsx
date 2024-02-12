@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { months } from "@/constants/CONSTS";
-import { setInvoice } from "@/redux/features/invoice-slice";
+import { resetState, setInvoice } from "@/redux/features/invoice-slice";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import { Invoice, Member, MemberState, TotalColumn } from "@/types/interface";
 import { useSession } from "next-auth/react";
@@ -98,7 +98,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listSimpananPokok.map((item) => {
       listId.push(item.id)
-      handleDataInvoice(item.id, 'principal_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalPokok: (dataTotalColumn.totalPokok += Number(item.amount)),
@@ -107,7 +106,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listSimpananWajib.map((item) => {
       listId.push(item.id)
-      handleDataInvoice(item.id, 'mandatory_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalWajib: (dataTotalColumn.totalWajib += Number(item.amount)),
@@ -116,7 +114,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listSimpananWajibKhusus.map((item) => {
       listId.push(item.id)
-      handleDataInvoice(item.id, 'special_mandatory_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalWajibKhusus: (dataTotalColumn.totalWajibKhusus += Number(
@@ -127,7 +124,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listSimpananSukarela.map((item) => {
       listId.push(item.id)
-      handleDataInvoice(item.id, 'voluntary_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalSukarela: (dataTotalColumn.totalSukarela += Number(item.amount)),
@@ -136,7 +132,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listTabunganRekreasi.map((item) => {
       listId.push(item.id)
-      handleDataInvoice(item.id, 'recretioan_saving', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalTabunganRekreasi: (dataTotalColumn.totalTabunganRekreasi += Number(
@@ -147,7 +142,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listPiutangSp.map((item) => {
       listId.push(item.id)
-      handleDataInvoice(item.id, 'receivable', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalPiutangSp: (dataTotalColumn.totalPiutangSp += Number(
@@ -158,7 +152,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     listPiutangDagang.map((item) => {
       listId.push(item.id)
-      handleDataInvoice(item.id, 'account_receivable', item.amount)
       dataTotalColumn = {
         ...dataTotalColumn,
         totalPiutangDagang: (dataTotalColumn.totalPiutangDagang += Number(
@@ -176,76 +169,163 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
     );
 
     setListMembers(filteredMember);
+
+    handleDataInvoice(listSimpananPokok, listSimpananWajib, listSimpananWajibKhusus, listSimpananSukarela, listTabunganRekreasi, listPiutangSp, listPiutangDagang)
   };
 
-  const handleDataInvoice = (id: number, type: string, amount: number) => {
-    const existIndexData = dataInvoice.findIndex((item) => item.memberId === id);
-    let updatedListData = [...dataInvoice];
-    console.log(existIndexData)
-    if (existIndexData < 0) {
-      updatedListData.push({
-        memberId: id,
-        principalSaving: 0,
-        mandatorySaving: 0,
-        specialMandatorySaving: 0,
-        voluntarySaving: 0,
-        recretionalSaving: 0,
-        receivable: 0,
-        accountReceivable: 0
-      });
-    }
+  const handleDataInvoice = (simpananPokok: Member[], simpananWajib: Member[], simpananWajibKhusus: Member[], simpananSukarela: Member[], tabunganRekreasi: Member[], piutangSp: Member[], piutangDagang: Member[]) => {
+    const newList: Invoice[] = [];
 
-    const newIndexData = updatedListData.findIndex((item) => item.memberId === id);
+    simpananPokok.map((item) => {
+      const indexData = newList.findIndex((data) => data.memberId === item.id)
+      if (indexData >= 0) {
+        const data = newList[indexData]
+        newList[indexData] = { ...data, principalSaving: item.amount }
+      } else {
+        const data = {
+          memberId: item.id,
+          principalSaving: item.amount,
+          mandatorySaving: 0,
+          specialMandatorySaving: 0,
+          voluntarySaving: 0,
+          recretionalSaving: 0,
+          receivable: 0,
+          accountReceivable: 0,
+        }
 
-    switch (type) {
-      case 'principal_saving':
-        updatedListData[newIndexData] = {
-          ...updatedListData[newIndexData],
-          principalSaving: amount
-        };
-        break;
-      case 'mandatory_saving':
-        updatedListData[newIndexData] = {
-          ...updatedListData[newIndexData],
-          mandatorySaving: amount
-        };
-        break;
-      case 'special_mandatory_saving':
-        updatedListData[newIndexData] = {
-          ...updatedListData[newIndexData],
-          specialMandatorySaving: amount
-        };
-        break;
-      case 'voluntary_saving':
-        updatedListData[newIndexData] = {
-          ...updatedListData[newIndexData],
-          voluntarySaving: amount
-        };
-        break;
-      case 'recretional_saving':
-        updatedListData[newIndexData] = {
-          ...updatedListData[newIndexData],
-          recretionalSaving: amount
-        };
-        break;
-      case 'receivable':
-        updatedListData[newIndexData] = {
-          ...updatedListData[newIndexData],
-          receivable: amount
-        };
-        break;
-      case 'account_receivable':
-        updatedListData[newIndexData] = {
-          ...updatedListData[newIndexData],
-          accountReceivable: amount
-        };
-        break;
-      default:
-        return;
-    }
-    setDataInvoice(updatedListData);
+        newList.push(data)
+      }
+    })
+
+    simpananWajib.map((item) => {
+      const indexData = newList.findIndex((data) => data.memberId === item.id)
+      if (indexData >= 0) {
+        const data = newList[indexData]
+        newList[indexData] = { ...data, mandatorySaving: item.amount }
+      } else {
+        const data = {
+          memberId: item.id,
+          principalSaving: 0,
+          mandatorySaving: item.amount,
+          specialMandatorySaving: 0,
+          voluntarySaving: 0,
+          recretionalSaving: 0,
+          receivable: 0,
+          accountReceivable: 0,
+        }
+
+        newList.push(data)
+      }
+    })
+
+    simpananWajibKhusus.map((item) => {
+      const indexData = newList.findIndex((data) => data.memberId === item.id)
+      if (indexData >= 0) {
+        const data = newList[indexData]
+        newList[indexData] = { ...data, specialMandatorySaving: item.amount }
+      } else {
+        const data = {
+          memberId: item.id,
+          principalSaving: 0,
+          mandatorySaving: 0,
+          specialMandatorySaving: item.amount,
+          voluntarySaving: 0,
+          recretionalSaving: 0,
+          receivable: 0,
+          accountReceivable: 0,
+        }
+
+        newList.push(data)
+      }
+    })
+
+    simpananSukarela.map((item) => {
+      const indexData = newList.findIndex((data) => data.memberId === item.id)
+      if (indexData >= 0) {
+        const data = newList[indexData]
+        newList[indexData] = { ...data, voluntarySaving: item.amount }
+      } else {
+        const data = {
+          memberId: item.id,
+          principalSaving: 0,
+          mandatorySaving: 0,
+          specialMandatorySaving: 0,
+          voluntarySaving: item.amount,
+          recretionalSaving: 0,
+          receivable: 0,
+          accountReceivable: 0,
+        }
+
+        newList.push(data)
+      }
+    })
+
+    tabunganRekreasi.map((item) => {
+      const indexData = newList.findIndex((data) => data.memberId === item.id)
+      if (indexData >= 0) {
+        const data = newList[indexData]
+        newList[indexData] = { ...data, recretionalSaving: item.amount }
+      } else {
+        const data = {
+          memberId: item.id,
+          principalSaving: 0,
+          mandatorySaving: 0,
+          specialMandatorySaving: 0,
+          voluntarySaving: 0,
+          recretionalSaving: item.amount,
+          receivable: 0,
+          accountReceivable: 0,
+        }
+
+        newList.push(data)
+      }
+    })
+
+    piutangSp.map((item) => {
+      const indexData = newList.findIndex((data) => data.memberId === item.id)
+      if (indexData >= 0) {
+        const data = newList[indexData]
+        newList[indexData] = { ...data, receivable: item.amount }
+      } else {
+        const data = {
+          memberId: item.id,
+          principalSaving: 0,
+          mandatorySaving: 0,
+          specialMandatorySaving: 0,
+          voluntarySaving: 0,
+          recretionalSaving: 0,
+          receivable: item.amount,
+          accountReceivable: 0,
+        }
+
+        newList.push(data)
+      }
+    })
+
+    piutangDagang.map((item) => {
+      const indexData = newList.findIndex((data) => data.memberId === item.id)
+      if (indexData >= 0) {
+        const data = newList[indexData]
+        newList[indexData] = { ...data, accountReceivable: item.amount }
+      } else {
+        const data = {
+          memberId: item.id,
+          principalSaving: 0,
+          mandatorySaving: 0,
+          specialMandatorySaving: 0,
+          voluntarySaving: 0,
+          recretionalSaving: 0,
+          receivable: 0,
+          accountReceivable: item.amount,
+        }
+
+        newList.push(data)
+      }
+    })
+
+    setDataInvoice(newList);
   };
-  console.log(dataInvoice)
+  
   const handleValueSimpananPokok = (id: number) => {
     const data = colSimpananPokok?.find((member: Member) => member.id == id);
 
@@ -364,11 +444,14 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
     const monthYear = `${selector.month < 10 ? `0${selector.month}` : selector.month}-${selector.year}`
 
-    const response = await createInvoice(colSimpananPokok, colSimpananWajib, colSimpananWajibKhusus, colSimpananSukarela, colTabunganRekreasi, colPiutangSp, colPiutangDagang, session?.user.accessToken, monthYear, selector.description)
+    const response = await createInvoice(colSimpananPokok, colSimpananWajib, colSimpananWajibKhusus, colSimpananSukarela, colTabunganRekreasi, colPiutangSp, colPiutangDagang, session?.user.accessToken, monthYear, selector.description, dataInvoice)
     setIsLoading(false)
 
     if (response.status == 200) {
+      dispatch(resetState())
+      setModal(false)
       setSuccess(response.data.message)
+      router.refresh()
     } else if (response.status == 422) {
       const errorData = response.data.errors;
       const keys = Object.keys(errorData)
@@ -562,17 +645,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
             >
               {isLoading ? <Loader /> : "Simpan Data"}
-            </Button>
-            <Button
-              type="button"
-              size={"sm"}
-              className="text-white bg-green-400"
-              onClick={handleDownloadExcel}
-              disabled={isLoading}
-
-
-            >
-              {isLoading ? <Loader /> : "Download Excel"}
             </Button>
           </div>
         </div>

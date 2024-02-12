@@ -1,4 +1,4 @@
-import { Member, MemberState, RegisterState } from "@/types/interface";
+import { Invoice, Member, MemberState, RegisterState } from "@/types/interface";
 import axios from "axios";
 
 // API register
@@ -543,7 +543,7 @@ export async function getPayments(token: string | undefined) {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "applicatioin/json",
+          Accept: "application/json",
         },
       }
     );
@@ -562,7 +562,7 @@ export async function getPrincivalSavings(token: string | undefined) {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "applicatioin/json",
+          Accept: "application/json",
         },
       }
     );
@@ -581,7 +581,7 @@ export async function getPositionCategories(token: string | undefined) {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "applicatioin/json",
+          Accept: "application/json",
         },
       }
     );
@@ -600,7 +600,7 @@ export async function getReceivables(token: string | undefined) {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "applicatioin/json",
+          Accept: "application/json",
         },
       }
     );
@@ -618,7 +618,7 @@ export async function getAccountsReceivable(token: string | undefined) {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "applicatioin/json",
+          Accept: "application/json",
         },
       }
     );
@@ -676,7 +676,8 @@ export async function createInvoice(
   accountsReceivable: Member[] | undefined,
   token: string | undefined,
   monthYear: string,
-  description: string
+  description: string,
+  dataInvoice: Invoice[]
 ) {
   try {
     const data = {
@@ -687,8 +688,9 @@ export async function createInvoice(
       recretional_savings: recretionalSavings,
       receivables,
       accounts_receivable: accountsReceivable,
+      invoices: dataInvoice,
       month_year: monthYear,
-      description
+      description,
     };
     
 
@@ -708,4 +710,23 @@ export async function createInvoice(
   } catch (error: any) {
     return error.response;
   }
+}
+
+// GET API Invoice
+export async function getInvoices(token: string | undefined) {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/invoice`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  } 
 }
