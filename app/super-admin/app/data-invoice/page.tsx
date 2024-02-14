@@ -5,11 +5,12 @@ import { InvoiceState } from '@/types/interface';
 import { getServerSession } from 'next-auth';
 import React from 'react'
 import Content from './content';
+import { Button } from '@/components/ui/button';
+import ButtonAction from './button';
 
 const Invoice = async () => {
     const session = await getServerSession(authOptions);
     const invoices: InvoiceState[] = await getInvoices(session?.user.accessToken);
-    console.log(invoices)
     return (
       <MainLayout>
         <div className="bg-white rounded p-4 w-full">
@@ -17,12 +18,9 @@ const Invoice = async () => {
             Kategori
           </h1>
   
-          <div className="mb-5">
-            download
-          </div>
-  
           <Content invoices={invoices} />
   
+          <ButtonAction invoices={invoices} />
         </div>
   
       </MainLayout>

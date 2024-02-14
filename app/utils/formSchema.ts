@@ -138,80 +138,92 @@ export const updateMemberSchema = z.object({
 export const categorySchema = z.object({
   name: z.string({
     invalid_type_error: "Nama kategori harus valid",
-    required_error: "Nama tidak boleh kosong"
-  })
-})
+    required_error: "Nama tidak boleh kosong",
+  }),
+});
 
 export const createSubCategorySchema = z.object({
-  name: z.string({
-    invalid_type_error: "Nama kategori harus valid",
-    required_error: "Nama tidak boleh kosong"
-  }).max(255, {
-    message: "Nama kategori tidak boleh lebih dari 255 karakter"
-  }),
-  type: z.enum(['debit', 'kredit']),
+  name: z
+    .string({
+      invalid_type_error: "Nama kategori harus valid",
+      required_error: "Nama tidak boleh kosong",
+    })
+    .max(255, {
+      message: "Nama kategori tidak boleh lebih dari 255 karakter",
+    }),
+  type: z.enum(["debit", "kredit"]),
   category_id: z.string({
     required_error: "Kategori tidak boleh kosong",
-    invalid_type_error: "Kategori tidak valid"
-  })
-})
+    invalid_type_error: "Kategori tidak valid",
+  }),
+});
 
 export const updateSubCategorySchema = z.object({
-  name: z.string({
-    invalid_type_error: "Nama kategori harus valid",
-    required_error: "Nama tidak boleh kosong"
-  }).max(255, {
-    message: "Nama kategori tidak boleh lebih dari 255 karakter"
-  }),
-  type: z.enum(['debit', 'kredit']),
-  category_id: z.optional(z.string({
-    required_error: "Kategori tidak boleh kosong",
-    invalid_type_error: "Kategori tidak valid"
-  }))
-})
+  name: z
+    .string({
+      invalid_type_error: "Nama kategori harus valid",
+      required_error: "Nama tidak boleh kosong",
+    })
+    .max(255, {
+      message: "Nama kategori tidak boleh lebih dari 255 karakter",
+    }),
+  type: z.enum(["debit", "kredit"]),
+  category_id: z.optional(
+    z.string({
+      required_error: "Kategori tidak boleh kosong",
+      invalid_type_error: "Kategori tidak valid",
+    })
+  ),
+});
 
 export const productSchema = z.object({
   name: z.string({
     invalid_type_error: "Nama produk harus valid",
-    required_error: "Nama tidak boleh kosong"
-  })
-})
+    required_error: "Nama tidak boleh kosong",
+  }),
+});
 
 export const addStuffSchema = z.object({
-  name: z.string({
-    invalid_type_error: "Nama barang harus valid",
-    required_error: "Nama barang tidak boleh kosong"
-  }).max(255, {
-    message: "Nama barang tidak boleh lebih dari 255 karakter"
-  }),
+  name: z
+    .string({
+      invalid_type_error: "Nama barang harus valid",
+      required_error: "Nama barang tidak boleh kosong",
+    })
+    .max(255, {
+      message: "Nama barang tidak boleh lebih dari 255 karakter",
+    }),
   price: z.string({
     invalid_type_error: "Harga barang harus valid",
-    required_error: "Harga barang tidak boleh kosong"
+    required_error: "Harga barang tidak boleh kosong",
   }),
   image: z.any(),
   product_id: z.string({
     required_error: "Kategori tidak boleh kosong",
-    invalid_type_error: "Kategori tidak valid"
-  })
-})
+    invalid_type_error: "Kategori tidak valid",
+  }),
+});
 
 export const editStuffSchema = z.object({
-  name: z.string({
-    invalid_type_error: "Nama barang harus valid",
-    required_error: "Nama barang tidak boleh kosong"
-  }).max(255, {
-    message: "Nama barang tidak boleh lebih dari 255 karakter"
-  }),
+  name: z
+    .string({
+      invalid_type_error: "Nama barang harus valid",
+      required_error: "Nama barang tidak boleh kosong",
+    })
+    .max(255, {
+      message: "Nama barang tidak boleh lebih dari 255 karakter",
+    }),
   price: z.string({
     invalid_type_error: "Harga barang harus valid",
-    required_error: "Harga barang tidak boleh kosong"
+    required_error: "Harga barang tidak boleh kosong",
   }),
   image: z.any(),
-  product_id: z.optional(z.string({
-    required_error: "Kategori tidak boleh kosong",
-    invalid_type_error: "Kategori tidak valid"
-  }))
-})
+  product_id: z.optional(
+    z.string({
+      required_error: "Kategori tidak boleh kosong",
+      invalid_type_error: "Kategori tidak valid",
+    })
+  ),
+});
 
 export const addPaymentDeterminationSchema = z.object({
   sub_category_id: z.string({
@@ -228,4 +240,20 @@ export const addPaymentDeterminationSchema = z.object({
     required_error: "Bulan pembayaran tidak boleh kosong",
     invalid_type_error: "Bulan pembayaran tidak valid",
   }),
+});
+
+export const invoiceSchema = z.object({
+  invoice_name: z.string({
+    required_error: "Nama invoice tidak boleh kosong",
+    invalid_type_error: "Nama invoice tidak valid",
+  }),
+
+  due_date: z.date({
+    required_error: "Tenggat tidak boleh kosong",
+    invalid_type_error: "Tenggat tidak valid",
+  }),
+
+  payment_source: z.enum(["gaji pns", "gaji p3k", "komiter", "TPP"]),
+
+  payment_method: z.enum(["cash", "transfer"]),
 });

@@ -1,5 +1,8 @@
 import { Invoice, Member, MemberState, RegisterState } from "@/types/interface";
 import axios from "axios";
+import { z } from "zod";
+import { invoiceSchema } from "./formSchema";
+import { format } from "date-fns";
 
 // API register
 export async function register(data: RegisterState) {
@@ -629,27 +632,13 @@ export async function getAccountsReceivable(token: string | undefined) {
 }
 
 // API Download Excel Report Payment
-export async function downloadPaymentReport(
-  principalSavings: Member[] | undefined,
-  mandatorySavings: Member[] | undefined,
-  specialMandatorySavings: Member[] | undefined,
-  voluntarySavings: Member[] | undefined,
-  recretionalSavings: Member[] | undefined,
+export async function downloadInvoiceReport(
+  monthYear: string,
   token: string | undefined
 ) {
   try {
-    const data = {
-      principal_savings: principalSavings,
-      mandatory_savings: mandatorySavings,
-      special_mandatory_savings: specialMandatorySavings,
-      voluntary_savings: voluntarySavings,
-      recretional_savings: recretionalSavings,
-    };
-
-    const response: any = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/export/payment-report`,
-      data,
-      {
+    const response: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/export/invoice/${monthYear}`, {
         responseType: "blob",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -667,32 +656,15 @@ export async function downloadPaymentReport(
 
 // API CREATE Invoice
 export async function createInvoice(
-  principalSavings: Member[] | undefined,
-  mandatorySavings: Member[] | undefined,
-  specialMandatorySavings: Member[] | undefined,
-  voluntarySavings: Member[] | undefined,
-  recretionalSavings: Member[] | undefined,
-  receivables: Member[] | undefined,
-  accountsReceivable: Member[] | undefined,
+  data: z.infer<typeof invoiceSchema>,
   token: string | undefined,
-  monthYear: string,
-  description: string,
-  dataInvoice: Invoice[]
 ) {
   try {
-    const data = {
-      principal_savings: principalSavings,
-      mandatory_savings: mandatorySavings,
-      special_mandatory_savings: specialMandatorySavings,
-      voluntary_savings: voluntarySavings,
-      recretional_savings: recretionalSavings,
-      receivables,
-      accounts_receivable: accountsReceivable,
-      invoices: dataInvoice,
-      month_year: monthYear,
-      description,
-    };
-    
+
+    const changedData = {
+      ...data,
+      due_date: format(data.due_date, 'yyyy-MM-dd')
+    }
 
     const response: any = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/invoice`,

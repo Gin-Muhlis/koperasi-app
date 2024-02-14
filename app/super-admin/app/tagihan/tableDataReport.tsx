@@ -3,7 +3,7 @@
 import AlertError from "@/app/components/alertError";
 import AlertSuccess from "@/app/components/alertSuccess";
 import Loader from "@/app/components/loader";
-import { createInvoice, downloadPaymentReport } from "@/app/utils/featuresApi";
+import { createInvoice } from "@/app/utils/featuresApi";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -447,6 +447,8 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
     const response = await createInvoice(colSimpananPokok, colSimpananWajib, colSimpananWajibKhusus, colSimpananSukarela, colTabunganRekreasi, colPiutangSp, colPiutangDagang, session?.user.accessToken, monthYear, selector.description, dataInvoice)
     setIsLoading(false)
 
+    console.log(response)
+
     if (response.status == 200) {
       dispatch(resetState())
       setModal(false)
@@ -465,44 +467,7 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
 
   }
 
-  const handleDownloadExcel = async () => {
-    setIsLoading(true);
-
-    const response = await downloadPaymentReport(
-      colSimpananPokok,
-      colSimpananWajib,
-      colSimpananWajibKhusus,
-      colSimpananSukarela,
-      colTabunganRekreasi,
-      session?.user.accessToken
-    );
-
-    if (response.status == 200) {
-      const blob = await response.data;
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "tagihan_gabungan.xlsx"); // or any other extension
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode?.removeChild(link);
-
-      setIsLoading(false);
-      router.refresh();
-      setSuccess("Download data berhasil");
-    } else if (response.status === 422) {
-      setIsLoading(false);
-      const errorsData = response.data.errors;
-      const keys = Object.keys(errorsData);
-      const firstKey = keys[0];
-      const message = errorsData[firstKey][0];
-
-      setError(message);
-    } else {
-      setIsLoading(false);
-      setError(response.data.message);
-    }
-  };
+  
 
   return (
     <>

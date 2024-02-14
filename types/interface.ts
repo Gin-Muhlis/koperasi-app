@@ -165,14 +165,13 @@ export type Invoice = {
 
 export type InvoiceState = {
   id: number,
-  uuid: string;
-  name: string;
-  principal_saving: number;
-  mandatory_saving: number;
-  special_mandatory_saving: number;
-  voluntary_saving: number;
-  recretional_saving: number;
-  receivable: number;
-  account_receivable: number;
-  month_year: string;
+  invoice_code: string;
+  invoice_name: string;
+  payment_source: string;
+  date: string;
+  due_date: string;
+  status: string;
+  payment_method: string;
+  payment_date: string;
+  user: string;
 }
