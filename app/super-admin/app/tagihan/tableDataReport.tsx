@@ -438,35 +438,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
   const handleDescription = (event: any) => {
     dispatch(setInvoice({ type: "SET_DESCRIPTION", value: event.target.value }))
   }
-
-  const handleInvoice = async () => {
-    setIsLoading(true)
-
-    const monthYear = `${selector.month < 10 ? `0${selector.month}` : selector.month}-${selector.year}`
-
-    const response = await createInvoice(colSimpananPokok, colSimpananWajib, colSimpananWajibKhusus, colSimpananSukarela, colTabunganRekreasi, colPiutangSp, colPiutangDagang, session?.user.accessToken, monthYear, selector.description, dataInvoice)
-    setIsLoading(false)
-
-    console.log(response)
-
-    if (response.status == 200) {
-      dispatch(resetState())
-      setModal(false)
-      setSuccess(response.data.message)
-      router.refresh()
-    } else if (response.status == 422) {
-      const errorData = response.data.errors;
-      const keys = Object.keys(errorData)
-      const firstKey = keys[0]
-      const message = errorData[firstKey][0]
-
-      setError(message)
-    } else {
-      setError(response.data.message)
-    }
-
-  }
-
   
 
   return (
@@ -604,7 +575,6 @@ const TableDataReport = ({ members }: { members: MemberState[] }) => {
               type="button"
               size={"sm"}
               className="text-white bg-amber-400"
-              onClick={handleInvoice}
               disabled={isLoading}
 
 

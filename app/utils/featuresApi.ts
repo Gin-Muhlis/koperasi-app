@@ -3,6 +3,7 @@ import axios from "axios";
 import { z } from "zod";
 import { invoiceSchema } from "./formSchema";
 import { format } from "date-fns";
+import axiosInstance from "@/axiosConfig";
 
 // API register
 export async function register(data: RegisterState) {
@@ -701,4 +702,19 @@ export async function getInvoices(token: string | undefined) {
   } catch (error: any) {
     return error.response;
   } 
+}
+
+// GET API Member Principal Saving
+export async function getMemberPrincipalSaving(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get('/member-principal', {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
 }

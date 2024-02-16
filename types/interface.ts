@@ -120,7 +120,6 @@ export type Member = {
   id: number;
   amount: number;
   status: string;
-  loanId: number | null
 };
 
 export type Receivable = {
@@ -175,3 +174,11 @@ export type InvoiceState = {
   payment_date: string;
   user: string;
 }
+
+export type SubCategoryInvoice = {
+  id: number;
+  name: string;
+  position: string;
+  payment: number;
+}
+

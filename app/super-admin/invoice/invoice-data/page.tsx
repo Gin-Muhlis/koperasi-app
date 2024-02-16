@@ -3,13 +3,16 @@ import React from 'react'
 import AddInvoice from './addInvoice'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { getInvoices } from '@/app/utils/featuresApi'
+import { getInvoices, getMemberPrincipalSaving, getMembers } from '@/app/utils/featuresApi'
 import ListInvoice from './listInvoice'
-import { InvoiceState } from '@/types/interface'
+import { InvoiceState, MemberState, SubCategoryInvoice } from '@/types/interface'
+import DetailInvoice from './detailInvoice'
 
 const Invoice = async () => {
     const session = await getServerSession(authOptions)
     const invoices: InvoiceState[] = await getInvoices(session?.user.accessToken)
+    const membersPrincipal: SubCategoryInvoice[] = await getMemberPrincipalSaving(session?.user.accessToken)
+    const members: MemberState[] = await getMembers(session?.user.accessToken)
 
     return (
         <MainLayout>
@@ -20,6 +23,7 @@ const Invoice = async () => {
                 <AddInvoice />
                 <ListInvoice invoices={invoices} />
             </div>
+            <DetailInvoice memberPrincipalSaving={membersPrincipal} members={members} />
         </MainLayout>
     )
 }

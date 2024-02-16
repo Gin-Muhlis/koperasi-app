@@ -61,7 +61,7 @@ const FormInvoice = ({handleModal}: {handleModal: () => void} ) => {
         const response = await createInvoice(values, session?.user.accessToken)
         console.log(response)
         if (response.status === 200) {
-            setSuccess(response.data.message)
+            setSuccess(true)
         } else if (response.status === 422) {
             const errors = response.data.errors
             const keys = Object.keys(errors)
@@ -189,8 +189,7 @@ const FormInvoice = ({handleModal}: {handleModal: () => void} ) => {
                     </div>
                 </form>
             </Form>
-
-            {success && <AlertSuccess message={success.toString()} setSuccess={setSuccess} isShow={true} />}
+            S
             {error && <AlertError message={error.toString()} setError={setError} isShow={true} />}
         </div>
     )

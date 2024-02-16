@@ -4,6 +4,7 @@ import { InvoiceState } from '@/types/interface'
 import { ColumnDef } from '@tanstack/react-table'
 import React from 'react'
 import { DataTable } from './data-table'
+import { months } from '@/constants/CONSTS'
 
 const ListInvoice = ({invoices}: {invoices: InvoiceState[]}) => {
 
@@ -32,10 +33,40 @@ const ListInvoice = ({invoices}: {invoices: InvoiceState[]}) => {
         {
           accessorKey: "date",
           header: "Tanggal Dibuat",
+          cell: ({row}) => {
+            const value: string = row.getValue('date')
+
+            const split = value.split("-")
+            const date = Number(split[2])
+            const year = Number(split[0])
+            let month: number | string = Number(split[1])
+
+            month = month < 10 ? month.toString().replace('0', '') : month;
+            const textMonth = months[Number(month) - 1]
+
+            const fullDate = `${date} ${textMonth} ${year}`
+
+            return <div>{fullDate}</div>
+          }
         },
         {
           accessorKey: "due_date",
           header: "Tenggat",
+          cell: ({row}) => {
+            const value: string = row.getValue('due_date')
+
+            const split = value.split("-")
+            const date = Number(split[2])
+            const year = Number(split[0])
+            let month: number | string = Number(split[1])
+
+            month = month < 10 ? month.toString().replace('0', '') : month;
+            const textMonth = months[Number(month) - 1]
+
+            const fullDate = `${date} ${textMonth} ${year}`
+
+            return <div>{fullDate}</div>
+          }
         },
       ]
 
