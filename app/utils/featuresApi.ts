@@ -657,18 +657,65 @@ export async function downloadInvoiceReport(
 
 // API CREATE Invoice
 export async function createInvoice(
-  data: z.infer<typeof invoiceSchema>,
+  data: {
+    invoice_name: string;
+    due_date: string;
+    payment_source: string;
+    payment_method: string
+},
   token: string | undefined,
 ) {
   try {
 
-    const changedData = {
-      ...data,
-      due_date: format(data.due_date, 'yyyy-MM-dd')
-    }
 
     const response: any = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/invoice`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept:
+            "application/json",
+        },
+      }
+    );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// CREATE API Detail Invoice
+export async function createDetailInvoice(
+  principalSavings: Member[] | undefined,
+  mandatorySavings: Member[] | undefined,
+  specialMandatorySavings: Member[] | undefined,
+  voluntarySavings: Member[] | undefined,
+  recretionalSavings: Member[] | undefined,
+  receivables: Member[] | undefined,
+  accountsReceivable: Member[] | undefined,
+  token: string | undefined,
+  monthYear: string,
+  description: string,
+  invoiceId: number
+) {
+  try {
+    const data = {
+      principal_savings: principalSavings,
+      mandatory_savings: mandatorySavings,
+      special_mandatory_savings: specialMandatorySavings,
+      voluntary_savings: voluntarySavings,
+      recretional_savings: recretionalSavings,
+      receivables,
+      accounts_receivable: accountsReceivable,
+      month_year: monthYear,
+      description,
+      invoice_id: invoiceId
+    };
+
+    const response: any = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/invoice-detail`,
       data,
       {
         headers: {
@@ -718,3 +765,19 @@ export async function getMemberPrincipalSaving(token: string | undefined) {
     return error.response
   }
 }
+
+// GET API Member Principal Saving
+export async function getMemberMandatorySaving(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get('/member-mandatory', {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+

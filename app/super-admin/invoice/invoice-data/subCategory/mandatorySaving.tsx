@@ -18,13 +18,13 @@ import { Member, SubCategoryInvoice } from '@/types/interface'
 import { handleFormat } from '@/app/utils/helper'
 import { setInvoice } from '@/redux/features/invoice-slice'
 
-const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { memberPrincipalSaving: SubCategoryInvoice[], setSubCategory: React.Dispatch<React.SetStateAction<string>> }) => {
+const MandatorySavingPopup = ({ memberMandatorySaving, setSubCategory }: { memberMandatorySaving: SubCategoryInvoice[], setSubCategory: React.Dispatch<React.SetStateAction<string>> }) => {
     const dispatch = useDispatch<appDispatch>();
     const selector = useAppSelector((state) => state.invoiceReducer);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-    const [members, setMembers] = useState<SubCategoryInvoice[]>(memberPrincipalSaving);
-    const [listSimpananPokok, setListSimpananPokok] = useState<Member[]>([])
+    const [members, setMembers] = useState<SubCategoryInvoice[]>(memberMandatorySaving);
+    const [listSimpananWajib, setListSimpananWajib] = useState<Member[]>([])
 
     const lastItemIndex = currentPage * itemsPerPage;
     const firstItemIndex = lastItemIndex - itemsPerPage;
@@ -33,18 +33,18 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
     // parse state list simpanan pokok
     useEffect(() => {
         if (selector) {
-            const data = JSON.parse(selector.listSimpananPokok)
+            const data = JSON.parse(selector.listSimpananWajib)
 
-            setListSimpananPokok(data)
+            setListSimpananWajib(data)
         }
-    }, [selector, selector.listSimpananPokok])
+    }, [selector, selector.listSimpananWajib])
 
 
     // handle set state data list
     const setStateData = (data: Member[]) => {
         dispatch(
             setInvoice({
-                type: "SET_SIMPANAN_POKOK",
+                type: "SET_SIMPANAN_WAJIB",
                 value: JSON.stringify(data),
             })
         );
@@ -57,20 +57,20 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
 
     // filter member berdasarkan jabatan
     const filterMembersByPosition = (value: string) => {
-        const newMembers = memberPrincipalSaving.filter((member) => member.position == value);
+        const newMembers = memberMandatorySaving.filter((member) => member.position == value);
 
         setMembers(newMembers);
     };
 
     // tambah member ke state data
     const handleAddMember = (id: number) => {
-        const existingItemIndex = listSimpananPokok.findIndex(
+        const existingItemIndex = listSimpananWajib.findIndex(
             (item: Member) => item.id == id
         );
 
         if (existingItemIndex >= 0) {
-            const data = listSimpananPokok[existingItemIndex];
-            const updatedItems: Member[] = [...listSimpananPokok];
+            const data = listSimpananWajib[existingItemIndex];
+            const updatedItems: Member[] = [...listSimpananWajib];
             updatedItems[existingItemIndex] = {
                 ...data,
                 status: "added",
@@ -79,7 +79,7 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
         } else {    
             const amount = members.find((data) => data.id == id)?.payment
             const newMembers: Member[] = [
-                ...listSimpananPokok,
+                ...listSimpananWajib,
                 { id, amount: Number(amount) , status: "added" },
             ];
             setStateData(newMembers)
@@ -88,13 +88,13 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
 
     //   hapus member dari state data
     const handleDeleteMember = (id: number) => {
-        let newMembers: Member[] = listSimpananPokok.filter((item: any) => item.id != id);
+        let newMembers: Member[] = listSimpananWajib.filter((item: any) => item.id != id);
         setStateData(newMembers)
     };
 
     //handle tampilan button tabel   
     const handleButtonAdd = (id: number) => {
-        const isInputed = listSimpananPokok.find(
+        const isInputed = listSimpananWajib.find(
             (item: any) => item.id == id
         );
 
@@ -121,17 +121,17 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
 
     // handle disable input pembayaran
     const handleDisableInput = (id: number) => {
-        const isAdded = listSimpananPokok.find(data => data.id == id && data.status == "added");
+        const isAdded = listSimpananWajib.find(data => data.id == id && data.status == "added");
 
         return isAdded != undefined ? true : false;
     }
 
     // handle tambah semua member ke state data
     const handleAddAllmember = () => {
-        const updatedList: Member[] = [...listSimpananPokok];
+        const updatedList: Member[] = [...listSimpananWajib];
 
         members.map((item) => {
-            const isAdded = listSimpananPokok.find((data) => data.id == item.id);
+            const isAdded = listSimpananWajib.find((data) => data.id == item.id);
             if (isAdded == undefined) {
                 const data = { id: item.id, amount: item.payment, status: "added" }
 
@@ -151,20 +151,20 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
 
     // handle update data jumlah pembayaran
     const handleUpdateAmount = (amount: string, id: number) => {
-        const existingItemIndex = listSimpananPokok.findIndex(
+        const existingItemIndex = listSimpananWajib.findIndex(
             (item: Member) => item.id === id
         );
 
         amount = amount.replace(".", "")
 
         if (existingItemIndex >= 0) {
-            const updatedItems = [...listSimpananPokok];
+            const updatedItems = [...listSimpananWajib];
             const data = updatedItems[existingItemIndex];
             updatedItems[existingItemIndex] = { ...data, amount: Number(amount) };
             setStateData(updatedItems)
         } else {
             const newMembers = [
-                ...listSimpananPokok,
+                ...listSimpananWajib,
                 { id, amount: Number(amount), status: "not_added"},
             ];
             setStateData(newMembers)
@@ -173,7 +173,7 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
 
     // handle value oembayaran
     const handleValueAmount = (id: number) => {
-        const isInputed = listSimpananPokok.find((data) => data.id == id)
+        const isInputed = listSimpananWajib.find((data) => data.id == id)
 
         if (isInputed != undefined) {
             return handleFormat(isInputed.amount)
@@ -191,7 +191,7 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
                 <div className="bg-white rounded p-5 w-full">
                     <div className="w-full flex flex-col gap-5 mb-5">
                         <div className="w-1/2">
-                            <h1 className="text-black text-xl font-bold mb-3">Simpanan Pokok</h1>
+                            <h1 className="text-black text-xl font-bold mb-3">Simpanan Wajib</h1>
                             <Select onValueChange={filterMembersByPosition}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Pilih Jabatan" />
@@ -235,7 +235,7 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
                         </table>
                         <div className="flex justify-end gap-3">
                             <Button size={"sm"} onClick={cancelAllMember}>
-                                Batalkan Semua ({listSimpananPokok.length})
+                                Batalkan Semua ({listSimpananWajib.length})
                             </Button>
                             <Button size={"sm"} onClick={handleAddAllmember}>
                                 Tambah Semua ({members.length})
@@ -260,4 +260,4 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
     )
 }
 
-export default PrincipalSavingPopup
+export default MandatorySavingPopup

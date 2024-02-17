@@ -34,16 +34,15 @@ import { format } from "date-fns"
 import { createInvoice } from '@/app/utils/featuresApi'
 import { useSession } from 'next-auth/react'
 import Loader from '@/app/components/loader'
-import AlertSuccess from '@/app/components/alertSuccess'
 import AlertError from '@/app/components/alertError'
+import { InvoiceState } from '@/types/interface'
 
 const formSchema = invoiceSchema;
 
-const FormInvoice = ({handleModal}: {handleModal: () => void} ) => {
+const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, setDataInvoice: React.Dispatch<React.SetStateAction<InvoiceState | null>>} ) => {
     const {data: session} = useSession()
 
     const [isLoading, setIsLoading] = useState(false)
-    const [success, setSuccess] = useState<string | boolean>(false)
     const [error, setError] = useState<string | boolean>(false)
 
     // definisi form  
@@ -57,11 +56,24 @@ const FormInvoice = ({handleModal}: {handleModal: () => void} ) => {
     // handle submit form tambah invoice
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setIsLoading(true)
+
+        const data = {
+            invoice_name: values.invoice_name,
+            due_date: format(values.due, "yyyy-MM-dd"),
+            payment_source: values.payment_source,
+            payment_method: values.payment_method
+        } as {
+            invoice_name: string;
+            due_date: string;
+            payment_source: string;
+            payment_method: string
+        }
         
-        const response = await createInvoice(values, session?.user.accessToken)
+        const response = await createInvoice(data, session?.user.accessToken)
         console.log(response)
         if (response.status === 200) {
-            setSuccess(true)
+            handleModal()
+            setDataInvoice(response.data.invoice);
         } else if (response.status === 422) {
             const errors = response.data.errors
             const keys = Object.keys(errors)
@@ -95,7 +107,7 @@ const FormInvoice = ({handleModal}: {handleModal: () => void} ) => {
                     />
                     <FormField
                         control={form.control}
-                        name="due_date"
+                        name="due"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
                                 <FormLabel>Tenggat Invoice</FormLabel>
@@ -189,7 +201,6 @@ const FormInvoice = ({handleModal}: {handleModal: () => void} ) => {
                     </div>
                 </form>
             </Form>
-            S
             {error && <AlertError message={error.toString()} setError={setError} isShow={true} />}
         </div>
     )

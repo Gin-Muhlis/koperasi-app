@@ -3,21 +3,18 @@
 import AlertError from "@/app/components/alertError";
 import AlertSuccess from "@/app/components/alertSuccess";
 import Loader from "@/app/components/loader";
-import { createInvoice } from "@/app/utils/featuresApi";
+import { createDetailInvoice, createInvoice } from "@/app/utils/featuresApi";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { months } from "@/constants/CONSTS";
-import { resetState, setInvoice } from "@/redux/features/invoice-slice";
+import { resetState } from "@/redux/features/invoice-slice";
 import { appDispatch, useAppSelector } from "@/redux/store";
-import { Invoice, Member, MemberState, TotalColumn } from "@/types/interface";
+import { Invoice, InvoiceState, Member, MemberState, TotalColumn } from "@/types/interface";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { handleFormat } from "@/app/utils/helper";
 
-const TableDetailInvoice = ({ members }: { members: MemberState[] }) => {
+const TableDetailInvoice = ({ members, dataInvoice }: { members: MemberState[], dataInvoice: InvoiceState }) => {
     const [modal, setModal] = useState(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
@@ -33,7 +30,6 @@ const TableDetailInvoice = ({ members }: { members: MemberState[] }) => {
     const [colPiutangSp, setColPiutangSp] = useState<Member[]>();
     const [colPiutangDagang, setColPiutangDagang] = useState<Member[]>();
     const [totalCol, setTotalCol] = useState<TotalColumn>();
-    const [dataInvoice, setDataInvoice] = useState<Invoice[]>([]);
 
     const { data: session } = useSession();
     const router = useRouter();
@@ -323,8 +319,6 @@ const TableDetailInvoice = ({ members }: { members: MemberState[] }) => {
                 newList.push(data)
             }
         })
-
-        setDataInvoice(newList);
     };
 
     const handleValueSimpananPokok = (id: number) => {
@@ -401,7 +395,6 @@ const TableDetailInvoice = ({ members }: { members: MemberState[] }) => {
             return data.amount
         }
 
-
         return 0;
     };
 
@@ -435,11 +428,31 @@ const TableDetailInvoice = ({ members }: { members: MemberState[] }) => {
             Number(piutangDagang)
         );
     };
-
-    const handleDescription = (event: any) => {
-        dispatch(setInvoice({ type: "SET_DESCRIPTION", value: event.target.value }))
-    }
-
+    
+      const handleSaveDetailInvoice = async () => {
+        setIsLoading(true)
+    
+        const monthYear = `${selector.month < 10 ? `0${selector.month}` : selector.month}-${selector.year}`
+    
+        const response = await createDetailInvoice(colSimpananPokok, colSimpananWajib, colSimpananWajibKhusus, colSimpananSukarela, colTabunganRekreasi, colPiutangSp, colPiutangDagang, session?.user.accessToken, monthYear, selector.description, dataInvoice.id)
+        setIsLoading(false)
+        console.log(response)
+    
+        if (response.status == 200) {
+          setSuccess(response.data.message)
+          resetState()
+        } else if (response.status == 422) {
+          const errorData = response.data.errors;
+          const keys = Object.keys(errorData)
+          const firstKey = keys[0]
+          const message = errorData[firstKey][0]
+    
+          setError(message)
+        } else {
+            setError(response.data.message)
+        }
+    
+      }
 
     return (
         <div>
@@ -543,21 +556,17 @@ const TableDetailInvoice = ({ members }: { members: MemberState[] }) => {
                     </tbody>
                 </table>
             </div>
-            <div className="w-full mb-5">
-                <Label className="mb-1">Deskripsi (opsional)</Label>
-                <Textarea onChange={handleDescription} className="w-full border border-solid border-slate-300 h-16" defaultValue={selector.description} />
-            </div>
             <div className="px-4 flex items-center justify-end gap-3">
                 <Button
                     type="button"
                     size={"sm"}
                     className="text-white bg-green-400"
                     disabled={isLoading}
+                    onClick={handleSaveDetailInvoice}
                 >
                     {isLoading ? <Loader /> : "Simpan Data"}
                 </Button>
             </div>
-            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
             {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
         </div>
     );

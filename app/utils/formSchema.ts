@@ -248,12 +248,12 @@ export const invoiceSchema = z.object({
     invalid_type_error: "Nama invoice tidak valid",
   }),
 
-  due_date: z.date({
+  due: z.date({
     required_error: "Tenggat tidak boleh kosong",
     invalid_type_error: "Tenggat tidak valid",
   }),
 
-  payment_source: z.enum(["gaji pns", "gaji p3k", "komiter", "TPP"]),
+  payment_source: z.enum(["gaji pns", "gaji p3k", "komite", "TPP"]),
 
   payment_method: z.enum(["cash", "transfer"]),
 });
