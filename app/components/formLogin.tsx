@@ -37,7 +37,6 @@ const FormLogin = () => {
                 setIsLoading(false)
 
                 const updatedSession = await getSession();
-
                 push(`${updatedSession?.user?.role}/dashboard`)
             } else {
                 setIsLoading(false)
@@ -74,7 +73,7 @@ const FormLogin = () => {
                         {passwordShow ? <Icon icon="mingcute:eye-close-fill" width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1 text-amber-500 text-md' /> : <Icon icon="solar:eye-bold" width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1 text-amber-500 text-md' />}
 
                     </div>
-            
+
                     <button type='submit' className='outline-none border-none bg-amber-400 text-white w-full rounded-full p-1 h-9 mb-3 flex items-center justify-center' disabled={isLoading}>
                         {isLoading ? <Loader /> : 'Masuk'}
                     </button>
@@ -92,7 +91,7 @@ const FormLogin = () => {
                     <Icon icon="jam:close" />
                 </span>
             </div>}
-            {error && <AlertError message='error' isShow={true} />}
+            {error && <AlertError message='error' isShow={true} setError={setError} />}
         </>
     )
 }

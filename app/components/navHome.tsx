@@ -7,15 +7,15 @@ import React from 'react'
 
 const NavHome = () => {
     const { data: session, status } = useSession()
-
+    console.log(status)
     return (
         <div className="w-full flex items-center justify-between px-10 py-3 bg-amber-300">
             <Link href={'/'} className='font-bold text-xl italic text-black'>
                 <span>Zie Koperasi</span>
             </Link>
             {status === "authenticated" ? (<Link href={`/${session.user?.role}/dashboard`} className='text-black font-bold text-sm flex items-center'>
-            <Icon icon="ic:round-home" width="22" height="22"  />
-            <span>Dashboard</span>
+                <Icon icon="ic:round-home" width="22" height="22" />
+                <span>Dashboard</span>
             </Link>) : (<div className="flex items-center gap-4">
                 <Link href={'/login'} className='text-black font-bold text-sm'>
                     Masuk

@@ -640,13 +640,13 @@ export async function downloadInvoiceReport(
   try {
     const response: any = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}/export/invoice/${monthYear}`, {
-        responseType: "blob",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept:
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        },
-      }
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      },
+    }
     );
 
     return response;
@@ -662,7 +662,7 @@ export async function createInvoice(
     due_date: string;
     payment_source: string;
     payment_method: string
-},
+  },
   token: string | undefined,
 ) {
   try {
@@ -748,10 +748,10 @@ export async function getInvoices(token: string | undefined) {
     return response.data.data;
   } catch (error: any) {
     return error.response;
-  } 
+  }
 }
 
-// GET API Member Principal Saving
+// GET API Member simpanan pokok
 export async function getMemberPrincipalSaving(token: string | undefined) {
   try {
     const response = await axiosInstance.get('/member-principal', {
@@ -766,7 +766,7 @@ export async function getMemberPrincipalSaving(token: string | undefined) {
   }
 }
 
-// GET API Member Principal Saving
+// GET API Member simapan wajib
 export async function getMemberMandatorySaving(token: string | undefined) {
   try {
     const response = await axiosInstance.get('/member-mandatory', {
@@ -781,3 +781,77 @@ export async function getMemberMandatorySaving(token: string | undefined) {
   }
 }
 
+// GET API Member simapan wajib khusus
+export async function getMemberSpecialMandatorySaving(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get('/member-special-mandatory', {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// GET API Member simapan sukarela
+export async function getMemberVoluntarySaving(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get('/member-voluntary', {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// GET API Member tabungan rekreasi
+export async function getMemberRecretionalSaving(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get('/member-recretional', {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// GET API Member piutang s/p
+export async function getMemberReceivable(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get('/member-receivable', {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+// GET API Member piutang dagang
+export async function getMemberAccountReceivable(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get('/member-account-receivable', {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}

@@ -11,12 +11,11 @@ import { Invoice, InvoiceState, Member, MemberState, TotalColumn } from "@/types
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { handleFormat } from "@/app/utils/helper";
+import { useDispatch } from "react-redux";
 
-const TableDetailInvoice = ({ members, dataInvoice }: { members: MemberState[], dataInvoice: InvoiceState }) => {
+const TableDetailInvoice = ({ members, dataInvoice, setDataInvoice, setSuccess }: { members: MemberState[], dataInvoice: InvoiceState, setDataInvoice: React.Dispatch<React.SetStateAction<InvoiceState | null>>, setSuccess: React.Dispatch<React.SetStateAction<string | boolean>> }) => {
     const [modal, setModal] = useState(false);
-    const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -33,6 +32,7 @@ const TableDetailInvoice = ({ members, dataInvoice }: { members: MemberState[], 
 
     const { data: session } = useSession();
     const router = useRouter();
+
     const dispatch = useDispatch<appDispatch>()
     const selector = useAppSelector((state) => state.invoiceReducer);
 
@@ -428,31 +428,32 @@ const TableDetailInvoice = ({ members, dataInvoice }: { members: MemberState[], 
             Number(piutangDagang)
         );
     };
-    
-      const handleSaveDetailInvoice = async () => {
+
+    const handleSaveDetailInvoice = async () => {
         setIsLoading(true)
-    
+
         const monthYear = `${selector.month < 10 ? `0${selector.month}` : selector.month}-${selector.year}`
-    
+
         const response = await createDetailInvoice(colSimpananPokok, colSimpananWajib, colSimpananWajibKhusus, colSimpananSukarela, colTabunganRekreasi, colPiutangSp, colPiutangDagang, session?.user.accessToken, monthYear, selector.description, dataInvoice.id)
         setIsLoading(false)
-        console.log(response)
-    
+
         if (response.status == 200) {
-          setSuccess(response.data.message)
-          resetState()
+            setSuccess(response.data.message)
+            setDataInvoice(null)
+            dispatch(resetState())
+            router.refresh()
         } else if (response.status == 422) {
-          const errorData = response.data.errors;
-          const keys = Object.keys(errorData)
-          const firstKey = keys[0]
-          const message = errorData[firstKey][0]
-    
-          setError(message)
+            const errorData = response.data.errors;
+            const keys = Object.keys(errorData)
+            const firstKey = keys[0]
+            const message = errorData[firstKey][0]
+
+            setError(message)
         } else {
             setError(response.data.message)
         }
-    
-      }
+
+    }
 
     return (
         <div>

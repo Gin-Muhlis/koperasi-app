@@ -22,15 +22,20 @@ import {
 import { useDispatch } from 'react-redux'
 import { appDispatch, useAppSelector } from '@/redux/store'
 import PrincipalSavingPopup from './subCategory/principalSaving'
-import { InvoiceState, MemberState, SubCategoryInvoice } from '@/types/interface'
+import { InvoiceState, MemberState, Receivable, SubCategoryInvoice } from '@/types/interface'
 import TableDetailInvoice from './tableDetailInvoice'
 import MandatorySavingPopup from './subCategory/mandatorySaving'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { setInvoice } from '@/redux/features/invoice-slice'
 import { months, numberMonths } from '@/constants/CONSTS';
+import SpecialMandatorySavingPopup from './subCategory/specialMandatorySaving';
+import VoluntarySavingPopup from './subCategory/voluntarySaving';
+import RecretionalSavingPopup from './subCategory/recretionalSaving';
+import ReceivablePopup from './subCategory/receivable';
+import AccountReceivablePopup from './subCategory/accountReceivable';
 
-const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, dataInvoice }: { members: MemberState[], memberPrincipalSaving: SubCategoryInvoice[], memberMandatorySaving: SubCategoryInvoice[], dataInvoice: InvoiceState }) => {
+const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, memberSpecialMandatorySaving, memberVoluntarySaving, memberRecretionalSaving, memberReceivable, memberAccountReceivable, dataInvoice, setSuccess, setDataInvoice }: { members: MemberState[], memberPrincipalSaving: SubCategoryInvoice[], memberMandatorySaving: SubCategoryInvoice[], memberSpecialMandatorySaving: SubCategoryInvoice[], memberVoluntarySaving: SubCategoryInvoice[], memberRecretionalSaving: SubCategoryInvoice[], memberReceivable: Receivable[], memberAccountReceivable: Receivable[], dataInvoice: InvoiceState, setSuccess: React.Dispatch<React.SetStateAction<string | boolean>>, setDataInvoice: React.Dispatch<React.SetStateAction<InvoiceState | null>> }) => {
     const dispatch = useDispatch<appDispatch>()
     const selector = useAppSelector((state) => state.invoiceReducer)
     const [subCategory, setSubCategory] = useState<string>("")
@@ -45,7 +50,7 @@ const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, 
     const handleTimeChange = (type: string, value: string) => {
         dispatch(setInvoice({ type: `SET_${type}`, value }));
     };
-
+    console.log(`subCategory: ${subCategory}`)
     return (
         <div className='w-full min-h-screen z-50 bg-zinc-200 p-5 md:p-12 fixed inset-0 overflow-y-scroll'>
             <div className="w-full rounded bg-white p-5">
@@ -165,16 +170,31 @@ const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, 
                             <DropdownMenuRadioGroup value={subCategory} onValueChange={setSubCategory}>
                                 <DropdownMenuRadioItem value="simpanan pokok" className="cursor-pointer">Simpanan Pokok</DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem value="simpanan wajib" className="cursor-pointer">Simpanan Wajib</DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="simpanan wajib khusus" className="cursor-pointer">Simpanan Wajib khusus</DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="simpanan sukarela" className="cursor-pointer">Simpanan Sukarela</DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="tabungan rekreasi" className="cursor-pointer">Tabungan Rekreasi</DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="piutang s/p" className="cursor-pointer">Piutang S/P</DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="piutang dagang" className="cursor-pointer">Piutang Dagang</DropdownMenuRadioItem>
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
 
-                {subCategory == "simpanan pokok" && <PrincipalSavingPopup memberPrincipalSaving={memberPrincipalSaving} setSubCategory={setSubCategory} />}
+                {subCategory === "simpanan pokok" && <PrincipalSavingPopup memberPrincipalSaving={memberPrincipalSaving} setSubCategory={setSubCategory} />}
 
-                {subCategory == "simpanan wajib" && <MandatorySavingPopup memberMandatorySaving={memberMandatorySaving} setSubCategory={setSubCategory} />}
+                {subCategory === "simpanan wajib" && <MandatorySavingPopup memberMandatorySaving={memberMandatorySaving} setSubCategory={setSubCategory} />}
 
-                <TableDetailInvoice members={members} dataInvoice={dataInvoice} />
+                {subCategory === "simpanan wajib khusus" && <SpecialMandatorySavingPopup memberSpecialMandatorySaving={memberSpecialMandatorySaving} setSubCategory={setSubCategory} />}
+
+                {subCategory === "simpanan sukarela" && <VoluntarySavingPopup memberVoluntarySaving={memberVoluntarySaving} setSubCategory={setSubCategory} />}
+
+                {subCategory === "tabungan rekreasi" && <RecretionalSavingPopup memberRecretionalSaving={memberRecretionalSaving} setSubCategory={setSubCategory} />}
+
+                {subCategory === "piutang s/p" && <ReceivablePopup memberReceivable={memberReceivable} setSubCategory={setSubCategory} />}
+
+                {subCategory === "piutang dagang" && <AccountReceivablePopup memberAccountReceivable={memberAccountReceivable} setSubCategory={setSubCategory} />}
+
+                <TableDetailInvoice members={members} dataInvoice={dataInvoice} setDataInvoice={setDataInvoice} setSuccess={setSuccess} />
             </div>
 
         </div>

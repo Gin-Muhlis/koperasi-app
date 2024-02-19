@@ -8,7 +8,7 @@ export default withAuth(
     // cek user sudah login
     const authPages = ["/login", "/register"];
 
-    if (authPages.includes(pathname) && req.nextauth?.token) 
+    if (authPages.includes(pathname) && req.nextauth?.token)
       return NextResponse.redirect(new URL(`/${req.nextauth.token?.role}/dashboard`, req.url));
 
     // cek user belum login
@@ -27,7 +27,7 @@ export default withAuth(
         new URL(`/${req.nextauth.token?.role}/dashboard?message=Anda tidak memiliki akses!`, req.url)
       );
 
-      return NextResponse.next();
+    return NextResponse.next();
   },
   {
     callbacks: {

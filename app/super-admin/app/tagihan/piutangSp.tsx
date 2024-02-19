@@ -89,7 +89,6 @@ const PiutangSp = ({
     };
 
     const handleAddAllmember = () => {
-        const listPiutangSp: Member[] = JSON.parse(selector.listPiutangSp);
         const newList: Member[] = [];
 
         currentItems.map((item) => {

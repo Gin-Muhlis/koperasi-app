@@ -3,12 +3,14 @@
 import { Button } from '@/components/ui/button'
 import React, { useState } from 'react'
 import FormInvoice from './formAddInvoice';
-import { InvoiceState, MemberState, SubCategoryInvoice } from '@/types/interface';
+import { InvoiceState, MemberState, Receivable, SubCategoryInvoice } from '@/types/interface';
 import DetailInvoice from './detailInvoice';
+import AlertSuccess from '@/app/components/alertSuccess';
 
-const AddInvoice = ({members, membersPrincipal, membersMandatory}: {members: MemberState[], membersPrincipal: SubCategoryInvoice[], membersMandatory: SubCategoryInvoice[]}) => {
+const AddInvoice = ({ members, membersPrincipal, membersMandatory, memberSpecialMandatory, memberVoluntary, memberRecretional, memberReceivable, memberAccountReceivable }: { members: MemberState[], membersPrincipal: SubCategoryInvoice[], membersMandatory: SubCategoryInvoice[], memberSpecialMandatory: SubCategoryInvoice[], memberVoluntary: SubCategoryInvoice[], memberRecretional: SubCategoryInvoice[], memberReceivable: Receivable[], memberAccountReceivable: Receivable[] }) => {
     const [modal, setModal] = useState(false);
     const [dataInvoice, setDataInvoice] = useState<InvoiceState | null>(null)
+    const [success, setSuccess] = useState<string | boolean>(false)
 
     const handleModal = () => {
         setModal(!modal);
@@ -25,8 +27,9 @@ const AddInvoice = ({members, membersPrincipal, membersMandatory}: {members: Mem
                 </div>
             </div>
 
-            {dataInvoice != null && <DetailInvoice memberPrincipalSaving={membersPrincipal} members={members} memberMandatorySaving={membersMandatory} dataInvoice={dataInvoice} />}
+            {dataInvoice != null && <DetailInvoice memberPrincipalSaving={membersPrincipal} members={members} memberMandatorySaving={membersMandatory} memberSpecialMandatorySaving={memberSpecialMandatory} memberVoluntarySaving={memberVoluntary} memberRecretionalSaving={memberRecretional} memberReceivable={memberReceivable} memberAccountReceivable={memberAccountReceivable} dataInvoice={dataInvoice} setSuccess={setSuccess} setDataInvoice={setDataInvoice} />}
 
+            {success && <AlertSuccess message={success} isShow={true} setSuccess={setSuccess} />}
         </div>
     )
 }
