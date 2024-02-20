@@ -161,6 +161,7 @@ export type Invoice = {
   recretionalSaving: number;
   receivable: number;
   accountReceivable: number;
+  memberName?: string
 }
 
 export type InvoiceState = {
@@ -174,6 +175,7 @@ export type InvoiceState = {
   payment_method: string;
   payment_date: string;
   user: string;
+  details?: Invoice[]
 }
 
 export type SubCategoryInvoice = {

@@ -855,3 +855,18 @@ export async function getMemberAccountReceivable(token: string | undefined) {
     return error.response
   }
 }
+
+// GET API Detail Invoice
+export async function getDetailInvoice(token: string | undefined, code: string) {
+  try {
+    const response = await axiosInstance.get(`/invoice-detail/${code}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return response.data.data
+  } catch (error: any) {
+    return error.response
+  }
+}

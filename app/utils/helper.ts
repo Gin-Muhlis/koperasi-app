@@ -1,3 +1,4 @@
+import { months } from "@/constants/CONSTS";
 import numeral from "numeral";
 
 // formating number
@@ -24,3 +25,14 @@ export const handleFormat = (value: number) => {
   const formated = numeral(value).format("0,0");
   return formated;
 };
+
+
+export const convertDateFormat = (date: string) => {
+  const splitDate = date.split("-");
+  const day = splitDate[2]
+  const year = splitDate[0]
+  const monthNumber = Number(splitDate[1])
+  const month = months[monthNumber - 1]
+
+  return `${day} ${month} ${year}`;
+}
