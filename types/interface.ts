@@ -175,7 +175,7 @@ export type InvoiceState = {
   payment_method: string;
   payment_date: string;
   user: string;
-  details?: Invoice[]
+  details: Invoice[]
 }
 
 export type SubCategoryInvoice = {
@@ -185,3 +185,13 @@ export type SubCategoryInvoice = {
   payment: number;
 }
 
+export type PaymentState = {
+  id?: number;
+  invoice_id?: number;
+  invoice_code?: string;
+  amount: number;
+  date_payment?: string;
+  no_rek: string | null;
+  transfer_name: string | null;
+  total_invoice?: number;
+}

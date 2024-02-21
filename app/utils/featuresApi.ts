@@ -1,4 +1,4 @@
-import { Invoice, Member, MemberState, RegisterState } from "@/types/interface";
+import { Invoice, Member, MemberState, PaymentState, RegisterState } from "@/types/interface";
 import axios from "axios";
 import { z } from "zod";
 import { invoiceSchema } from "./formSchema";
@@ -632,29 +632,6 @@ export async function getAccountsReceivable(token: string | undefined) {
   }
 }
 
-// API Download Excel Report Payment
-export async function downloadInvoiceReport(
-  monthYear: string,
-  token: string | undefined
-) {
-  try {
-    const response: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/export/invoice/${monthYear}`, {
-      responseType: "blob",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      },
-    }
-    );
-
-    return response;
-  } catch (error: any) {
-    return error.response;
-  }
-}
-
 // API CREATE Invoice
 export async function createInvoice(
   data: {
@@ -868,5 +845,41 @@ export async function getDetailInvoice(token: string | undefined, code: string) 
     return response.data.data
   } catch (error: any) {
     return error.response
+  }
+}
+
+// CREATE API Payment
+export async function createPaymentInvoice(data: PaymentState, token: string | undefined) {
+  try {
+    const response = await axiosInstance.post(`payment`, data, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return response;
+  } catch (error: any) {
+    return error.response
+  }
+
+}
+
+// DOWNLOAD API Detail Invoice
+export async function downloadExcelInvoice(data: Invoice[], token: string | undefined) {
+  try {
+    const response: any = await axiosInstance.post(
+      `download-invoice-excel`, data, {
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      },
+    }
+    );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
   }
 }

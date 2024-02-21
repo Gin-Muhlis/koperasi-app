@@ -50,7 +50,7 @@ const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, 
     const handleTimeChange = (type: string, value: string) => {
         dispatch(setInvoice({ type: `SET_${type}`, value }));
     };
-    console.log(`subCategory: ${subCategory}`)
+    
     return (
         <div className='w-full min-h-screen z-50 bg-zinc-200 p-5 md:p-12 fixed inset-0 overflow-y-scroll'>
             <div className="w-full rounded bg-white p-5">
@@ -113,10 +113,10 @@ const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, 
                 </div>
 
                 {/* time */}
-                <div className="w-full mb-7 grid grid-cols-1 md:grid-cols-2 items-center justify-between gap-4">
+                <div className="w-full mb-7 grid grid-cols-1 md:grid-cols-2 items-start justify-between gap-4">
                     <div className="flex items-center justify-start gap-4 w-full">
                         <div className='w-full'>
-                            <Label className="mb-2">Waktu Invoice (Bulan)</Label>
+                            <Label className="mb-2 font-bold">Waktu Invoice (Bulan)</Label>
                             <Select
                                 value={selector.month.toString()}
                                 onValueChange={(value) => handleTimeChange("MONTH", value)}
@@ -136,7 +136,7 @@ const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, 
                             </Select>
                         </div>
                         <div className='w-full'>
-                            <Label className="mb-2">Waktu Invoice (Tahun)</Label>
+                            <Label className="mb-2 font-bold">Waktu Invoice (Tahun)</Label>
                             <Select
                                 value={selector.year.toString()}
                                 onValueChange={(value) => handleTimeChange("YEAR", value)}
@@ -154,7 +154,7 @@ const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, 
                         </div>
                     </div>
                     <div className='w-full'>
-                        <Label className="mb-1">Deskripsi (opsional)</Label>
+                        <Label className="mb-1 font-bold">Deskripsi (opsional)</Label>
                         <Textarea onChange={handleDescription} className="w-full border border-solid border-slate-300 h-16" defaultValue={selector.description} />
                     </div>
                 </div>

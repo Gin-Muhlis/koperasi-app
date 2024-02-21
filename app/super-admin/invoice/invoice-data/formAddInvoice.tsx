@@ -70,7 +70,7 @@ const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, se
         }
         
         const response = await createInvoice(data, session?.user.accessToken)
-        console.log(response)
+        
         if (response.status === 200) {
             handleModal()
             setDataInvoice(response.data.invoice);

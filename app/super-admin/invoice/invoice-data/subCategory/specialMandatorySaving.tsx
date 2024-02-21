@@ -155,17 +155,17 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
             (item: Member) => item.id === id
         );
 
-        amount = amount.replace(".", "")
+        const numericValue = amount.replace(/\D/g, '');
 
         if (existingItemIndex >= 0) {
             const updatedItems = [...listSimpananWajibKhusus];
             const data = updatedItems[existingItemIndex];
-            updatedItems[existingItemIndex] = { ...data, amount: Number(amount) };
+            updatedItems[existingItemIndex] = { ...data, amount: Number(numericValue) };
             setStateData(updatedItems)
         } else {
             const newMembers = [
                 ...listSimpananWajibKhusus,
-                { id, amount: Number(amount), status: "not_added" },
+                { id, amount: Number(numericValue), status: "not_added" },
             ];
             setStateData(newMembers)
         }

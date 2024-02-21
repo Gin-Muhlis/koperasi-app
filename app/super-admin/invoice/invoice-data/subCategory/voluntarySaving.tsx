@@ -155,17 +155,17 @@ const VoluntarySavingPopup = ({ memberVoluntarySaving, setSubCategory }: { membe
             (item: Member) => item.id === id
         );
 
-        amount = amount.replace(".", "")
+        const numericValue = amount.replace(/\D/g, '');
 
         if (existingItemIndex >= 0) {
             const updatedItems = [...listSimpananSukarela];
             const data = updatedItems[existingItemIndex];
-            updatedItems[existingItemIndex] = { ...data, amount: Number(amount) };
+            updatedItems[existingItemIndex] = { ...data, amount: Number(numericValue) };
             setStateData(updatedItems)
         } else {
             const newMembers = [
                 ...listSimpananSukarela,
-                { id, amount: Number(amount), status: "not_added" },
+                { id, amount: Number(numericValue), status: "not_added" },
             ];
             setStateData(newMembers)
         }

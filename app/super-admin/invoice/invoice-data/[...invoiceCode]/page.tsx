@@ -104,10 +104,10 @@ const DetailInvoice = async ({ params }: { params: { invoiceCode: string } }) =>
 
         {/* button aksi */}
         <div className="w-full flex items-center justify-start gap-2 mb-5">
-            <ConfirmInvoiceButton />
+            <ConfirmInvoiceButton paymentMethod={detailInvoice.payment_method} invoiceId={detailInvoice.id} totalPayment={handleTotalData()} />
             <PrintInvoiceButton />
             <DownloadPdfInvoiceButton />
-            <DownloadExcelInvoiceButton />
+            <DownloadExcelInvoiceButton detailInvoice={detailInvoice.details} />
         </div>
 
         {/* detail data invoice */}

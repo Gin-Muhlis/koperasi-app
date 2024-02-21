@@ -257,3 +257,17 @@ export const invoiceSchema = z.object({
 
   payment_method: z.enum(["cash", "transfer"]),
 });
+
+export const paymentSchema = z.object({
+  amount: z.number({
+    required_error: "Jumlah Bayar tidak boleh kosong",
+    invalid_type_error: "Jumlah Bayar tidak valid",
+  }),
+  no_rek: z.string({
+    invalid_type_error: "No Rekening tidak valid"
+  }).nullable(),
+  transfer_name: z.string({
+    invalid_type_error: "Nama pembayar tidak valid"
+  }).nullable(), 
+  
+})
