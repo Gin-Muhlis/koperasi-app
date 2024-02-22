@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 
-const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment }: { paymentMethod: string, invoiceId: number, totalPayment: string }) => {
+const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusInvoice }: { paymentMethod: string, invoiceId: number, totalPayment: string, statusInvoice: string }) => {
   const [modal, setModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<string | boolean>(false)
@@ -104,10 +104,10 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment }: { paym
 
   return (
     <>
-      <Button className='text-white bg-green-500 flex items-center justify-center gap-1' onClick={handleModal}>
+      {statusInvoice == "dibayar" ? <Button className='bg-green-400 text-white' disabled>Dibayar</Button> : <><Button className='text-white bg-green-500 flex items-center justify-center gap-1' onClick={handleModal}>
         <Icon icon="lucide:wallet" width={16} height={16}></Icon>
         <span>Bayar Invoice</span>
-      </Button>
+      </Button></>}
 
       <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
         <div className="bg-white rounded p-5 w-full md:w-1/2">
@@ -133,7 +133,7 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment }: { paym
               </div>
             </>}
             <div className="w-full flex items-center justify-end gap-3">
-              <Button onClick={handleModal} >Batal</Button>
+              <Button type='button' onClick={handleModal}>Batal</Button>
               <Button type="submit" className='bg-green-400 text-white' disabled={isLoading}>
                 {isLoading ? <Loader /> : 'Konfirmasi'}
               </Button>

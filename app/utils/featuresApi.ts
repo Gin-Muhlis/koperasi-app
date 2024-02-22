@@ -868,7 +868,7 @@ export async function createPaymentInvoice(data: PaymentState, token: string | u
 export async function downloadExcelInvoice(data: Invoice[], token: string | undefined) {
   try {
     const response: any = await axiosInstance.post(
-      `download-invoice-excel`, data, {
+      `export/invoice-excel`, data, {
       responseType: "blob",
       headers: {
         Authorization: `Bearer ${token}`,
