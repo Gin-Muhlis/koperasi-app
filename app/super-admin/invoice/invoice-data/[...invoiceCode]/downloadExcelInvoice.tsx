@@ -26,6 +26,7 @@ const DownloadExcelInvoiceButton = ({detailInvoice}: {detailInvoice: Invoice[]})
             detailInvoice,
             session?.user.accessToken
         );
+        console.log(response)
 
         if (response.status == 200) {
             const blob = await response.data;
