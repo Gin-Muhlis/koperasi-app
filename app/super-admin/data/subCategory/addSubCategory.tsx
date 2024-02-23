@@ -21,8 +21,6 @@ import {
     Select,
     SelectContent,
     SelectItem,
-    SelectGroup,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
@@ -166,8 +164,8 @@ const AddSubCategory = ({categories}: {categories: CategoryState[]}) => {
         </div>
 
       </div>
-      {success && <AlertSuccess message={success.toString()} isShow={true} />}
-      {error && <AlertError message={error.toString()} isShow={true} />}
+      {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
+      {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
     </>
   );
 };

@@ -39,8 +39,8 @@ const DeleteCategory = ({ category }: { category: CategoryState }) => {
 
     if (response.status === 200) {
       setIsLoading(false);
-      setSuccess(response.data.message);
       router.refresh();
+      setSuccess(response.data.message);
     } else {
       setIsLoading(false);
       setError("Data member gagal dihapus");
@@ -75,8 +75,8 @@ const DeleteCategory = ({ category }: { category: CategoryState }) => {
         </AlertDialogContent>
       </AlertDialog>
 
-      {success && <AlertSuccess message={success.toString()} isShow={true} />}
-      {error && <AlertError message={error.toString()} isShow={true} />}
+     {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
+      {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
     </div>
   );
 };

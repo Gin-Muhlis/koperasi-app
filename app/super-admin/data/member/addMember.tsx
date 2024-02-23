@@ -31,11 +31,11 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { createMemberSchema } from "@/app/utils/formSchema";
-import { RoleState } from "@/types/interface";
+import { PositionCategory, RoleState } from "@/types/interface";
 
 const formSchema = createMemberSchema;
 
-const AddMember = ({ roles }: { roles: RoleState[] | undefined }) => {
+const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefined, positionCategories: PositionCategory[] }) => {
   const { data: session } = useSession();
   const [imageProfile, setImageProfile] = useState<
     File | string | Blob | undefined
@@ -65,13 +65,15 @@ const AddMember = ({ roles }: { roles: RoleState[] | undefined }) => {
       position: "pns",
       username: "",
       password: "",
-      role: "member"
+      role: "member",
+      position_category: positionCategories.length > 0 ? positionCategories[0].position : ''
     },
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true)
     const formData = new FormData();
+    const positionCategory = positionCategories.find((position) => position.position == values.position_category);
 
     formData.append("username", values.username);
     formData.append("password", values.password);
@@ -83,13 +85,14 @@ const AddMember = ({ roles }: { roles: RoleState[] | undefined }) => {
     formData.append("gender", values.gender);
     formData.append("religion", values.religion);
     formData.append("role", values.role);
+    formData.append("group_id", positionCategory?.id.toString() as string)
 
     if (imageProfile) {
       formData.append("image", imageProfile);
     }
 
     const response = await createMember(formData, session?.user.accessToken)
-
+   
     setIsLoading(false)
 
     if (response.status === 200) {
@@ -252,17 +255,27 @@ const AddMember = ({ roles }: { roles: RoleState[] | undefined }) => {
                     </FormItem>
                   )}
                 />
-
-                <FormField
+                   <FormField
                   control={form.control}
-                  name="image"
+                  name="position_category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Gambar</FormLabel>
-                      {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <div className="w-14 h-14 bg-slate-300 rounded mb-2"></div>}
-                      <FormControl>
-                        <Input type="file" {...field} accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
-                      </FormControl>
+                      <FormLabel>Golongan</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Silahkan pilih Golongan" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Golongan</SelectLabel>
+                            {positionCategories.map((position) => (
+                              <SelectItem key={position.id} value={position.position}>{position.position}</SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -318,6 +331,20 @@ const AddMember = ({ roles }: { roles: RoleState[] | undefined }) => {
                     </FormItem>
                   )}
                 />
+                   <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Gambar</FormLabel>
+                      {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <div className="w-14 h-14 bg-slate-300 rounded mb-2"></div>}
+                      <FormControl>
+                        <Input type="file" {...field} accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
               <div className="p-4 flex items-center justify-end gap-3">
                 <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
@@ -330,8 +357,8 @@ const AddMember = ({ roles }: { roles: RoleState[] | undefined }) => {
         </div>
 
       </div>
-      {success && <AlertSuccess message={success.toString()} isShow={true} />}
-      {error && <AlertError message={error.toString()} isShow={true} />}
+      {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
+      {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
     </>
   );
 };

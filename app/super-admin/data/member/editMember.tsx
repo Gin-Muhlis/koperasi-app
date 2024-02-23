@@ -31,13 +31,13 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { updateMemberSchema } from "@/app/utils/formSchema";
-import { MemberState, RoleState } from "@/types/interface";
+import { MemberState, PositionCategory, RoleState } from "@/types/interface";
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Switch } from "@/components/ui/switch";
 
 const formSchema = updateMemberSchema;
 
-const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[] | undefined }) => {
+const EditMember = ({ member, roles, positionCategories }: { member: MemberState, roles: RoleState[] | undefined, positionCategories: PositionCategory[] }) => {
     const { data: session } = useSession();
     const [imageProfile, setImageProfile] = useState<
         File | string | Blob | undefined
@@ -67,15 +67,16 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
             position: member.position,
             username: member.username,
             role: member.role,
-            active: member.active == 1 ? true : false
+            active: member.active == 1 ? true : false,
+            position_category: member.position_category
         },
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(values)
-       
         setIsLoading(true)
         const formData = new FormData();
+
+        const positionCategory = positionCategories.find((position) => position.position == values.position_category);
 
         formData.append("_method", "PUT");
         formData.append("username", values.username);
@@ -89,6 +90,7 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
         formData.append("role", values.role);
         formData.append("active", values.active ? '1' : '0');
         formData.append("password", values.password as string);
+        formData.append("group_id", positionCategory?.id.toString() as string)
 
         if (previewImage) {
             formData.append("image", imageProfile as Blob);
@@ -260,17 +262,27 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
                                         </FormItem>
                                     )}
                                 />
-
                                 <FormField
                                     control={form.control}
-                                    name="image"
+                                    name="position_category"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Gambar</FormLabel>
-                                            {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <img src={imageProfile?.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" />}
-                                            <FormControl>
-                                                <Input type="file" {...field} accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
-                                            </FormControl>
+                                            <FormLabel>Golongan</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                                                <FormControl>
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Silahkan pilih Golongan" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        <SelectLabel>Golongan</SelectLabel>
+                                                        {positionCategories.map((position) => (
+                                                            <SelectItem key={position.id} value={position.position}>{position.position}</SelectItem>
+                                                        ))}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -328,6 +340,20 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
                                 />
                                 <FormField
                                     control={form.control}
+                                    name="image"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Gambar</FormLabel>
+                                            {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <img src={imageProfile?.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" />}
+                                            <FormControl>
+                                                <Input type="file" {...field} accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
                                     name="active"
                                     render={({ field }) => (
                                         <FormItem>
@@ -354,8 +380,8 @@ const EditMember = ({ member, roles }: { member: MemberState, roles: RoleState[]
                 </div>
 
             </div>
-            {success && <AlertSuccess message={success.toString()} isShow={true} />}
-            {error && <AlertError message={error.toString()} isShow={true} />}
+            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
+            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
         </>
     );
 };

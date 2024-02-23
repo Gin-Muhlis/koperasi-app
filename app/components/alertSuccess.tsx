@@ -3,18 +3,20 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import React, { useState } from 'react'
 
-const AlertSuccess = ({ message, isShow, setSuccess }: { message: string | boolean, isShow: boolean, setSuccess: React.Dispatch<React.SetStateAction<string | boolean>> }) => {
+const AlertSuccess = ({ message, isShow, setSuccess }: { message: string | boolean, isShow: boolean, setSuccess?: React.Dispatch<React.SetStateAction<string | boolean>> }) => {
   const [show, setShow] = useState(isShow)
 
   const handleClose = () => {
     setShow(false)
-    setSuccess(false)
+    if (setSuccess) {
+      setSuccess(false)
+    }
   }
 
   return (
     <>
       {show && <div className='z-50 p-4 bg-green-500 rounded fixed bottom-7 right-7 text-white flex items-center gap-1'>
-        <Icon icon="mingcute:alert-fill" width={24} height={24} />
+        <Icon icon="lucide:check-circle" width={24} height={24} />
         <span className=" font-semibold text-md alert-access">
           {message}
         </span>

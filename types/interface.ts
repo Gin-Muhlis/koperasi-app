@@ -45,6 +45,7 @@ export type MemberState = {
   identify_number: number;
   religion: string;
   position: "pns" | "p3k" | "cpns";
+  position_category: string;
   imageProfile: File | string | Blob | undefined;
   payment_member: number;
   date_activation: number;

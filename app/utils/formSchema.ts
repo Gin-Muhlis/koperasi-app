@@ -49,6 +49,10 @@ export const createMemberSchema = z.object({
     .toLowerCase(),
   gender: z.enum(["L", "P"]),
   position: z.enum(["pns", "p3k", "cpns"]),
+  position_category: z.string({
+    required_error: "Golongan member tidak boleh ksosong",
+    invalid_type_error: "Golongan tidak valid"
+  }),
   image: z.any(),
   username: z
     .string({
@@ -119,6 +123,10 @@ export const updateMemberSchema = z.object({
     .toLowerCase(),
   gender: z.enum(["L", "P"]),
   position: z.enum(["pns", "p3k", "cpns"]),
+  position_category: z.string({
+    required_error: "Golongan member tidak boleh ksosong",
+    invalid_type_error: "Golongan tidak valid"
+  }),
   image: z.any(),
   username: z
     .string({
@@ -270,4 +278,23 @@ export const paymentSchema = z.object({
     invalid_type_error: "Nama pembayar tidak valid"
   }).nullable(), 
   
+})
+
+export const positionCategorySchema = z.object({
+  potition: z.string({
+    invalid_type_error: 'Nama posisi tidak valid',
+    required_error: "Nama posisi tidak boleh kosong"
+  }),
+  pokok: z.number({
+    required_error: "Jumlah Pembayaran Simpanan Pokok tidak boleh kosong",
+    invalid_type_error: "Jumlah Pembayaran Simpanan Pokok tidak valid",
+  }),
+  wajib: z.number({
+    required_error: "Jumlah Pembayaran Simpanan Wajib tidak boleh kosong",
+    invalid_type_error: "Jumlah Pembayaran Simpanan Wajib tidak valid",
+  }),
+  wajib_khusus: z.number({
+    required_error: "Jumlah Pembayaran Simpanan Wajib Khusus tidak boleh kosong",
+    invalid_type_error: "Jumlah Pembayaran Simpanan Wajib Khusus tidak valid",
+  }),
 })

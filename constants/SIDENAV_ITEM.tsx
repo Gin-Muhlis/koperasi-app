@@ -18,10 +18,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
       { title: "Sub-kategori", path: "/super-admin/data/subCategory" },
       { title: "Produk", path: "/super-admin/data/product" },
       { title: "Barang", path: "/super-admin/data/stuff" },
-      {
-        title: "Ketentuan Pembayaran",
-        path: "/super-admin/data/paymentDetermination",
-      },
+      { title: "Golongan", path: "/super-admin/data/positionCategory" },
     ],
   },
   {
@@ -33,16 +30,6 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
       { title: "Data Invoice", path: "/super-admin/invoice/invoice-data" },
     ],
   },
-  // {
-  //   title: "App",
-  //   path: "/super-admin/app",
-  //   icon: <Icon icon="lucide:folder" width="24" height="24" />,
-  //   submenu: true,
-  //   subMenuItems: [
-  //     { title: "Data Invoice", path: "/super-admin/app/data-invoice" },
-  //     { title: "Tagihan Gabungan", path: "/super-admin/app/tagihan" },
-  //   ],
-  // },
   {
     title: "Simpanan",
     path: "/super-admin/saving",
@@ -62,14 +49,4 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
       },
     ],
   },
-  // {
-  //   title: "App",
-  //   path: "/super-admin/app",
-  //   icon: <Icon icon="lucide:file-box" width="24" height="24" />,
-  //   submenu: true,
-  //   subMenuItems: [
-  //     { title: "Simpanan", path: "/super-admin/app/saving" },
-  //     { title: "Pinjaman", path: "/super-admin/app/sale" },
-  //   ],
-  // },
 ];

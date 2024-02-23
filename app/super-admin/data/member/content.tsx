@@ -3,12 +3,12 @@
 import React from 'react'
 import { DataTable } from "@/components/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { MemberState, RoleState } from '@/types/interface';
+import { MemberState, PositionCategory, RoleState } from '@/types/interface';
 import DeleteMember from "./deleteMember";
 import EditMember from "./editMember";
 import DetailMember from './detailMember';
 
-const Content = ({ members, roles }: { members: MemberState[], roles: RoleState[] }) => {
+const Content = ({ members, roles, positionCategories }: { members: MemberState[], roles: RoleState[], positionCategories: PositionCategory[] }) => {
 
     const columns: ColumnDef<MemberState>[] = [
         {
@@ -47,7 +47,7 @@ const Content = ({ members, roles }: { members: MemberState[], roles: RoleState[
 
                 return (
                     <div className="flex items-center justify-center gap-1">
-                        <EditMember member={member} roles={roles} />
+                        <EditMember member={member} roles={roles} positionCategories={positionCategories} />
                         <DetailMember member={member} />
                         <DeleteMember member={member} />
                     </div>

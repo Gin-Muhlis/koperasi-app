@@ -3,12 +3,14 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import React, { useState } from 'react'
 
-const AlertError = ({ message, isShow, setError }: { message: string, isShow: boolean, setError: React.Dispatch<React.SetStateAction<string | boolean>> }) => {
+const AlertError = ({ message, isShow, setError }: { message: string, isShow: boolean, setError?: React.Dispatch<React.SetStateAction<string | boolean>> }) => {
   const [show, setShow] = useState(isShow)
 
   const handleClose = () => {
     setShow(false)
+    if (setError) {
     setError(false)
+    }
   }
 
   return (

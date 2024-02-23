@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   description: 'Aplikasi untuk pendataan di koperasi',
 }
 
-
 const Dashboard = async ({ searchParams }: IProps) => {
 
   return (

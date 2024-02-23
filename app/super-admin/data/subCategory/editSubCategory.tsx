@@ -38,7 +38,7 @@ const formSchema = updateSubCategorySchema;
 
 const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategoryState, categories: CategoryState[] }) => {
     const { data: session } = useSession();
-    
+
     const [modal, setModal] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
@@ -172,8 +172,8 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
                 </div>
 
             </div>
-            {success && <AlertSuccess message={success.toString()} isShow={true} />}
-            {error && <AlertError message={error.toString()} isShow={true} />}
+            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
+            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
         </>
     );
 };

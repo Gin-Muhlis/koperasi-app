@@ -74,8 +74,8 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
                 </AlertDialogContent>
             </AlertDialog>
 
-            {success && <AlertSuccess message={success.toString()} isShow={true} />}
-            {error && <AlertError message={error.toString()} isShow={true} />}
+            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
+            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
         </div>
     )
 }

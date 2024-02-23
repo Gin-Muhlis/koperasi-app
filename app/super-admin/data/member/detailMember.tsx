@@ -8,6 +8,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 
 const DetailMember = ({ member }: { member: MemberState }) => {
@@ -50,6 +51,10 @@ const DetailMember = ({ member }: { member: MemberState }) => {
                             <Input value={member.position} readOnly />
                         </div>
                         <div>
+                            <Label>Golongan</Label>
+                            <Input value={member.position_category} readOnly />
+                        </div>
+                        <div>
                             <Label>Gambar Profile</Label>
                             <img src={member.imageProfile?.toString()} alt="Gambar member" className="w-14 h-14 rounded object-cover" />
                         </div>
@@ -63,7 +68,7 @@ const DetailMember = ({ member }: { member: MemberState }) => {
                         </div>
                         <div>
                             <Label className="block mb-2">Aktif</Label>
-                            <Switch checked={member.active == 1 ? true : false}  />
+                            <Badge className={`text-white ${member.active == 1 ? 'bg-green-400' : 'bg-secondary'}`}>{member.active == 1 ? 'Aktif' : 'Tidak Aktif'}</Badge>
                         </div>
                     </div>
                     <div className="p-4 flex items-center justify-end gap-3">

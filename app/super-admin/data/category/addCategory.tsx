@@ -89,9 +89,9 @@ const AddCategory = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nama</FormLabel>
+                      <FormLabel>Nama Kategori</FormLabel>
                       <FormControl>
-                        <Input placeholder="Nama Lengkap" {...field} disabled={isLoading} />
+                        <Input placeholder="Nama Kategori" {...field} disabled={isLoading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -110,8 +110,8 @@ const AddCategory = () => {
         </div>
 
       </div>
-      {success && <AlertSuccess message={success.toString()} isShow={true} />}
-      {error && <AlertError message={error.toString()} isShow={true} />}
+      {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
+      {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
     </>
   );
 };
