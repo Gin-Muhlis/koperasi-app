@@ -104,7 +104,10 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
 
   return (
     <>
-      {statusInvoice == "dibayar" ? <Button className='bg-green-400 text-white' disabled>Dibayar</Button> : <><Button className='text-white bg-green-500 flex items-center justify-center gap-1' onClick={handleModal}>
+      {statusInvoice == "dibayar" ?<Button className='text-white flex items-center justify-center gap-1' disabled>
+        <Icon icon="lucide:check-circle" width={16} height={16}></Icon>
+        <span>Dibayar</span>
+      </Button> : <><Button className='text-white  flex items-center justify-center gap-1' onClick={handleModal}>
         <Icon icon="lucide:wallet" width={16} height={16}></Icon>
         <span>Bayar Invoice</span>
       </Button></>}

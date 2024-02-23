@@ -5,9 +5,11 @@ import { Icon } from '@iconify/react/dist/iconify.js'
 import React from 'react'
 
 const PrintInvoiceButton = () => {
+    
+
     return (
         <>
-            <Button className='flex items-center justify-center gap-1'>
+            <Button className='flex items-center justify-center gap-1' >
                 <Icon icon="lucide:printer" width={16} height={16}></Icon>
                 <span>Print Invoice</span>
             </Button>

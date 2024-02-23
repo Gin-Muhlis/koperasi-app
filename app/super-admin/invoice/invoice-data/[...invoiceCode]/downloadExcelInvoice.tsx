@@ -11,7 +11,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
-const DownloadExcelInvoiceButton = ({detailInvoice}: {detailInvoice: Invoice[]}) => {
+const DownloadExcelInvoiceButton = ({detailInvoice, timeInvoice}: {detailInvoice: Invoice[], timeInvoice: string}) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [success, setSuccess] = useState<string | boolean>(false)
     const [error, setError] = useState<string | boolean>(false)
@@ -22,18 +22,21 @@ const DownloadExcelInvoiceButton = ({detailInvoice}: {detailInvoice: Invoice[]})
     const handleDownloadExcel = async () => {
         setIsLoading(true);
 
+        const splitTime = timeInvoice.split(' ')
+        const time = `${splitTime[1]} ${splitTime[2]}`
+
         const response = await downloadExcelInvoice(
             detailInvoice,
+            timeInvoice,
             session?.user.accessToken
         );
-        console.log(response)
-
+            
         if (response.status == 200) {
             const blob = await response.data;
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute("download", "tagihan_gabungan.xlsx"); // or any other extension
+            link.setAttribute("download", `Pembayaran Invoice ${time}.xlsx`); // or any other extension
             document.body.appendChild(link);
             link.click();
             link.parentNode?.removeChild(link);

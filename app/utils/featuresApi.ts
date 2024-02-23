@@ -864,11 +864,12 @@ export async function createPaymentInvoice(data: PaymentState, token: string | u
 
 }
 
-// DOWNLOAD API Detail Invoice
-export async function downloadExcelInvoice(data: Invoice[], token: string | undefined) {
+// DOWNLOAD API Detail Invoice Excel
+export async function downloadExcelInvoice(data: Invoice[], timeInvoice: string, token: string | undefined) {
   try {
     const invoiceData = {
-      data: data
+      data: data,
+      time_invoice: timeInvoice
     };
 
     const response: any = await axiosInstance.post(
@@ -878,6 +879,30 @@ export async function downloadExcelInvoice(data: Invoice[], token: string | unde
         Authorization: `Bearer ${token}`,
         Accept:
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      },
+    }
+    );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+// DOWNLOAD API Detail Invoice PDF
+export async function downloadPdfInvoice(data: Invoice[], timeInvoice: string, token: string | undefined) {
+  try {
+    const invoiceData = {
+      data: data,
+      time_invoice: timeInvoice
+    };
+
+    const response: any = await axiosInstance.post(
+      `export/invoice-pdf`, invoiceData, {
+        responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept:
+        "application/pdf",
       },
     }
     );
