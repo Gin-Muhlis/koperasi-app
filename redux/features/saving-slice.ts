@@ -3,10 +3,9 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   typeSaving: "",
   idTypesaving: "",
-  month: "01",
+  month: new Date().getMonth() + 1,
   year: new Date().getFullYear(),
-  amount: 0,
-  description: "",
+  description: "-",
   members: "[]",
   isSelectAll: false,
 };
@@ -43,12 +42,6 @@ export const saving = createSlice({
           return {
             ...state,
             year: value,
-          };
-          break;
-        case "SET_AMOUNT":
-          return {
-            ...state,
-            amount: value,
           };
           break;
         case "SET_MEMBERS":

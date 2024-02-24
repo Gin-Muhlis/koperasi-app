@@ -1,7 +1,14 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getMembers, getPayments, getSubCategories } from "@/app/utils/featuresApi";
+import {
+  getMemberMandatorySaving,
+  getSubCategories,
+} from "@/app/utils/featuresApi";
 import MainLayout from "@/components/mainLayout";
-import { MemberState, PaymentDeterminationState, SubCategoryState } from "@/types/interface";
+import {
+  MemberState,
+  SubCategoryInvoice,
+  SubCategoryState,
+} from "@/types/interface";
 import { getServerSession } from "next-auth";
 import React from "react";
 import SavingTime from "./savingTime";
@@ -11,12 +18,13 @@ import SaveSaving from "./saveSaving";
 
 const Saving = async () => {
   const session = await getServerSession(authOptions);
-  const members: MemberState[] = await getMembers(session?.user.accessToken);
+  const members: SubCategoryInvoice[] = await getMemberMandatorySaving(
+    session?.user.accessToken
+  );
   const subCategories: SubCategoryState[] = await getSubCategories(
     session?.user.accessToken
   );
-  const payments: PaymentDeterminationState[] = await getPayments(session?.user.accessToken)
-
+  console.log(members);
   return (
     <MainLayout>
       <div className="bg-white rounded p-4 w-full">
@@ -30,7 +38,7 @@ const Saving = async () => {
           </div>
         </div>
         <div className="w-full pt-14 mb-7">
-          <Member members={members} payments={payments} />
+          <Member members={members} />
         </div>
         <SaveSaving subCategories={subCategories} />
       </div>

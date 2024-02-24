@@ -38,15 +38,25 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     subMenuItems: [
       { title: "Simpanan Pokok", path: "/super-admin/saving/pokok" },
       { title: "Simpanan Wajib", path: "/super-admin/saving/wajib" },
+      {
+        title: "Simpanan Wajib Khusus",
+        path: "/super-admin/saving/wajib-khusus",
+      },
       { title: "Simpanan Sukarela", path: "/super-admin/saving/sukarela" },
       {
         title: "Tabungan Rekreasi",
         path: "/super-admin/saving/tabungan-rekreasi",
       },
-      {
-        title: "Qurban/Infaq",
-        path: "/super-admin/saving/qurban-infaq",
-      },
+    ],
+  },
+  {
+    title: "Piutang",
+    path: "/super-admin/receivable",
+    icon: <Icon icon="lucide:file-box" width="24" height="24" />,
+    submenu: true,
+    subMenuItems: [
+      { title: "Piutang S/P", path: "/super-admin/receivable/piutang-sp" },
+      { title: "Piutang Dagang", path: "/super-admin/saving/piutang-dagang" },
     ],
   },
 ];

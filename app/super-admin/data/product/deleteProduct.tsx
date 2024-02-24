@@ -3,12 +3,12 @@
 import React from 'react';
 import { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { CategoryState, MemberState, ProductState } from '@/types/interface';
+import {  ProductState } from '@/types/interface';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSession } from 'next-auth/react';
 import AlertSuccess from '@/app/components/alertSuccess';
 import AlertError from '@/app/components/alertError';
-import { deleteCategory, deleteProduct } from '@/app/utils/featuresApi';
+import { deleteProduct } from '@/app/utils/featuresApi';
 import {
     AlertDialog,
     AlertDialogAction,

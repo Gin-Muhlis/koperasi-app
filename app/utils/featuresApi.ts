@@ -1,8 +1,10 @@
-import { Invoice, Member, MemberState, PaymentState, RegisterState } from "@/types/interface";
-import axios from "axios";
-import { z } from "zod";
-import { invoiceSchema } from "./formSchema";
-import { format } from "date-fns";
+import {
+  Invoice,
+  Member,
+  MemberState,
+  PaymentState,
+  RegisterState,
+} from "@/types/interface";
 import axiosInstance from "@/axiosConfig";
 
 // API register
@@ -23,16 +25,11 @@ export async function register(data: RegisterState) {
       formData.append("image", data.imageProfile);
     }
 
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/register`,
-      formData,
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/register`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -43,13 +40,12 @@ export async function register(data: RegisterState) {
 // PAI Logout
 export async function logout(token: string | undefined) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/logout`,
+    const response = await axiosInstance.post(
+      `/logout`,
       {},
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "application/json",
         },
       }
     );
@@ -63,15 +59,11 @@ export async function logout(token: string | undefined) {
 // API GET Member
 export async function getMembers(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/member`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/member`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response.data.data;
   } catch (error: any) {
@@ -82,17 +74,12 @@ export async function getMembers(token: string | undefined) {
 // API CREATE Member
 export async function createMember(data: FormData, token: string | undefined) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/member`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/member`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -103,15 +90,11 @@ export async function createMember(data: FormData, token: string | undefined) {
 // API CREATE Member
 export async function deleteMember(id: number, token: string | undefined) {
   try {
-    const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/member/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.delete(`/member/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -126,17 +109,12 @@ export async function updateMember(
   token: string | undefined
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/member/${id}`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/member/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -147,15 +125,11 @@ export async function updateMember(
 // API GET Role
 export async function getRoles(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/role`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/role`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response.data.data;
   } catch (error: any) {
@@ -166,15 +140,11 @@ export async function getRoles(token: string | undefined) {
 // API GET Profile
 export async function getProfile(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/profile`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response.data.data;
   } catch (error: any) {
@@ -185,15 +155,11 @@ export async function getProfile(token: string | undefined) {
 // API GET Category
 export async function getCategories(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/category`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/category`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response.data.data;
   } catch (error: any) {
@@ -207,16 +173,11 @@ export async function createCategory(
   token: string | undefined
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/category/`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/category/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -231,16 +192,11 @@ export async function updateCategory(
   token: string | undefined
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/category/${id}`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/category/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -251,15 +207,11 @@ export async function updateCategory(
 // API UPDATE Category
 export async function deleteCategory(id: number, token: string | undefined) {
   try {
-    const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/category/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.delete(`/category/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -270,15 +222,11 @@ export async function deleteCategory(id: number, token: string | undefined) {
 // API GET Sub-Category
 export async function getSubCategories(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/sub-category`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/sub-category`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response.data.data;
   } catch (error: any) {
@@ -292,16 +240,11 @@ export async function createSubCategory(
   token: string | undefined
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/sub-category/`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/sub-category/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -316,16 +259,11 @@ export async function updateSubCategory(
   token: string | undefined
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/sub-category/${id}`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/sub-category/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -336,15 +274,11 @@ export async function updateSubCategory(
 // API DELETE Sub-Category
 export async function deleteSubCategory(id: number, token: string | undefined) {
   try {
-    const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/sub-category/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.delete(`/sub-category/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -355,15 +289,11 @@ export async function deleteSubCategory(id: number, token: string | undefined) {
 // API GET Product
 export async function getProducts(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/product`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/product`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response.data.data;
   } catch (error: any) {
@@ -374,16 +304,11 @@ export async function getProducts(token: string | undefined) {
 // API CREATE Product
 export async function createProduct(data: FormData, token: string | undefined) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/product/`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/product/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -394,15 +319,11 @@ export async function createProduct(data: FormData, token: string | undefined) {
 // API DELETE Product
 export async function deleteProduct(id: number, token: string | undefined) {
   try {
-    const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/product/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.delete(`/product/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -417,16 +338,11 @@ export async function updateProduct(
   token: string | undefined
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/product/${id}`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/product/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -437,15 +353,11 @@ export async function updateProduct(
 // API GET Stuff
 export async function getStuffs(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/stuff`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/stuff`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response.data.data;
   } catch (error: any) {
@@ -456,16 +368,11 @@ export async function getStuffs(token: string | undefined) {
 // API CREATE Stuff
 export async function createStuff(data: FormData, token: string | undefined) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/stuff/`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/stuff/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -480,16 +387,11 @@ export async function updateStuff(
   token: string | undefined
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/stuff/${id}`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`/stuff/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -500,15 +402,11 @@ export async function updateStuff(
 // API DELETE Stuff
 export async function deleteStuff(id: number, token: string | undefined) {
   try {
-    const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/stuff/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.delete(`/stuff/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -522,13 +420,79 @@ export async function createSavingMembers(
   token: string | undefined
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/saving-members`,
+    const response = await axiosInstance.post(`/saving`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Payment Principal Member
+export async function getPrincivalSavings(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/tab/principal-saving`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Position Category
+export async function getPositionCategories(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/position-category`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API CREATE Position Category
+export async function createPositionCategory(
+  data: FormData,
+  token: string | undefined
+) {
+  try {
+    const response = await axiosInstance.post(`/position-category`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API UPDATE Position Category
+export async function updatePositionCategory(
+  id: number,
+  data: FormData,
+  token: string | undefined
+) {
+  try {
+    const response = await axiosInstance.post(
+      `/position-category/${id}`,
       data,
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "application/json",
         },
       }
     );
@@ -539,96 +503,49 @@ export async function createSavingMembers(
   }
 }
 
-// API GET Payment Determination
-export async function getPayments(token: string | undefined) {
+// API DELETE Position Category
+export async function deletePositionCategory(
+  id: number,
+  token: string | undefined
+) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/payment-determination`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.delete(`/position-category/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.data;
+    return response;
   } catch (error: any) {
-    return error.Response;
+    return error.response;
   }
 }
 
-// API GET Payment Principal Member
-export async function getPrincivalSavings(token: string | undefined) {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/tab/principal-saving`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
-
-    return response.data.data;
-  } catch (error: any) {
-    return error.Response;
-  }
-}
-
-// API GET Position Category
-export async function getPositionCategories(token: string | undefined) {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/position-category`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
-
-    return response.data.data;
-  } catch (error: any) {
-    return error.Response;
-  }
-}
-
-// API GET Position Category
+// API GET Piutang S/P
 export async function getReceivables(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/tab/receivable`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/tab/receivable`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data.data;
   } catch (error: any) {
-    return error.Response;
+    return error.response;
   }
 }
 
-// API GET Position Category
+// API GET Piutang Dagang
 export async function getAccountsReceivable(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/tab/accounts-receivable`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/tab/accounts-receivable`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data.data;
   } catch (error: any) {
-    return error.Response;
+    return error.response;
   }
 }
 
@@ -638,24 +555,16 @@ export async function createInvoice(
     invoice_name: string;
     due_date: string;
     payment_source: string;
-    payment_method: string
+    payment_method: string;
   },
-  token: string | undefined,
+  token: string | undefined
 ) {
   try {
-
-
-    const response: any = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/invoice`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept:
-            "application/json",
-        },
-      }
-    );
+    const response: any = await axiosInstance.post(`/invoice`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -688,20 +597,14 @@ export async function createDetailInvoice(
       accounts_receivable: accountsReceivable,
       month_year: monthYear,
       description,
-      invoice_id: invoiceId
+      invoice_id: invoiceId,
     };
 
-    const response: any = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/invoice-detail`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept:
-            "application/json",
-        },
-      }
-    );
+    const response: any = await axiosInstance.post(`/invoice-detail`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -712,15 +615,11 @@ export async function createDetailInvoice(
 // GET API Invoice
 export async function getInvoices(token: string | undefined) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/invoice`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/invoice`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response.data.data;
   } catch (error: any) {
@@ -731,156 +630,169 @@ export async function getInvoices(token: string | undefined) {
 // GET API Member simpanan pokok
 export async function getMemberPrincipalSaving(token: string | undefined) {
   try {
-    const response = await axiosInstance.get('/member-principal', {
+    const response = await axiosInstance.get("/member-principal", {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.data
+    return response.data.data;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
 }
 
 // GET API Member simapan wajib
 export async function getMemberMandatorySaving(token: string | undefined) {
   try {
-    const response = await axiosInstance.get('/member-mandatory', {
+    const response = await axiosInstance.get("/member-mandatory", {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.data
+    return response.data.data;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
 }
 
 // GET API Member simapan wajib khusus
-export async function getMemberSpecialMandatorySaving(token: string | undefined) {
+export async function getMemberSpecialMandatorySaving(
+  token: string | undefined
+) {
   try {
-    const response = await axiosInstance.get('/member-special-mandatory', {
+    const response = await axiosInstance.get("/member-special-mandatory", {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.data
+    return response.data.data;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
 }
 
 // GET API Member simapan sukarela
 export async function getMemberVoluntarySaving(token: string | undefined) {
   try {
-    const response = await axiosInstance.get('/member-voluntary', {
+    const response = await axiosInstance.get("/member-voluntary", {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.data
+    return response.data.data;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
 }
 
 // GET API Member tabungan rekreasi
 export async function getMemberRecretionalSaving(token: string | undefined) {
   try {
-    const response = await axiosInstance.get('/member-recretional', {
+    const response = await axiosInstance.get("/member-recretional", {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.data
+    return response.data.data;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
 }
 
 // GET API Member piutang s/p
 export async function getMemberReceivable(token: string | undefined) {
   try {
-    const response = await axiosInstance.get('/member-receivable', {
+    const response = await axiosInstance.get("/member-receivable", {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.data
+    return response.data.data;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
 }
 
 // GET API Member piutang dagang
 export async function getMemberAccountReceivable(token: string | undefined) {
   try {
-    const response = await axiosInstance.get('/member-account-receivable', {
+    const response = await axiosInstance.get("/member-account-receivable", {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.data
+    return response.data.data;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
 }
 
 // GET API Detail Invoice
-export async function getDetailInvoice(token: string | undefined, code: string) {
+export async function getDetailInvoice(
+  token: string | undefined,
+  code: string
+) {
   try {
     const response = await axiosInstance.get(`/invoice-detail/${code}`, {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.data
+    return response.data.data;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
 }
 
 // CREATE API Payment
-export async function createPaymentInvoice(data: PaymentState, token: string | undefined) {
+export async function createPaymentInvoice(
+  data: PaymentState,
+  token: string | undefined
+) {
   try {
     const response = await axiosInstance.post(`payment`, data, {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {
-    return error.response
+    return error.response;
   }
-
 }
 
 // DOWNLOAD API Detail Invoice Excel
-export async function downloadExcelInvoice(data: Invoice[], timeInvoice: string, token: string | undefined) {
+export async function downloadExcelInvoice(
+  data: Invoice[],
+  timeInvoice: string,
+  token: string | undefined
+) {
   try {
     const invoiceData = {
       data: data,
-      time_invoice: timeInvoice
+      time_invoice: timeInvoice,
     };
 
     const response: any = await axiosInstance.post(
-      `export/invoice-excel`, invoiceData, {
-      responseType: "blob",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      },
-    }
+      `export/invoice-excel`,
+      invoiceData,
+      {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+      }
     );
 
     return response;
@@ -889,22 +801,27 @@ export async function downloadExcelInvoice(data: Invoice[], timeInvoice: string,
   }
 }
 // DOWNLOAD API Detail Invoice PDF
-export async function downloadPdfInvoice(data: Invoice[], timeInvoice: string, token: string | undefined) {
+export async function downloadPdfInvoice(
+  data: Invoice[],
+  timeInvoice: string,
+  token: string | undefined
+) {
   try {
     const invoiceData = {
       data: data,
-      time_invoice: timeInvoice
+      time_invoice: timeInvoice,
     };
 
     const response: any = await axiosInstance.post(
-      `export/invoice-pdf`, invoiceData, {
-        responseType: "blob",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept:
-        "application/pdf",
-      },
-    }
+      `export/invoice-pdf`,
+      invoiceData,
+      {
+        // responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/pdf",
+        },
+      }
     );
 
     return response;

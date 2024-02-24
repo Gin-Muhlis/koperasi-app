@@ -32,13 +32,13 @@ const SaveSaving = ({
       (item) => item.name == "simpanan wajib"
     );
 
-    const arrayIdMembers = JSON.parse(selector.members).map(
-      (member: any) => member.id
-    );
+    const members = JSON.parse(selector.members);
 
     const data = {
-      members_id: arrayIdMembers,
-      month_year: `${selector.month}-${selector.year}`,
+      members,
+      month_year: `${
+        selector.month < 9 ? `0${selector.month}` : `${selector.year}`
+      }-${selector.year}`,
       sub_category_id: subCategory?.id,
       description: selector.description,
       type_saving: subCategory?.name,
@@ -46,7 +46,6 @@ const SaveSaving = ({
 
     const response = await createSavingMembers(data, session?.user.accessToken);
     console.log(response);
-
     if (response.status == 200) {
       setIsLoading(false);
       setSuccess(response.data.message);

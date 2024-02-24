@@ -111,7 +111,7 @@ export type TypeTab = {
 
 export type PositionCategory = {
   id: number;
-  position: string;
+  name: string;
   pokok: number;
   wajib: number;
   wajib_khusus: number;
@@ -121,7 +121,7 @@ export type Member = {
   id: number;
   amount: number;
   status: string;
-  loanId?: number
+  loanId?: number;
 };
 
 export type Receivable = {
@@ -145,13 +145,12 @@ export type TotalColumn = {
   totalPiutangDagang: number;
 };
 
-
 export type MandatorySaving = {
   id: number;
   name: string;
   position: string;
-  month_remain: number
-}
+  month_remain: number;
+};
 
 export type Invoice = {
   memberId: number;
@@ -162,11 +161,11 @@ export type Invoice = {
   recretionalSaving: number;
   receivable: number;
   accountReceivable: number;
-  memberName?: string
-}
+  memberName?: string;
+};
 
 export type InvoiceState = {
-  id: number,
+  id: number;
   invoice_code: string;
   invoice_name: string;
   payment_source: string;
@@ -176,15 +175,15 @@ export type InvoiceState = {
   payment_method: string;
   payment_date: string;
   user: string;
-  details: Invoice[]
-}
+  details: Invoice[];
+};
 
 export type SubCategoryInvoice = {
   id: number;
   name: string;
   position: string;
   payment: number;
-}
+};
 
 export type PaymentState = {
   id?: number;
@@ -195,4 +194,4 @@ export type PaymentState = {
   no_rek: string | null;
   transfer_name: string | null;
   total_invoice?: number;
-}
+};

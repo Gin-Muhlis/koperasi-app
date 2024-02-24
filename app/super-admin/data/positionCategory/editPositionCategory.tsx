@@ -2,7 +2,10 @@
 
 import AlertError from "@/app/components/alertError";
 import AlertSuccess from "@/app/components/alertSuccess";
-import { createPositionCategory } from "@/app/utils/featuresApi";
+import {
+  createPositionCategory,
+  updatePositionCategory,
+} from "@/app/utils/featuresApi";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -22,10 +25,16 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { positionCategorySchema } from "@/app/utils/formSchema";
+import { PositionCategory } from "@/types/interface";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const formSchema = positionCategorySchema;
 
-const AddPositionCategory = () => {
+const EditPositionCategory = ({
+  positionCategory,
+}: {
+  positionCategory: PositionCategory;
+}) => {
   const { data: session } = useSession();
 
   const [modal, setModal] = useState(false);
@@ -41,10 +50,10 @@ const AddPositionCategory = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      position: "",
-      pokok: "0",
-      wajib: "0",
-      wajib_khusus: "0",
+      position: positionCategory.name,
+      pokok: positionCategory.pokok.toString(),
+      wajib: positionCategory.wajib.toString(),
+      wajib_khusus: positionCategory.wajib_khusus.toString(),
     },
   });
 
@@ -52,12 +61,14 @@ const AddPositionCategory = () => {
     setIsLoading(true);
     const formData = new FormData();
 
+    formData.append("_method", "PUT");
     formData.append("position", values.position);
     formData.append("pokok", values.pokok.toString());
     formData.append("wajib", values.wajib.toString());
     formData.append("wajib_khusus", values.wajib_khusus.toString());
 
-    const response = await createPositionCategory(
+    const response = await updatePositionCategory(
+      positionCategory.id,
       formData,
       session?.user.accessToken
     );
@@ -80,13 +91,16 @@ const AddPositionCategory = () => {
     } else {
       setError(response.data.message);
     }
-  };
-
+    };
+    
   return (
     <>
-      <Button className="text-white bg-amber-400" onClick={handleModal}>
-        Tambah Data
-      </Button>
+      <span
+        className="w-5 h-5 rounded bg-green-500 text-white flex items-center justify-center cursor-pointer"
+        onClick={handleModal}
+      >
+        <Icon icon="lucide:square-pen" width="16" height="16" />
+      </span>
       <div
         className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${
           modal ? "block" : "hidden"
@@ -98,7 +112,7 @@ const AddPositionCategory = () => {
           }`}
         >
           <div className="p-4 border-b border-b-slate-300 mb-4">
-            <h3 className="font-bold text-lg text-black">Tambah Data Produk</h3>
+            <h3 className="font-bold text-lg text-black">Edit Data Produk</h3>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -219,4 +233,4 @@ const AddPositionCategory = () => {
   );
 };
 
-export default AddPositionCategory;
+export default EditPositionCategory;

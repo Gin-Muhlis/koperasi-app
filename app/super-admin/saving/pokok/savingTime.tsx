@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { months } from "@/constants/CONSTS";
 import { createSaving } from "@/redux/features/saving-slice";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import React from "react";
@@ -19,25 +20,11 @@ const SavingTime = () => {
   const selector = useAppSelector((state) => state.savingReducer);
   const currentyear = new Date().getFullYear();
   const nextYear = currentyear + 1;
-  const months = [
-    "01",
-    "02",
-    "03",
-    "04",
-    "05",
-    "06",
-    "07",
-    "08",
-    "09",
-    10,
-    11,
-    12,
-  ];
 
   const handleChange = (type: string, value: string) => {
     dispatch(createSaving({ type: `SET_${type}`, value }));
   };
-
+  console.log(selector.month);
   return (
     <div>
       <div className="flex items-center justify-start gap-4">
@@ -53,7 +40,7 @@ const SavingTime = () => {
             <SelectGroup>
               <SelectContent>
                 {months.map((item, index) => (
-                  <SelectItem key={index} value={item.toString()}>
+                  <SelectItem key={index} value={(index + 1).toString()}>
                     {item}
                   </SelectItem>
                 ))}

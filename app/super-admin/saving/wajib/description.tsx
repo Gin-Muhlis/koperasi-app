@@ -17,7 +17,7 @@ const Description = () => {
   };
   return (
     <div>
-      <Label>Deskripsi</Label>
+      <Label>Keterangan (opsional)</Label>
       <Textarea
         value={selector.description}
         onChange={(e) => handleChange(e.target.value)}

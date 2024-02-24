@@ -51,7 +51,7 @@ export const createMemberSchema = z.object({
   position: z.enum(["pns", "p3k", "cpns"]),
   position_category: z.string({
     required_error: "Golongan member tidak boleh ksosong",
-    invalid_type_error: "Golongan tidak valid"
+    invalid_type_error: "Golongan tidak valid",
   }),
   image: z.any(),
   username: z
@@ -125,7 +125,7 @@ export const updateMemberSchema = z.object({
   position: z.enum(["pns", "p3k", "cpns"]),
   position_category: z.string({
     required_error: "Golongan member tidak boleh ksosong",
-    invalid_type_error: "Golongan tidak valid"
+    invalid_type_error: "Golongan tidak valid",
   }),
   image: z.any(),
   username: z
@@ -233,23 +233,6 @@ export const editStuffSchema = z.object({
   ),
 });
 
-export const addPaymentDeterminationSchema = z.object({
-  sub_category_id: z.string({
-    required_error: "Sub kategori tidak boleh kosong",
-    invalid_type_error: "Sub kategori tidak valid",
-  }),
-
-  amount: z.number({
-    required_error: "Jumlah tidak boleh kosong",
-    invalid_type_error: "Jumlah tidak valid",
-  }),
-
-  payment_month: z.string({
-    required_error: "Bulan pembayaran tidak boleh kosong",
-    invalid_type_error: "Bulan pembayaran tidak valid",
-  }),
-});
-
 export const invoiceSchema = z.object({
   invoice_name: z.string({
     required_error: "Nama invoice tidak boleh kosong",
@@ -266,35 +249,22 @@ export const invoiceSchema = z.object({
   payment_method: z.enum(["cash", "transfer"]),
 });
 
-export const paymentSchema = z.object({
-  amount: z.number({
-    required_error: "Jumlah Bayar tidak boleh kosong",
-    invalid_type_error: "Jumlah Bayar tidak valid",
-  }),
-  no_rek: z.string({
-    invalid_type_error: "No Rekening tidak valid"
-  }).nullable(),
-  transfer_name: z.string({
-    invalid_type_error: "Nama pembayar tidak valid"
-  }).nullable(), 
-  
-})
-
 export const positionCategorySchema = z.object({
-  potition: z.string({
-    invalid_type_error: 'Nama posisi tidak valid',
-    required_error: "Nama posisi tidak boleh kosong"
+  position: z.string({
+    invalid_type_error: "Nama posisi tidak valid",
+    required_error: "Nama posisi tidak boleh kosong",
   }),
-  pokok: z.number({
+  pokok: z.string({
     required_error: "Jumlah Pembayaran Simpanan Pokok tidak boleh kosong",
     invalid_type_error: "Jumlah Pembayaran Simpanan Pokok tidak valid",
   }),
-  wajib: z.number({
+  wajib: z.string({
     required_error: "Jumlah Pembayaran Simpanan Wajib tidak boleh kosong",
     invalid_type_error: "Jumlah Pembayaran Simpanan Wajib tidak valid",
   }),
-  wajib_khusus: z.number({
-    required_error: "Jumlah Pembayaran Simpanan Wajib Khusus tidak boleh kosong",
+  wajib_khusus: z.string({
+    required_error:
+      "Jumlah Pembayaran Simpanan Wajib Khusus tidak boleh kosong",
     invalid_type_error: "Jumlah Pembayaran Simpanan Wajib Khusus tidak valid",
   }),
-})
+});

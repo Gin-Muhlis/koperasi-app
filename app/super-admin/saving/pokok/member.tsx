@@ -1,20 +1,35 @@
 "use client";
 
-import { MemberState } from "@/types/interface";
+import { SubCategoryInvoice } from "@/types/interface";
 import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DataTable } from "./data-table";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch } from "react-redux";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import { createSaving } from "@/redux/features/saving-slice";
+import { handleFormat } from "@/app/utils/helper";
 
-const Member = ({ members }: { members: MemberState[] }) => {
+const Member = ({ members }: { members: SubCategoryInvoice[] }) => {
   const dispatch = useDispatch<appDispatch>();
   const selector = useAppSelector((state) => state.savingReducer);
+  const [total, setTotal] = useState(0);
 
-  const columns: ColumnDef<MemberState>[] = [
+  useEffect(() => {
+    if (selector) {
+      const membersData = JSON.parse(selector.members);
+      let subTotal = 0;
+
+      membersData.map((member: SubCategoryInvoice) => {
+        subTotal += member.payment;
+      });
+
+      setTotal(subTotal);
+    }
+  }, [selector]);
+
+  const columns: ColumnDef<SubCategoryInvoice>[] = [
     {
       id: "select",
       header: ({ table }) => {
@@ -116,7 +131,7 @@ const Member = ({ members }: { members: MemberState[] }) => {
     <div>
       <div className="w-full grid grid-cols 1 md:grid-cols-2 gap-10">
         <div>
-          <span className="text-lg font-bold">Pilih Member</span>
+          <span className="text-lg font-bold">Pilih Anggota</span>
           <DataTable
             columns={columns}
             data={members}
@@ -125,29 +140,45 @@ const Member = ({ members }: { members: MemberState[] }) => {
         </div>
         <div>
           <span className="text-lg font-bold inline-block mb-4">
-            Member Pilihan
+            Data Pembayaran
           </span>
-          <div className="grid grid-cols-2 gap-3 mb-2">
-            {JSON.parse(selector.members).length > 0 &&
-              JSON.parse(selector.members).map((item: any) => (
-                <div
-                  key={item.id}
-                  className="rounded p-2 bg-gradient-to-r from-[rgba(249,232,51,1)] to-[rgba(250,196,59,1)] sidenav flex items-center justify-start gap-4"
-                >
-                  <img
-                    src={item.imageProfile}
-                    className="w-12 h-12 object-cover rounded-full bg-white"
-                  />
-                  <div className="flex flex-col items-start justify-start flex-1">
-                    <span className="text-sm text-black font-bold">
-                      {item.name}
-                    </span>
-                    <span className="text-xs italic text-black">
-                      {item.position}
-                    </span>
-                  </div>
-                </div>
-              ))}
+          <div className="w-full">
+            <table className="w-full border border-solid text-sm">
+              <thead>
+                <tr className="border border-solid">
+                  <th className="border border-solid p-2">No</th>
+                  <th className="border border-solid p-2">Nama Anggota</th>
+                  <th className="border border-solid p-2">Jumlah Bayar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {JSON.parse(selector.members).length > 0 &&
+                  JSON.parse(selector.members).map(
+                    (member: SubCategoryInvoice, index: number) => (
+                      <tr key={member.id} className="border border-solid">
+                        <td className="text-center border border-solid p-2">
+                          {index + 1}
+                        </td>
+                        <td className="border border-solid p-2">
+                          {member.name}
+                        </td>
+                        <td className="text-center border border-solid p-2">
+                          {handleFormat(member.payment)}
+                        </td>
+                      </tr>
+                    )
+                  )}
+
+                <tr>
+                  <td colSpan={2} className="border border-solid text-center">
+                    Total
+                  </td>
+                  <td className="text-center border border-solid p-2">
+                    {handleFormat(total)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -156,4 +187,3 @@ const Member = ({ members }: { members: MemberState[] }) => {
 };
 
 export default Member;
-
