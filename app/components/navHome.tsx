@@ -7,7 +7,7 @@ import React from 'react'
 
 const NavHome = () => {
     const { data: session, status } = useSession()
-    console.log(status)
+    
     return (
         <div className="w-full flex items-center justify-between h-14 px-10 bg-amber-300">
             <Link href={'/'} className='font-bold text-xl italic text-black'>

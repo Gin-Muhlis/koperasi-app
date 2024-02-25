@@ -11,6 +11,7 @@ export type SideNavItem = {
   icon?: JSX.Element;
   submenu?: boolean;
   subMenuItems?: SideNavItem[];
+  role: string;
 };
 
 export interface IProps {
@@ -202,3 +203,18 @@ export type PaymentState = {
   transfer_name: string | null;
   total_invoice?: number;
 };
+
+export type History = {
+  date: string;
+  amount: number;
+  code: number
+}
+
+export type DashboardMember = {
+  total_mandatory_saving: number,
+  total_special_mandatory_saving: number,
+  total_voluntary_saving: number,
+  total_recretional_saving: number,
+  history_savings: History[],
+  history_installments: History[],
+}

@@ -143,6 +143,72 @@ export const updateMemberSchema = z.object({
   active: z.boolean(),
 });
 
+export const updateProfileSchema = z.object({
+  name: z
+    .string({
+      invalid_type_error: "Nama harus valid",
+    })
+    .max(100, {
+      message: "Nama tidak boleh lebih dari 100 karakter",
+    })
+    .min(1, {
+      message: "Nama tidak boleh kosong",
+    }),
+  email: z
+    .string({
+      invalid_type_error: "Email harus valid",
+    })
+    .email({
+      message: "Email harus valid",
+    })
+    .min(1, {
+      message: "Email tidak boleh kosong",
+    }),
+  address: z
+    .string({
+      invalid_type_error: "Alamat harus valid",
+    })
+    .min(1, {
+      message: "Alamat tidak boleh kosong",
+    }),
+  phone_number: z
+    .string()
+    .max(20, {
+      message: "No Telp tidak boleh lebih dari 20 karakter",
+    })
+    .min(1, {
+      message: "No Telp tidak boleh kosong",
+    }),
+  religion: z
+    .string({
+      invalid_type_error: "Alamat harus valid",
+    })
+    .min(1, {
+      message: "Agama tidak boleh kosong",
+    })
+    .max(20, {
+      message: "No Telp tidak boleh lebih dari 20 karakter",
+    })
+    .toLowerCase(),
+  gender: z.enum(["L", "P"]),
+  position: z.enum(["pns", "p3k", "cpns"]),
+  position_category: z.string({
+    required_error: "Golongan member tidak boleh ksosong",
+    invalid_type_error: "Golongan tidak valid",
+  }),
+  image: z.any(),
+  username: z
+    .string({
+      invalid_type_error: "Username harus valid",
+    })
+    .max(100, {
+      message: "Username tidak boleh lebih dari 100 karakter",
+    })
+    .min(1, {
+      message: "Username tidak boleh kosong",
+    }),
+});
+
 export const categorySchema = z.object({
   name: z.string({
     invalid_type_error: "Nama kategori harus valid",

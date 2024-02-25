@@ -19,7 +19,8 @@ const Sidebar = () => {
   const { data: session } = useSession();
   const [memberProfile, setMemberProfile] = useState<MemberState>();
   const [error, setError] = useState<string | boolean>(false);
-
+  const [menus, setMenus] = useState<SideNavItem[]>([])
+  
   const getDataProfile = async (token: string | undefined) => {
     const response = await getProfile(token);
 
@@ -29,6 +30,11 @@ const Sidebar = () => {
   useEffect(() => {
     if (session) {
       getDataProfile(session?.user.accessToken);
+
+      const role = session?.user.role
+      const menusByRole = SIDENAV_ITEMS.filter((menu) => menu.role == role)
+
+      setMenus(menusByRole)
     }
   }, [session]);
 
@@ -52,7 +58,7 @@ const Sidebar = () => {
         />
         <div className="flex flex-col">
           <span className="text-md text-black font-extrabold">
-            {memberProfile?.name}
+            {memberProfile?.username}
           </span>
           <span className="text-sm text-black opacity-70 italic font-semibold">
             {memberProfile?.role}
@@ -60,11 +66,11 @@ const Sidebar = () => {
         </div>
       </div>
       <div className="flex flex-col space-y-2">
-        {SIDENAV_ITEMS.map((item, idx) => {
+        {menus.map((item, idx) => {
           return <MenuItem key={idx} item={item} />;
         })}
         <div
-          className={`flex flex-row space-x-4 text-black items-center p-2 rounded-lg hover:bg-zinc-100 cursor-pointer`}
+          className={`flex flex-row space-x-4 text-black items-center p-2 rounded hover:bg-zinc-100 cursor-pointer`}
           onClick={handleLogout}
         >
           <Icon icon="lucide:log-in" width="22" height="22" />
@@ -96,7 +102,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
         <>
           <button
             onClick={toggleSubMenu}
-            className={`flex flex-row items-center p-2 rounded-lg text-black w-full justify-between hover:bg-zinc-100 ${
+            className={`flex flex-row items-center p-2 rounded text-black w-full justify-between hover:bg-zinc-100 ${
               pathname.includes(item.path) ? "bg-zinc-100 " : ""
             }`}
           >
@@ -113,7 +119,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
           </button>
 
           {subMenuOpen && (
-            <div className="my-2 ml-12 flex flex-col space-y-4">
+            <div className="my-2 ml-12 flex flex-col space-y-4 overflow-hidden">
               {item.subMenuItems?.map((subItem, idx) => {
                 return (
                   <Link
@@ -136,7 +142,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
       ) : (
         <Link
           href={item.path}
-          className={`flex flex-row space-x-4 items-center p-2 rounded-l text-black hover:bg-zinc-100 ${
+          className={`flex flex-row space-x-4 items-center overflow-hidden p-2 rounded text-black hover:bg-zinc-100 ${
             item.path === pathname ? "bg-zinc-100" : ""
           }`}
         >

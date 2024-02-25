@@ -8,7 +8,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <SessionProvider>
-        <div className='flex min-h-screen items-start justify-between bg-zinc-200'>
+        <div className='flex min-h-screen items-start justify-between bg-[#f0e7ff]'>
           <Sidebar />
           <div className="w-full relative md:ml-72">
             <Header />

@@ -152,6 +152,27 @@ export async function getProfile(token: string | undefined) {
   }
 }
 
+// API UPDATE PROFILE
+export async function updateProfile(
+  id: number,
+  data: FormData,
+  token: string | undefined
+) {
+  try {
+    
+    const response = await axiosInstance.post(`/profile/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
 // API GET Category
 export async function getCategories(token: string | undefined) {
   try {
@@ -800,6 +821,7 @@ export async function downloadExcelInvoice(
     return error.response;
   }
 }
+
 // DOWNLOAD API Detail Invoice PDF
 export async function downloadPdfInvoice(
   data: Invoice[],
@@ -825,6 +847,23 @@ export async function downloadPdfInvoice(
     );
 
     return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Dashboard Member
+export async function getDashboardMember(
+  token: string | undefined
+) {
+  try {
+    const response = await axiosInstance.get(`/dashboard/member`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
   } catch (error: any) {
     return error.response;
   }

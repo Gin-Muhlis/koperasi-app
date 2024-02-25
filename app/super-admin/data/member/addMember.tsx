@@ -66,14 +66,14 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
       username: "",
       password: "",
       role: "member",
-      position_category: positionCategories.length > 0 ? positionCategories[0].position : ''
+      position_category: positionCategories.length > 0 ? positionCategories[0].name : ''
     },
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true)
     const formData = new FormData();
-    const positionCategory = positionCategories.find((position) => position.position == values.position_category);
+    const positionCategory = positionCategories.find((position) => position.name == values.position_category);
 
     formData.append("username", values.username);
     formData.append("password", values.password);
@@ -271,7 +271,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                           <SelectGroup>
                             <SelectLabel>Golongan</SelectLabel>
                             {positionCategories.map((position) => (
-                              <SelectItem key={position.id} value={position.position}>{position.position}</SelectItem>
+                              <SelectItem key={position.id} value={position.name}>{position.name}</SelectItem>
                             ))}
                           </SelectGroup>
                         </SelectContent>
