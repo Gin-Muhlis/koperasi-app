@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/select";
 import { useDispatch } from 'react-redux'
 import { appDispatch, useAppSelector } from '@/redux/store'
-import { Member, Receivable, SubCategoryInvoice } from '@/types/interface'
+import { Member, Receivable, Status, SubCategoryInvoice } from '@/types/interface'
 import { handleFormat } from '@/app/utils/helper'
 import { setInvoice } from '@/redux/features/invoice-slice'
+import { Badge } from '@/components/ui/badge'
 
 const ReceivablePopup = ({ memberReceivable, setSubCategory }: { memberReceivable: Receivable[], setSubCategory: React.Dispatch<React.SetStateAction<string>> }) => {
     const dispatch = useDispatch<appDispatch>();
@@ -111,7 +112,7 @@ const ReceivablePopup = ({ memberReceivable, setSubCategory }: { memberReceivabl
 
         members.map((item) => {
             const isAdded = listPiutangSp.find((data) => data.id == item.id);
-            if (isAdded == undefined) {
+            if (isAdded == undefined && !handlePayedMember(item.month_status)) {
                 const data = { id: item.id, amount: item.monthly, status: "added", loanId: item.loan_id }
 
                 updatedList.push(data)
@@ -128,18 +129,45 @@ const ReceivablePopup = ({ memberReceivable, setSubCategory }: { memberReceivabl
         setStateData(updatedList)
     }
 
-    // handle value oembayaran
-    const handleValueAmount = (id: number) => {
-        const isInputed = listPiutangSp.find((data) => data.id == id)
+    // handle cek is payed member
+    const handlePayedMember = (dataPayments: Status[] | undefined) => {
+        const month = selector.month < 10 ? `0${selector.month}` : selector.month;
+        const year = selector.year;
+        let status: string | boolean = false
 
-        if (isInputed != undefined) {
-            return handleFormat(isInputed.amount)
+        dataPayments?.map((data) => {
+            if (data.month == `${month}-${year}`) {
+                status = data.status
+                return
+            }
+        })
+        return status
+    }
+
+    // handle tampilan status
+    const handleShowStatus = (status: boolean | string) => {
+        let textStatus = ""
+        if (status && status == "dibayar") {
+            textStatus = "Dibayar"
+        } else {
+            textStatus = "Menunggu Pembayaran"
         }
 
-        const defaultAmount = members.find((data) => data.id == id)?.monthly
+        return <Badge className='bg-green-400 text-white'>{textStatus}</Badge>
+    }
 
-        return handleFormat(Number(defaultAmount))
+    // handle length available member
+    const handleLengthAvailableMember = () => {
+        const availables: Receivable[] = []
 
+        members.map((member) => {
+            const isAdded = listPiutangSp.find((data) => data.id == member.id);
+            if (isAdded == undefined && !handlePayedMember(member.month_status)) {
+                availables.push(member)
+            }
+        })
+
+        return availables.length;
     }
 
     return (
@@ -217,7 +245,9 @@ const ReceivablePopup = ({ memberReceivable, setSubCategory }: { memberReceivabl
                                                 disabled
                                             />
                                         </td>
-                                        <td className="text-center p-3">{handleButtonAdd(item.id)}</td>
+                                        <td className="text-center p-3">
+                                            {handlePayedMember(item.month_status) ? handleShowStatus(handlePayedMember(item.month_status)) : handleButtonAdd(item.id)}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -227,7 +257,7 @@ const ReceivablePopup = ({ memberReceivable, setSubCategory }: { memberReceivabl
                                 Batalkan Semua ({listPiutangSp.length})
                             </Button>
                             <Button size={"sm"} onClick={handleAddAllmember}>
-                                Tambah Semua ({members.length})
+                                Tambah Semua ({handleLengthAvailableMember()})
                             </Button>
                         </div>
                         <div className="w-full flex flex-end">
@@ -240,6 +270,7 @@ const ReceivablePopup = ({ memberReceivable, setSubCategory }: { memberReceivabl
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-end gap-3">
+                        <Button size={"sm"} onClick={handleModal}>Batal</Button>
                         <Button size={"sm"} className='bg-green-400' onClick={handleModal}>Konfirmasi</Button>
                     </div>
                 </div>

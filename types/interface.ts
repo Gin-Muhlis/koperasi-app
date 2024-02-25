@@ -124,6 +124,11 @@ export type Member = {
   loanId?: number;
 };
 
+export type Status = {
+  month: string;
+    status: string
+}
+
 export type Receivable = {
   id: number;
   name: string;
@@ -133,6 +138,7 @@ export type Receivable = {
   monthly: number;
   paid: number;
   remain_payment: number;
+  month_status?: Status[]
 };
 
 export type TotalColumn = {
@@ -183,6 +189,7 @@ export type SubCategoryInvoice = {
   name: string;
   position: string;
   payment: number;
+  month_status?: Status[]
 };
 
 export type PaymentState = {

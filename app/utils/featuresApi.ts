@@ -816,7 +816,7 @@ export async function downloadPdfInvoice(
       `export/invoice-pdf`,
       invoiceData,
       {
-        // responseType: "blob",
+        responseType: "blob",
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/pdf",

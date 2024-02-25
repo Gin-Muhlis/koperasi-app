@@ -39,6 +39,25 @@ const RecretionalSavingPopup = ({ memberRecretionalSaving, setSubCategory }: { m
         }
     }, [selector, selector.listTabunganRekreasi])
 
+    useEffect(() => {
+        if (memberRecretionalSaving) {
+            const filteredMember = memberRecretionalSaving.filter((member) => member.payment != 0)
+            const dataSet: Member[] = []
+
+            filteredMember.map((member) => {
+                const data = {
+                    id: member.id,
+                    amount: member.payment,
+                    status: "not_added"
+                }
+
+                dataSet.push(data)
+            })
+
+            setStateData(dataSet)
+
+        }
+    }, [memberRecretionalSaving])
 
     // handle set state data list
     const setStateData = (data: Member[]) => {
@@ -84,6 +103,8 @@ const RecretionalSavingPopup = ({ memberRecretionalSaving, setSubCategory }: { m
             ];
             setStateData(newMembers)
         }
+
+        handleCountData('add')
     };
 
     //   hapus member dari state data
@@ -130,16 +151,17 @@ const RecretionalSavingPopup = ({ memberRecretionalSaving, setSubCategory }: { m
     const handleAddAllmember = () => {
         const updatedList: Member[] = [...listTabunganRekreasi];
 
-        members.map((item) => {
-            const isAdded = listTabunganRekreasi.find((data) => data.id == item.id);
-            if (isAdded == undefined) {
-                const data = { id: item.id, amount: item.payment, status: "added" }
+        listTabunganRekreasi.map((item) => {
+            if (item.status == 'not_added') {
+                const index = listTabunganRekreasi.findIndex((data) => data.id == item.id)
+                const data = { ...item, status: "added" }
 
-                updatedList.push(data)
+                updatedList[index] = data
             }
         });
 
         setStateData(updatedList)
+        handleCountData('add');
     };
 
     // handle batalkan semua data yang dipilih
@@ -183,6 +205,24 @@ const RecretionalSavingPopup = ({ memberRecretionalSaving, setSubCategory }: { m
 
         return handleFormat(Number(defaultAmount))
 
+    }
+
+    // handle jumlah data
+    const handleCountData = (type: string) => {
+        if (type == 'cancel') {
+            const dataAdded = listTabunganRekreasi.filter(data => data.status === 'added')
+
+            return dataAdded.length
+        } else {
+            const dataNotAdded = []
+            listTabunganRekreasi.map((member) => {
+                if (member.status == "not_added") {
+                    dataNotAdded.push(member)
+                }
+            })
+
+            return dataNotAdded.length
+        }
     }
 
     return (
@@ -235,10 +275,10 @@ const RecretionalSavingPopup = ({ memberRecretionalSaving, setSubCategory }: { m
                         </table>
                         <div className="flex justify-end gap-3">
                             <Button size={"sm"} onClick={cancelAllMember}>
-                                Batalkan Semua ({listTabunganRekreasi.length})
+                                Batalkan Semua ({handleCountData("cancel")})
                             </Button>
                             <Button size={"sm"} onClick={handleAddAllmember}>
-                                Tambah Semua ({members.length})
+                                Tambah Semua ({handleCountData('add')})
                             </Button>
                         </div>
                         <div className="w-full flex flex-end">
@@ -251,6 +291,7 @@ const RecretionalSavingPopup = ({ memberRecretionalSaving, setSubCategory }: { m
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-end gap-3">
+                        <Button size={"sm"} onClick={handleModal}>Batal</Button>
                         <Button size={"sm"} className='bg-green-400' onClick={handleModal}>Konfirmasi</Button>
                     </div>
                 </div>

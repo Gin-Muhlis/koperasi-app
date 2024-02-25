@@ -5,9 +5,8 @@ import { ColumnDef } from '@tanstack/react-table'
 import React from 'react'
 import { DataTable } from './data-table'
 import { months } from '@/constants/CONSTS'
-import { Button } from '@/components/ui/button'
-import { MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
+import { Icon } from '@iconify/react/dist/iconify.js'
 
 const ListInvoice = ({ invoices }: { invoices: InvoiceState[] }) => {
 
@@ -79,8 +78,9 @@ const ListInvoice = ({ invoices }: { invoices: InvoiceState[] }) => {
 
         return <div className='flex justify-center'>
           <Link href={`/super-admin/invoice/invoice-data/${code}`} className='text-center'>
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
+            <span className="w-5 h-5 rounded bg-blue-500 text-white flex items-center justify-center cursor-pointer">
+              <Icon icon="lucide:eye" width="16" height="16" />
+            </span>
           </Link>
 
         </div>

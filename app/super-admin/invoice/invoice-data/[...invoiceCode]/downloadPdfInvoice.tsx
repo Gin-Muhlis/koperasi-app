@@ -18,7 +18,7 @@ const DownloadPdfInvoiceButton = ({detailInvoice, timeInvoice}: {detailInvoice: 
     const router = useRouter()
     const { data: session } = useSession()
 
-    const handleDownloadExcel = async () => {
+    const handleDownloadPdf = async () => {
         setIsLoading(true);
 
         const splitTime = timeInvoice.split(' ')
@@ -60,7 +60,7 @@ const DownloadPdfInvoiceButton = ({detailInvoice, timeInvoice}: {detailInvoice: 
 
     return (
         <>
-            <Button onClick={handleDownloadExcel} className='text-white bg-red-600 flex items-center justify-center gap-1' disabled={isLoading}>
+            <Button onClick={handleDownloadPdf} className='text-white bg-red-600 flex items-center justify-center gap-1' disabled={isLoading}>
                 {isLoading ? <Loader /> : <>
                     <Icon icon="lucide:file" width={16} height={16}></Icon>
                     <span>Download PDF</span>

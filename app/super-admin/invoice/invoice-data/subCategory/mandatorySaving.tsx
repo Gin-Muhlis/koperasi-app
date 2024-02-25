@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/select";
 import { useDispatch } from 'react-redux'
 import { appDispatch, useAppSelector } from '@/redux/store'
-import { Member, SubCategoryInvoice } from '@/types/interface'
+import { Member, Status, SubCategoryInvoice } from '@/types/interface'
 import { handleFormat } from '@/app/utils/helper'
 import { setInvoice } from '@/redux/features/invoice-slice'
+import { Badge } from '@/components/ui/badge'
 
 const MandatorySavingPopup = ({ memberMandatorySaving, setSubCategory }: { memberMandatorySaving: SubCategoryInvoice[], setSubCategory: React.Dispatch<React.SetStateAction<string>> }) => {
     const dispatch = useDispatch<appDispatch>();
@@ -76,17 +77,17 @@ const MandatorySavingPopup = ({ memberMandatorySaving, setSubCategory }: { membe
                 status: "added",
             };
             setStateData(updatedItems)
-        } else {    
+        } else {
             const amount = members.find((data) => data.id == id)?.payment
             const newMembers: Member[] = [
                 ...listSimpananWajib,
-                { id, amount: Number(amount) , status: "added" },
+                { id, amount: Number(amount), status: "added" },
             ];
             setStateData(newMembers)
         }
     };
 
-    //   hapus member dari state data
+    //  hapus member dari state data
     const handleDeleteMember = (id: number) => {
         let newMembers: Member[] = listSimpananWajib.filter((item: any) => item.id != id);
         setStateData(newMembers)
@@ -119,20 +120,35 @@ const MandatorySavingPopup = ({ memberMandatorySaving, setSubCategory }: { membe
         }
     };
 
+    // handle cek is payed member
+    const handlePayedMember = (dataPayments: Status[] | undefined) => {
+        const month = selector.month < 10 ? `0${selector.month}` : selector.month;
+        const year = selector.year;
+        let status: string | boolean = false
+
+        dataPayments?.map((data) => {
+            if (data.month == `${month}-${year}`) {
+                status = data.status
+                return
+            }
+        })
+        return status
+    }
+
     // handle disable input pembayaran
-    const handleDisableInput = (id: number) => {
+    const handleDisableInput = (dataPayments: Status[] | undefined, id: number) => {
         const isAdded = listSimpananWajib.find(data => data.id == id && data.status == "added");
 
-        return isAdded != undefined ? true : false;
+        return isAdded != undefined || handlePayedMember(dataPayments) ? true : false;
     }
 
     // handle tambah semua member ke state data
-    const handleAddAllmember = () => {
+    const handleAddAllMember = () => {
         const updatedList: Member[] = [...listSimpananWajib];
 
         members.map((item) => {
             const isAdded = listSimpananWajib.find((data) => data.id == item.id);
-            if (isAdded == undefined) {
+            if (isAdded == undefined && !handlePayedMember(item.month_status)) {
                 const data = { id: item.id, amount: item.payment, status: "added" }
 
                 updatedList.push(data)
@@ -165,7 +181,7 @@ const MandatorySavingPopup = ({ memberMandatorySaving, setSubCategory }: { membe
         } else {
             const newMembers = [
                 ...listSimpananWajib,
-                { id, amount: Number(numericValue), status: "not_added"},
+                { id, amount: Number(numericValue), status: "not_added" },
             ];
             setStateData(newMembers)
         }
@@ -182,7 +198,40 @@ const MandatorySavingPopup = ({ memberMandatorySaving, setSubCategory }: { membe
         const defaultAmount = members.find((data) => data.id == id)?.payment
 
         return handleFormat(Number(defaultAmount))
-        
+
+    }
+
+    // handle tampilan status
+    const handleShowStatus = (status: boolean | string) => {
+        let textStatus = ""
+        if (status && status == "dibayar") {
+            textStatus = "Dibayar"
+        } else {
+            textStatus = "Menunggu Pembayaran"
+        }
+
+        return <Badge className='bg-green-400 text-white'>{textStatus}</Badge>
+    }
+
+    // handle length available member
+    const handleLengthAvailableMember = () => {
+        const availables: SubCategoryInvoice[] = []
+
+        members.map((member) => {
+            const isAdded = listSimpananWajib.find((data) => data.id == member.id);
+            if (isAdded == undefined && !handlePayedMember(member.month_status)) {
+                availables.push(member)
+            }
+        })
+
+        return availables.length;
+    }
+
+    // handle jumlah data yang bisa di cancel
+    const handleCountCancel = () => {
+        const dataAdded = listSimpananWajib.filter(data => data.status === 'added')
+
+        return dataAdded.length
     }
 
     return (
@@ -225,20 +274,22 @@ const MandatorySavingPopup = ({ memberMandatorySaving, setSubCategory }: { membe
                                                 value={handleValueAmount(item.id)}
                                                 onChange={(event) => handleUpdateAmount(event.target.value, item.id)}
                                                 min={0}
-                                                disabled={handleDisableInput(item.id)}
+                                                disabled={handleDisableInput(item.month_status, item.id)}
                                             />
                                         </td>
-                                        <td className="text-center p-3">{handleButtonAdd(item.id)}</td>
+                                        <td className="text-center p-3">
+                                            {handlePayedMember(item.month_status) ? handleShowStatus(handlePayedMember(item.month_status)) : handleButtonAdd(item.id)}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                         <div className="flex justify-end gap-3">
                             <Button size={"sm"} onClick={cancelAllMember}>
-                                Batalkan Semua ({listSimpananWajib.length})
+                                Batalkan Semua ({handleCountCancel()})
                             </Button>
-                            <Button size={"sm"} onClick={handleAddAllmember}>
-                                Tambah Semua ({members.length})
+                            <Button size={"sm"} onClick={handleAddAllMember}>
+                                Tambah Semua ({handleLengthAvailableMember()})
                             </Button>
                         </div>
                         <div className="w-full flex flex-end">
@@ -251,6 +302,7 @@ const MandatorySavingPopup = ({ memberMandatorySaving, setSubCategory }: { membe
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-end gap-3">
+                    <Button size={"sm"} onClick={handleModal}>Batal</Button>
                         <Button size={"sm"} className='bg-green-400' onClick={handleModal}>Konfirmasi</Button>
                     </div>
                 </div>

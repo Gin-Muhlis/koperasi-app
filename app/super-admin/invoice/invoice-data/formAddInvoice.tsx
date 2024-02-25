@@ -50,6 +50,8 @@ const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, se
         resolver: zodResolver(formSchema),
         defaultValues: {
             invoice_name: "",
+            payment_source: "gaji p3k",
+            payment_method: "cash"
         },
     })
 
@@ -73,6 +75,7 @@ const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, se
         
         if (response.status === 200) {
             handleModal()
+            form.reset();
             setDataInvoice(response.data.invoice);
         } else if (response.status === 422) {
             const errors = response.data.errors

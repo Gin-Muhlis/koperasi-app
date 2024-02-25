@@ -47,7 +47,7 @@ const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, 
         dispatch(setInvoice({ type: "SET_DESCRIPTION", value: event.target.value }))
     }
 
-    const handleTimeChange = (type: string, value: string) => {
+    const handleTimeChange = (type: string, value: number) => {
         dispatch(setInvoice({ type: `SET_${type}`, value }));
     };
     
@@ -119,7 +119,7 @@ const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, 
                             <Label className="mb-2 font-bold">Waktu Invoice (Bulan)</Label>
                             <Select
                                 value={selector.month.toString()}
-                                onValueChange={(value) => handleTimeChange("MONTH", value)}
+                                onValueChange={(value) => handleTimeChange("MONTH", Number(value))}
                             >
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Bulan" />
@@ -139,7 +139,7 @@ const DetailInvoice = ({ members, memberPrincipalSaving, memberMandatorySaving, 
                             <Label className="mb-2 font-bold">Waktu Invoice (Tahun)</Label>
                             <Select
                                 value={selector.year.toString()}
-                                onValueChange={(value) => handleTimeChange("YEAR", value)}
+                                onValueChange={(value) => handleTimeChange("YEAR", Number(value))}
                             >
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Tahun" />

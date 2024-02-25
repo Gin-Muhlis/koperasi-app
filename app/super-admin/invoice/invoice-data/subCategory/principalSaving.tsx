@@ -250,6 +250,7 @@ const PrincipalSavingPopup = ({ memberPrincipalSaving, setSubCategory }: { membe
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-end gap-3">
+                    <Button size={"sm"} onClick={handleModal}>Batal</Button>
                         <Button size={"sm"} className='bg-green-400' onClick={handleModal}>Konfirmasi</Button>
                     </div>
                 </div>
