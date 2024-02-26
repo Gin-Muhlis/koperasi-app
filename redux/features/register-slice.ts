@@ -11,6 +11,7 @@ const initialState = {
     religion: "",
     role: "pilih",
     password: "",
+    group_id: "pilih",
     confirmPassword: "",
   } as RegisterState;
 
@@ -62,6 +63,12 @@ export const register = createSlice({
           return {
             ...state,
             role: value,
+          };
+          break;
+        case "SET_POSITION_CATEGORY":
+          return {
+            ...state,
+            group_id: value,
           };
           break;
         case "SET_PASSWORD":

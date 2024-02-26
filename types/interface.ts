@@ -30,6 +30,7 @@ export type RegisterState = {
   gender: string;
   religion: string;
   role: string;
+  group_id: string;
   imageProfile: File | string | null;
   password: string;
   confirmPassword: string;
@@ -251,3 +252,25 @@ export type ReceivableData = {
   description: string;
   sub_category_id: number
 }
+
+export type ReportMember = {
+  id: number;
+  name: string;
+  principal_saving: number;
+  mandatory_saving: number;
+  special_mandatory_saving: number;
+  voluntary_saving: number;
+  recretional_saving: number;
+  receivable: number;
+  account_receivable: number;
+}
+
+export type ReportLoanmember = {
+  id: number;
+  name: string;
+  position: string;
+  total_payment: number;
+  monthly: number;
+  paid: number;
+  remain_payment: number;
+};

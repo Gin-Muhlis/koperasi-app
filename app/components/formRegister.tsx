@@ -8,8 +8,10 @@ import { useDispatch } from "react-redux";
 import { register } from "../utils/featuresApi";
 import AlertError from "./alertError";
 import { Button } from "@/components/ui/button";
+import { PositionCategory } from "@/types/interface";
+import Loader from "./loader";
 
-const FormRegister = () => {
+const FormRegister = ({ positionCategories }: { positionCategories: PositionCategory[] }) => {
   const [imageProfile, setImageProfile] = useState(null);
   const [previewImage, setPreviewImage] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -39,48 +41,43 @@ const FormRegister = () => {
       setPreviewImage(null);
     }
   };
-
+  console.log(selector)
   const handleRegister = async (event: SyntheticEvent) => {
     event.preventDefault();
     setIsLoading(true);
 
-    try {
-      if (selector.password !== selector.confirmPassword) {
-        setIsLoading(false);
-        return;
-      }
-
-      const data = {
-        ...selector,
-        imageProfile: imageProfile,
-      };
-
-      const response = await register(data);
-      console.log(response)
-
+    if (selector.password !== selector.confirmPassword) {
       setIsLoading(false);
+      return;
+    }
 
-      if (response.status === 200) {
-        push("/login?message=Pendaftaran berhasil");
-      }
-    } catch (error: any) {
-      setIsLoading(false);
+    const data = {
+      ...selector,
+      imageProfile: imageProfile,
+    };
 
-      if (error.status === 422) {
-        const errorsData = error.response.data.errors;
-        const keys = Object.keys(errorsData);
-        const firstKey = keys[0];
-        const message = errorsData[firstKey][0];
+    const response = await register(data);
+    console.log(response)
 
-        setError(message);
-      } else {
-        setError("Terjadi kesalahan dengan sistem!");
-      }
+    setIsLoading(false);
+
+    if (response.status === 200) {
+      push("/login?message=Pendaftaran berhasil");
+    }
+    if (response.status == 422) {
+      const errorsData = response.data.errors;
+      const keys = Object.keys(errorsData);
+      const firstKey = keys[0];
+      const message = errorsData[firstKey][0];
+
+      setError(message);
+    } else {
+      setError("Terjadi kesalahan dengan sistem!");
     }
   };
 
   return (
-    <form 
+    <form
       onSubmit={handleRegister}
       className="w-full"
       encType="multipart/form-data"
@@ -124,6 +121,7 @@ const FormRegister = () => {
             <div className="w-1 h-full bg-amber-400"></div>
             <input
               type="number"
+              min={0}
               value={selector.phone}
               onChange={(e) => handleInput("PHONE", e.target.value)}
               className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
@@ -236,25 +234,37 @@ const FormRegister = () => {
           </div>
         </div>
         <div className="mb-3">
-          <label htmlFor="image" className="label text-black text-xs">
-            Gambar Profile
+          <label htmlFor="role" className="label text-black text-xs">
+            Golongan
           </label>
-
-          {previewImage ? (
-            <img src={previewImage} className="w-14 h-14 mb-1 object-cover" />
-          ) : (
-            <div className="w-14 h-14 bg-slate-200 opacity-70 mb-1"></div>
-          )}
           <div className="flex items-start justify-start w-full h-8">
-            <input
-              type="file"
-              accept=".jpg, .jpeg, .png"
-              onChange={handleImageInput}
-              id="image"
-              className="text-sm"
-            />
+            <div className="w-1 h-full bg-amber-400"></div>
+            <select
+              id="role"
+              value={selector.group_id}
+              onChange={(e) => handleInput("POSITION_CATEGORY", e.target.value)}
+              className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none "
+            >
+              <option
+                className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
+                disabled
+                value="pilih"
+              >
+                Silahkan pilih JGolongan
+              </option>
+
+              {positionCategories.map((data) => (
+                <option
+                  className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
+                  value={data.id}
+                >
+                  {data.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
+
         <div className="mb-3">
           <label htmlFor="password" className="label text-black text-xs">
             Password
@@ -290,23 +300,43 @@ const FormRegister = () => {
             ""
           )}
         </div>
+        <div className="mb-3">
+          <label htmlFor="image" className="label text-black text-xs">
+            Gambar Profile
+          </label>
+
+          {previewImage ? (
+            <img src={previewImage} className="w-14 h-14 mb-1 object-cover" />
+          ) : (
+            <div className="w-14 h-14 bg-slate-200 opacity-70 mb-1"></div>
+          )}
+          <div className="flex items-start justify-start w-full h-8">
+            <input
+              type="file"
+              accept=".jpg, .jpeg, .png"
+              onChange={handleImageInput}
+              id="image"
+              className="text-sm"
+            />
+          </div>
+        </div>
       </div>
 
       <div className="w-full flex items-center justify-end">
         <Button
-        size={"sm"}
+          size={"sm"}
           type="submit"
           className=" bg-amber-400 text-white "
           disabled={isLoading}
         >
           {isLoading ? (
-            <span className="loading loading-spinner loading-xs"></span>
+            <Loader />
           ) : (
             "Daftar"
           )}
         </Button>
       </div>
-     {error && <AlertError message={error.toString()} isShow={true} />}
+      {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
     </form>
   );
 };

@@ -19,6 +19,7 @@ export async function register(data: RegisterState) {
     formData.append("address", data.address);
     formData.append("phone_number", data.phone);
     formData.append("position", data.role);
+    formData.append("group_id", data.group_id);
     formData.append("gender", data.gender);
     formData.append("religion", data.religion);
 
@@ -35,6 +36,17 @@ export async function register(data: RegisterState) {
     return response;
   } catch (error: any) {
     return error.response;
+  }
+}
+
+// API GET Golongan untuk daftar
+export async function getRegisterPositioCategories() {
+  try {
+    const response = await axiosInstance.get('/register/position-categories');
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response
   }
 }
 
@@ -899,4 +911,34 @@ export async function createLoanMember(data: ReceivableData, token: string | und
     return error.response;
   } 
 
+}
+
+// API GET Laporan Anggota
+export async function getReportMembers(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/report/members`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  } 
+}
+
+// API GET Laporan Pinjaman Member
+export async function getReportLoanMembers(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/report/loan-members`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  } 
 }

@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ProductState, StuffState } from '@/types/interface';
 import EditStuff from './editStuff';
 import DeleteStuff from './deleteStuff';
+import { handleFormat } from '@/app/utils/helper';
 
 const Content = ({ stuffs, products }: { stuffs: StuffState[], products: ProductState[] }) => {
 
@@ -17,6 +18,11 @@ const Content = ({ stuffs, products }: { stuffs: StuffState[], products: Product
         {
             accessorKey: "price",
             header: "Harga",
+            cell: ({row}) => {
+                const value = row.getValue('price');
+
+                return <>{handleFormat(Number(value))}</>
+            }
         },
         {
             accessorKey: "product_name",

@@ -8,17 +8,15 @@ import { SideNavItem } from "@/types/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
-import AlertError from "@/app/components/alertError";
 import { getProfile, logout } from "@/app/utils/featuresApi";
 import { useDispatch } from "react-redux";
 import { appDispatch } from "@/redux/store";
 import { resetState } from "@/redux/features/saving-slice";
+import LogoutDialog from "@/app/components/logoutDialog";
 
 const Sidebar = () => {
   const { data: session } = useSession();
   const [memberProfile, setMemberProfile] = useState<MemberState>();
-  const [error, setError] = useState<string | boolean>(false);
   const [menus, setMenus] = useState<SideNavItem[]>([])
   
   const getDataProfile = async (token: string | undefined) => {
@@ -37,16 +35,6 @@ const Sidebar = () => {
       setMenus(menusByRole)
     }
   }, [session]);
-
-  const handleLogout = async () => {
-    const response = await logout(session?.user.accessToken);
-
-    if (response.status === 200) {
-      signOut();
-    } else {
-      setError(response.data?.message);
-    }
-  };
 
   return (
     <div className="w-72 flex-1 h-screen fixed overflow-y-scroll p-4 bg-gradient-to-r from-[rgba(249,232,51,1)] to-[rgba(250,196,59,1)] sidenav">
@@ -69,15 +57,8 @@ const Sidebar = () => {
         {menus.map((item, idx) => {
           return <MenuItem key={idx} item={item} />;
         })}
-        <div
-          className={`flex flex-row space-x-4 text-black items-center p-2 rounded hover:bg-zinc-100 cursor-pointer`}
-          onClick={handleLogout}
-        >
-          <Icon icon="lucide:log-in" width="22" height="22" />
-          <span className="font-semibold text-md flex pt-1">Keluar</span>
-        </div>
+        <LogoutDialog />
       </div>
-      {error && <AlertError message={error.toString()} isShow={true} />}
     </div>
   );
 };

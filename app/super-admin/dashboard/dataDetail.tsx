@@ -15,7 +15,7 @@ const DataDetail = ({ data }: { data: DashboardAdmin }) => {
             </div>
             <div className="shadow bg-white border border-solid rounded-lg p-4 flex flex-col basis-[18%]">
                 <span className="text-2xl font-bold text-amber-400">{data.count_invoices_paid}</span>
-                <span className='text-sm text-gray-500'>Invoice Dibayar</span>
+                <span className='text-sm text-gray-500'>Invoice Selesai</span>
             </div>
             <div className="shadow bg-white border border-solid rounded-lg p-4 flex flex-col basis-[18%]">
                 <span className="text-2xl font-bold text-amber-400">{handleFormat(data.total_savings)}</span>

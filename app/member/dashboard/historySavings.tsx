@@ -10,7 +10,7 @@ const HistorySavings = ({ data }: { data: DashboardMember }) => {
             <h2 className='text-md font-bold mb-5 text-gray-700'>Catatan Simpanan</h2>
             <div className="flex flex-col items-start justify-start gap-4">
                 {data.history_savings.length > 0 ? data.history_savings.map((saving) => (
-                    <div className="rounded shadow-md p-2 w-full bg-gray-100">
+                    <div key={saving.code} className="rounded shadow-md p-2 w-full bg-gray-100">
                         <div className="flex justify-between items-center">
                             <div>
                                 <h5 className='text-sm font-bold'>{saving.code}</h5>
