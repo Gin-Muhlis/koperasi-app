@@ -3,9 +3,9 @@
 import AlertError from "@/app/components/alertError";
 import AlertSuccess from "@/app/components/alertSuccess";
 import Loader from "@/app/components/loader";
-import { createSavingMembers } from "@/app/utils/featuresApi";
+import { createLoanMember, createSavingMembers } from "@/app/utils/featuresApi";
 import { Button } from "@/components/ui/button";
-import { createSaving, resetState } from "@/redux/features/saving-slice";
+import { resetState } from "@/redux/features/receivable-slice";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import { SubCategoryState } from "@/types/interface";
 import { useSession } from "next-auth/react";
@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-const SaveSaving = ({
+const SaveReceivable = ({
   subCategories,
 }: {
   subCategories: SubCategoryState[];
@@ -24,27 +24,23 @@ const SaveSaving = ({
   const [error, setError] = useState<string | boolean>(false);
   const router = useRouter();
   const dispatch = useDispatch<appDispatch>();
-  const selector = useAppSelector((state) => state.savingReducer);
+  const selector = useAppSelector((state) => state.receivableReducer);
 
   const handleSaveSaving = async () => {
     setIsLoading(true);
     const subCategory: SubCategoryState | undefined = subCategories.find(
-      (item) => item.name == "simpanan wajib"
+      (item) => item.name == "piutang s/p"
     );
 
     const members = JSON.parse(selector.members);
 
     const data = {
       members,
-      month_year: `${
-        selector.month < 9 ? `0${selector.month}` : `${selector.year}`
-      }-${selector.year}`,
-      sub_category_id: subCategory?.id,
       description: selector.description,
-      type_saving: subCategory?.name,
+      sub_category_id: subCategory?.id as number
     };
 
-    const response = await createSavingMembers(data, session?.user.accessToken);
+    const response = await createLoanMember(data, session?.user.accessToken);
     console.log(response);
     if (response.status == 200) {
       setIsLoading(false);
@@ -83,4 +79,4 @@ const SaveSaving = ({
   );
 };
 
-export default SaveSaving;
+export default SaveReceivable;

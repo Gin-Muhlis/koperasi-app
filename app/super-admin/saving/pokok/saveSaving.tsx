@@ -41,7 +41,6 @@ const SaveSaving = ({
       }-${selector.year}`,
       sub_category_id: subCategory?.id,
       description: selector.description,
-      type_saving: subCategory?.name,
     };
 
     const response = await createSavingMembers(data, session?.user.accessToken);

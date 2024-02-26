@@ -3,6 +3,7 @@ import {
   Member,
   MemberState,
   PaymentState,
+  ReceivableData,
   RegisterState,
 } from "@/types/interface";
 import axiosInstance from "@/axiosConfig";
@@ -882,4 +883,20 @@ export async function getDashboardAdmin(token: string | undefined) {
   } catch (error: any) {
     return error.response;
   } 
+}
+
+// API CREATE Pinjaman
+export async function createLoanMember(data: ReceivableData, token: string | undefined) {
+  try {
+      const response = await axiosInstance.post('/receivable', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      return response;
+  } catch (error: any) {
+    return error.response;
+  } 
+
 }

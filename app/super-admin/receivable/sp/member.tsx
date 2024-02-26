@@ -1,6 +1,6 @@
 "use client";
 
-import { MemberState } from "@/types/interface";
+import { MemberReceivable, MemberState } from "@/types/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useEffect, useState } from "react";
 import { DataTable } from "./data-table";
@@ -8,56 +8,37 @@ import { DataTable } from "./data-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch } from "react-redux";
 import { appDispatch, useAppSelector } from "@/redux/store";
-import { createSaving } from "@/redux/features/saving-slice";
-import { handleFormat } from "@/app/utils/helper";
+import { convertDateFormat, handleFormat } from "@/app/utils/helper";
 import { Input } from "@/components/ui/input";
+import { createReceivable } from "@/redux/features/receivable-slice";
 
 const Member = ({ members }: { members: MemberState[] }) => {
   const dispatch = useDispatch<appDispatch>();
-  const selector = useAppSelector((state) => state.savingReducer);
-  const [listMembers, setListMembers] = useState<MemberState[]>([]);
+  const selector = useAppSelector((state) => state.receivableReducer);
+  const [listMembers, setListMembers] = useState<MemberReceivable[]>([]);
   const [total, setTotal] = useState(0);
 
-  // useEffect(() => {
-  //   if (selector) {
-  //     const membersData = JSON.parse(selector.members);
-  //     let subTotal = 0;
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth() + 1 < 10 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1;
+  const day = new Date().getDate()
 
-  //     membersData.map((member: MemberState) => {
-  //       subTotal += member.payment;
-  //     });
 
-  //     setTotal(subTotal);
-  //     setListMembers(membersData);
-  //   }
-  // }, [selector]);
+  useEffect(() => {
+    if (selector) {
+      const membersData = JSON.parse(selector.members);
 
-  // const handlePaymentMember = (id: number, amount: string) => {
-  //   const formatValue = amount.replaceAll(".", "");
+      setListMembers(membersData);
+    }
+  }, [selector, selector.members]);
 
-  //   const indexMember = listMembers.findIndex((member) => member.id == id);
-
-  //   const updatedMembers = [...listMembers];
-  //   const data = updatedMembers[indexMember];
-
-  //   updatedMembers[indexMember] = { ...data, payment: Number(formatValue) };
-
-  //   setListMembers(updatedMembers);
-
-  //   dispatch(
-  //     createSaving({
-  //       type: "SET_MEMBERS",
-  //       value: JSON.stringify(updatedMembers),
-  //     })
-  //   );
-  // };
-  // console.log(selector);
-
-  // const handleValuePayment = (id: number) => {
-  //   const isInputed = listMembers.find((member) => member.id == id);
-
-  //   return handleFormat(isInputed?.payment as number);
-  // };
+  const setStateMember = (data: MemberReceivable[]) => {
+    dispatch(
+      createReceivable({
+        type: "SET_MEMBERS",
+        value: JSON.stringify(data),
+      })
+    );
+  }
 
   const columns: ColumnDef<MemberState>[] = [
     {
@@ -80,28 +61,33 @@ const Member = ({ members }: { members: MemberState[] }) => {
                     members.find((member: any) => member.id == item.original.id)
                   )
                     return;
+                  const date = new Date(`${year}-${month}-${day}`);
+                  date.setMonth(date.getMonth() + 1)
 
-                  members.push(item.original);
+                  const deadline = date.toISOString().slice(0, 10);
+
+                  const dataMember = {
+                    id: item.original.id,
+                    name: item.original.name,
+                    amount: 0,
+                    date: `${year}-${month}-${day}`,
+                    duration: 1,
+                    deadline: deadline,
+                    total: 0
+                  }
+
+
+                  members.push(dataMember);
                 });
 
-                dispatch(
-                  createSaving({
-                    type: "SET_MEMBERS",
-                    value: JSON.stringify(members),
-                  })
-                );
+                setStateMember(members)
               } else {
                 const newMembers = members.filter(
                   (member: any) =>
                     !rows.some((item) => item.original.id === member.id)
                 );
 
-                dispatch(
-                  createSaving({
-                    type: "SET_MEMBERS",
-                    value: JSON.stringify(newMembers),
-                  })
-                );
+                setStateMember(newMembers)
               }
             }}
             aria-label="Select all"
@@ -117,27 +103,30 @@ const Member = ({ members }: { members: MemberState[] }) => {
               row.toggleSelected(!!value);
               if (value) {
                 const members = JSON.parse(selector.members);
-                members.push(member);
-                const stringMembers = JSON.stringify(members);
-                dispatch(
-                  createSaving({
-                    type: "SET_MEMBERS",
-                    value: stringMembers,
-                  })
-                );
+                const date = new Date(`${year}-${month}-${day}`);
+                date.setMonth(date.getMonth() + 1)
+
+                const deadline = date.toISOString().slice(0, 10);
+
+                const dataMember = {
+                  id: member.id,
+                  name: member.name,
+                  amount: 0,
+                  date: `${year}-${month}-${day}`,
+                  duration: 1,
+                  deadline: deadline,
+                  total: 0
+                }
+
+                members.push(dataMember);
+                setStateMember(members)
               } else {
                 const members = JSON.parse(selector.members);
                 const newMembers = members.filter(
                   (item: any) => item.id !== member.id
                 );
 
-                const stringNewMembers = JSON.stringify(newMembers);
-                dispatch(
-                  createSaving({
-                    type: "SET_MEMBERS",
-                    value: stringNewMembers,
-                  })
-                );
+                setStateMember(newMembers)
               }
             }}
             aria-label="Select row"
@@ -156,6 +145,90 @@ const Member = ({ members }: { members: MemberState[] }) => {
       header: "jabatan",
     },
   ];
+  
+  // handle value pinjaman member
+  const handleAmountMember = (id: number) => {
+    const member = listMembers.find((member) => member.id == id);
+
+    return handleFormat(member?.amount as number)
+  }
+
+  // handle value duras member
+  const handleDurationMember = (id: number) => {
+    const member = listMembers.find((member) => member.id == id);
+
+    return member?.duration;
+  }
+
+  // handle total pinjaman member
+  const handleTotalLoanMember = (amount: number, duration: number) => {
+    const interest = 1.5 / 100;
+
+    let interestAmount = Number(amount) * Number(interest) * Number(duration)
+    const total = Number(amount) + interestAmount;
+
+    return total;
+  }
+
+  // handle input jumlah pinjaman member
+  const handleInputAmount = (id: number, amount: string) => {
+    const numericValue = amount.replace(/\D/g, '');
+    
+
+    const updatedMembers = [...listMembers];
+
+    const index = updatedMembers.findIndex((member) => member.id == id);
+    const data = updatedMembers[index];
+
+    const total = handleTotalLoanMember(Number(numericValue), data.duration);
+
+    updatedMembers[index] = { ...data, amount: Number(numericValue), total: Number(total) }
+
+    setStateMember(updatedMembers)
+  }
+
+  // handle durasi pinjaman
+  const handleDurationChange = (id: number, duration: number) => {
+    const updatedMembers = [...listMembers];
+
+    const index = updatedMembers.findIndex((member) => member.id == id);
+    const data = updatedMembers[index];
+
+    const date = new Date(data.date);
+    date.setMonth(date.getMonth() + Number(duration))
+
+    const deadline = date.toISOString().slice(0, 10);
+
+    const total = handleTotalLoanMember(Number(data.amount), duration);
+
+    updatedMembers[index] = { ...data, duration: Number(duration), deadline, total }
+    setStateMember(updatedMembers)
+  }
+  console.log(selector)
+  // handle deadline pinjaman member
+  const handleValueDeadlineMember = (id: number) => {
+    const member = listMembers.find((member) => member.id == id);
+
+    return convertDateFormat(member?.deadline as string);
+  }
+
+  // handle total simapan member
+  const handleValueTotalMember = (id: number) => {
+    const member = listMembers.find((member) => member.id == id);
+
+    return handleFormat(member?.total as number);
+  }
+
+  // handle total
+  const handleTotal = () => {
+    let total = 0;
+
+    listMembers.map((member) => {
+      total += member.total
+    })
+
+    return handleFormat(total);
+  }
 
   return (
     <div>
@@ -177,33 +250,44 @@ const Member = ({ members }: { members: MemberState[] }) => {
               <thead>
                 <tr className="border border-solid">
                   <th className="border border-solid p-2">No</th>
-                  <th className="border border-solid p-2">Nama Anggota</th>
-                  <th className="border border-solid p-2">Jumlah Bayar</th>
+                  <th className="border border-solid p-2">Nama</th>
+                  <th className="border border-solid p-2">Tanggal Pinjaman</th>
+                  <th className="border border-solid p-2">Jumlah Pinjaman</th>
+                  <th className="border border-solid p-2">Durasi Pinjaman (Bulan)</th>
+                  <th className="border border-solid p-2">Tenggat Bayar</th>
+                  <th className="border border-solid p-2">Total Pinjaman</th>
                 </tr>
               </thead>
               <tbody>
                 {listMembers.map(
-                  (member: MemberState, index: number) => (
+                  (member: MemberReceivable, index: number) => (
                     <tr key={member.id} className="border border-solid">
                       <td className="text-center border border-solid p-2">
                         {index + 1}
                       </td>
                       <td className="border border-solid p-2">{member.name}</td>
-                      <td className="text-center border border-solid p-2">
-                        <Input
-                          
-                          
-                        />
+                      <td className="border border-solid p-2">{convertDateFormat(`${year}-${month}-${day}`)}</td>
+                      <td className="border border-solid p-2">
+                        <Input value={handleAmountMember(member.id)} onChange={(e) => handleInputAmount(member.id, e.target.value)} />
+                      </td>
+                      <td className="border border-solid p-2">
+                        <Input value={handleDurationMember(member.id)} min={1} type="number" onChange={(e) => handleDurationChange(member.id, Number(e.target.value))} defaultValue={1} />
+                      </td>
+                      <td className="border border-solid p-2">
+                      {handleValueDeadlineMember(member.id)}
+                      </td>
+                      <td className="border border-solid p-2">
+                        {handleValueTotalMember(member.id)}
                       </td>
                     </tr>
                   )
                 )}
                 <tr>
-                  <td colSpan={2} className="border border-solid text-center">
+                  <td colSpan={6} className="border border-solid text-center">
                     Total
                   </td>
-                  <td className="text-center border border-solid p-2">
-                    {handleFormat(total)}
+                  <td className="border border-solid p-2">
+                    {handleTotal()}
                   </td>
                 </tr>
               </tbody>

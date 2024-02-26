@@ -13,7 +13,8 @@ import {
 import { getServerSession } from "next-auth";
 import React from "react";
 import Member from "./member";
-import SaveSaving from "./saveSaving";
+import SaveSaving from "./saveReceivable";
+import SaveReceivable from "./saveReceivable";
 
 const Saving = async () => {
   const session = await getServerSession(authOptions);
@@ -23,7 +24,7 @@ const Saving = async () => {
   const subCategories: SubCategoryState[] = await getSubCategories(
     session?.user.accessToken
   );
-  console.log(members);
+  
   return (
     <MainLayout>
       <div className="bg-white rounded p-4 w-full">
@@ -33,7 +34,7 @@ const Saving = async () => {
         <div className="w-full pt-14 mb-7">
           <Member members={members} />
         </div>
-        <SaveSaving subCategories={subCategories} />
+        <SaveReceivable subCategories={subCategories} />
       </div>
     </MainLayout>
   );

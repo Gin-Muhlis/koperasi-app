@@ -29,7 +29,6 @@ const DownloadPdfInvoiceButton = ({detailInvoice, timeInvoice}: {detailInvoice: 
             timeInvoice,
             session?.user.accessToken
         );
-        console.log(response)
 
         if (response.status == 200) {
             const blob = await response.data;

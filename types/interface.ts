@@ -235,3 +235,19 @@ export type DashboardAdmin = {
   total_loans: number;
   history_invoices: HistoryInvoice[]
 }
+
+export type MemberReceivable = {
+  id: number;
+  name: string;
+  amount: number;
+  date: string;
+  duration: number;
+  deadline: string;
+  total: number;
+}
+
+export type ReceivableData = {
+  members: MemberReceivable;
+  description: string;
+  sub_category_id: number
+}
