@@ -36,3 +36,9 @@ export const convertDateFormat = (date: string) => {
 
   return `${day} ${month} ${year}`;
 }
+
+export const capitalizeString = (str: string) => {
+  if (str.length < 1) return "";
+
+  return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
+}

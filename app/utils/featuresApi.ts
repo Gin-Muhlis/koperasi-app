@@ -868,3 +868,18 @@ export async function getDashboardMember(
     return error.response;
   }
 }
+
+// API GET Dashboard Admin
+export async function getDashboardAdmin(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/dashboard/admin`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  } 
+}

@@ -218,3 +218,20 @@ export type DashboardMember = {
   history_savings: History[],
   history_installments: History[],
 }
+
+export type HistoryInvoice = {
+  invoice_name: number,
+  date: string;
+  status: string;
+  payment_source: string;
+  payment_method: string;
+}
+
+export type DashboardAdmin = {
+  count_member: number;
+  count_invoices_not_paid: number;
+  count_invoices_paid: number;
+  total_savings: number;
+  total_loans: number;
+  history_invoices: HistoryInvoice[]
+}
