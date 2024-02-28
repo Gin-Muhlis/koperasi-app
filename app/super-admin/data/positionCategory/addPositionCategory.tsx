@@ -61,7 +61,6 @@ const AddPositionCategory = () => {
       formData,
       session?.user.accessToken
     );
-    console.log(response);
 
     setIsLoading(false);
 

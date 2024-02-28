@@ -3,48 +3,37 @@
 import AlertError from "@/app/components/alertError";
 import AlertSuccess from "@/app/components/alertSuccess";
 import Loader from "@/app/components/loader";
-import { createSavingMembers } from "@/app/utils/featuresApi";
+import { createInstallmentMember } from "@/app/utils/featuresApi";
 import { Button } from "@/components/ui/button";
-import { createSaving, resetState } from "@/redux/features/saving-slice";
+import { resetState } from "@/redux/features/installment-slice";
 import { appDispatch, useAppSelector } from "@/redux/store";
-import { SubCategoryState } from "@/types/interface";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-const SaveSaving = ({
-  subCategories,
-}: {
-  subCategories: SubCategoryState[];
-}) => {
+const SaveInstallment = () => {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | boolean>(false);
   const [error, setError] = useState<string | boolean>(false);
   const router = useRouter();
   const dispatch = useDispatch<appDispatch>();
-  const selector = useAppSelector((state) => state.savingReducer);
+  const selector = useAppSelector((state) => state.installmentReducer);
 
-  const handleSaveSaving = async () => {
+  const handleInstallment = async () => {
     setIsLoading(true);
-    const subCategory: SubCategoryState | undefined = subCategories.find(
-      (item) => item.name == "simpanan sukarela"
-    );
-
     const members = JSON.parse(selector.members);
 
     const data = {
       members,
+      description: selector.description,
       month_year: `${selector.month < 9 ? `0${selector.month}` : `${selector.year}`
         }-${selector.year}`,
-      sub_category_id: subCategory?.id,
-      description: selector.description,
-      type_saving: subCategory?.name,
     };
 
-    const response = await createSavingMembers(data, session?.user.accessToken);
-  
+    const response = await createInstallmentMember(data, session?.user.accessToken);
+
     if (response.status == 200) {
       setIsLoading(false);
       setSuccess(response.data.message);
@@ -70,7 +59,7 @@ const SaveSaving = ({
         <Button
           size="sm"
           className="bg-amber-400 text-white"
-          onClick={handleSaveSaving}
+          onClick={handleInstallment}
           disabled={isLoading}
         >
           {isLoading ? <Loader /> : "Simpan Data"}
@@ -82,4 +71,4 @@ const SaveSaving = ({
   );
 };
 
-export default SaveSaving;
+export default SaveInstallment;

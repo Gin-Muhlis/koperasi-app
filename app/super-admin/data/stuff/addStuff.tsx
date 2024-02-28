@@ -74,7 +74,7 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
             formData.append("image", image);
         }
         const response = await createStuff(formData, session?.user.accessToken)
-        console.log(response)
+
         setIsLoading(false)
 
         if (response.status === 200) {

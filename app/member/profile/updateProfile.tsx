@@ -92,7 +92,6 @@ const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositi
 
         const response = await updateProfile(member.id, formData, session?.user.accessToken)
         setIsLoading(false)
-        console.log(response)
 
         if (response.status === 200) {
             setModal(!modal)

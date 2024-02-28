@@ -24,7 +24,7 @@ const SavingTime = () => {
   const handleChange = (type: string, value: string) => {
     dispatch(createSaving({ type: `SET_${type}`, value }));
   };
-  console.log(selector.month);
+  
   return (
     <div>
       <div className="flex items-center justify-start gap-4">

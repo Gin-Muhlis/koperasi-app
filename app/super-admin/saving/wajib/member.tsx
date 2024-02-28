@@ -51,7 +51,7 @@ const Member = ({ members }: { members: SubCategoryInvoice[] }) => {
       })
     );
   };
-  console.log(selector);
+  
 
   const handleValuePayment = (id: number) => {
     const isInputed = listMembers.find((member) => member.id == id);

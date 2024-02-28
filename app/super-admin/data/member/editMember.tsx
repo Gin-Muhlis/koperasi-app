@@ -97,7 +97,7 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
         }
 
         const response = await updateMember(member.id, formData, session?.user.accessToken)
-        console.log(response)
+
         setIsLoading(false)
 
         if (response.status === 200) {

@@ -9,7 +9,7 @@ const NavHome = () => {
     const { data: session, status } = useSession()
     
     return (
-        <div className="w-full flex items-center justify-between h-14 px-10 bg-amber-300">
+        <div className="w-full flex items-center justify-between h-14 px-10 bg-[#FFB000]">
             <Link href={'/'} className='font-bold text-xl italic text-black'>
                 <span>Zie Koperasi</span>
             </Link>

@@ -928,6 +928,21 @@ export async function getReportMembers(token: string | undefined) {
   } 
 }
 
+// API GET Laporan Per orang
+export async function getReportMember(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/report/nasabah`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  } 
+}
+
 // API GET Laporan Pinjaman Member
 export async function getReportLoanMembers(token: string | undefined) {
   try {
@@ -941,4 +956,20 @@ export async function getReportLoanMembers(token: string | undefined) {
   } catch (error: any) {
     return error.response;
   } 
+}
+
+// API CREATE Angsuran
+export async function createInstallmentMember(data: any, token: string | undefined) {
+  try {
+      const response = await axiosInstance.post('/installment', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      return response;
+  } catch (error: any) {
+    return error.response;
+  } 
+
 }

@@ -20,8 +20,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import Loader from '@/app/components/loader';
-
 
 const LogoutDialog = () => {
     const { data: session } = useSession()
@@ -30,7 +28,7 @@ const LogoutDialog = () => {
 
     const handleLogout = async () => {
         const response = await logout(session?.user.accessToken);
-
+        console.log(response)
         if (response.status === 200) {
             signOut();
         } else {

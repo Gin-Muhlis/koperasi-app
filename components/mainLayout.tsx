@@ -3,12 +3,12 @@ import React, { ReactNode } from 'react'
 import Sidebar from './sidebar'
 import Header from './header'
 import { SessionProvider } from 'next-auth/react'
-
+  
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <SessionProvider>
-        <div className='flex min-h-screen items-start justify-between bg-[#f0e7ff]'>
+        <div className='flex min-h-screen items-start justify-between bg-[#F5F5DC]'>
           <Sidebar />
           <div className="w-full relative md:ml-72">
             <Header />

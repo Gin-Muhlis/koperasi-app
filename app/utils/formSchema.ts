@@ -71,7 +71,7 @@ export const createMemberSchema = z.object({
     .min(8, {
       message: "Password minimal 8 karakter",
     }),
-  role: z.enum(["super-admin", "member"]),
+  role: z.enum(["super-admin", "member", "nasabah"]),
 });
 
 export const updateMemberSchema = z.object({
@@ -139,7 +139,7 @@ export const updateMemberSchema = z.object({
       message: "Username tidak boleh kosong",
     }),
   password: z.optional(z.string()),
-  role: z.enum(["super-admin", "member"]),
+  role: z.enum(["super-admin", "member", "nasabah"]),
   active: z.boolean(),
 });
 

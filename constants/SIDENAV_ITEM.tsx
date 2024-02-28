@@ -64,6 +64,8 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     subMenuItems: [
       { role: "super-admin", title: "Piutang S/P", path: "/super-admin/receivable/sp" },
       { role: "super-admin", title: "Piutang Dagang", path: "/super-admin/receivable/dagang" },
+      { role: "super-admin", title: "Pembayaran Angsuran", path: "/super-admin/receivable/angsuran" },
+
     ],
   },
   {
@@ -89,5 +91,12 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     path: "/member/profile",
     icon: <Icon icon="lucide:circle-user-round" width="22" height="22" />,
     role: "member",
+  },
+  // nasabah menu
+  {
+    title: "Dashboard",
+    path: "/nasabah/dashboard",
+    icon: <Icon icon="lucide:home" width="22" height="22" />,
+    role: "nasabah",
   },
 ];

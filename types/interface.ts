@@ -136,6 +136,7 @@ export type Receivable = {
   name: string;
   position: string;
   loan_id: number;
+  sub_category_id?: number;
   total_payment: number;
   monthly: number;
   paid: number;
@@ -265,6 +266,15 @@ export type ReportMember = {
   account_receivable: number;
 }
 
+export type DataNasabah = {
+  principal_saving: number;
+  mandatory_saving: number;
+  special_mandatory_saving: number;
+  voluntary_saving: number;
+  recretional_saving: number;
+  receivable: number;
+}
+
 export type ReportLoanmember = {
   id: number;
   name: string;
@@ -274,3 +284,10 @@ export type ReportLoanmember = {
   paid: number;
   remain_payment: number;
 };
+
+export type MemberInstallment = {
+  id: number;
+  name: string;
+  amount: number;
+  remain_payment: number; 
+}

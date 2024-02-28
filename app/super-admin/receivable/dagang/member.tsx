@@ -204,7 +204,7 @@ const Member = ({ members }: { members: MemberState[] }) => {
     updatedMembers[index] = { ...data, duration: Number(duration), deadline, total }
     setStateMember(updatedMembers)
   }
-  console.log(selector)
+  
   // handle deadline pinjaman member
   const handleValueDeadlineMember = (id: number) => {
     const member = listMembers.find((member) => member.id == id);

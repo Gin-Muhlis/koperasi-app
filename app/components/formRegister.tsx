@@ -41,7 +41,7 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
       setPreviewImage(null);
     }
   };
-  console.log(selector)
+  
   const handleRegister = async (event: SyntheticEvent) => {
     event.preventDefault();
     setIsLoading(true);
@@ -57,14 +57,12 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
     };
 
     const response = await register(data);
-    console.log(response)
 
     setIsLoading(false);
 
     if (response.status === 200) {
       push("/login?message=Pendaftaran berhasil");
-    }
-    if (response.status == 422) {
+    }else if (response.status == 422) {
       const errorsData = response.data.errors;
       const keys = Object.keys(errorsData);
       const firstKey = keys[0];

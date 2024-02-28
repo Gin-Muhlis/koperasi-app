@@ -84,7 +84,6 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
 
             setError(message)
         } else {
-            console.log(response)
             setError(response.data.message)
         }
     }

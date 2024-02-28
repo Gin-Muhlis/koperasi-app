@@ -190,34 +190,7 @@ const ReceivablePopup = ({ memberReceivable, setSubCategory }: { memberReceivabl
                                 </SelectGroup>
                             </Select>
                         </div>
-                        {/* <table className="border border-solid text-sm">
-                            <thead className="border border-solid">
-                                <tr>
-                                    <th className="text-start p-3">Nama</th>
-                                    <th className="text-start p-3">Pembayaran</th>
-                                    <th className="text-center p-3">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody className="border border-solid">
-                                {currentItems.map((item) => (
-                                    <tr key={item.id}>
-                                        <td className="p-3">{item.name}</td>
-                                        <td className="p-3">
-                                            <Input
-                                                type="text"
-                                                placeholder="Pembayaran"
-                                                data-id={item.id}
-                                                value={handleValueAmount(item.id)}
-                                                onChange={(event) => handleUpdateAmount(event.target.value, item.id)}
-                                                min={0}
-                                                disabled={handleDisableInput(item.id)}
-                                            />
-                                        </td>
-                                        <td className="text-center p-3">{handleButtonAdd(item.id)}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table> */}
+                        
                         <table className="border border-solid text-sm">
                             <thead className="border border-solid">
                                 <tr>

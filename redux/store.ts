@@ -6,6 +6,7 @@ import paymentDeterminationReducer from "./features/paymenMember-slice";
 import invoiceReducer from "./features/invoice-slice";
 import dataInvoiceReducer from "./features/dataInvoice-slice";
 import receivableReducer from "./features/receivable-slice";
+import installmentReducer from "./features/installment-slice";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     invoiceReducer,
     dataInvoiceReducer,
     receivableReducer,
+    installmentReducer
   },
 });
 

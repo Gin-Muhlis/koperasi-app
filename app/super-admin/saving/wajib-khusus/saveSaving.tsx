@@ -45,7 +45,7 @@ const SaveSaving = ({
     };
 
     const response = await createSavingMembers(data, session?.user.accessToken);
-    console.log(response);
+
     if (response.status == 200) {
       setIsLoading(false);
       setSuccess(response.data.message);

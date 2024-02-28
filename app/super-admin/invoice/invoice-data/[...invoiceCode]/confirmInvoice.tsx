@@ -46,7 +46,6 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
 
     const response = await createPaymentInvoice(data, session?.user.accessToken)
     setIsLoading(false)
-    console.log(response)
     if (response.status == 200) {
       setSuccess(response.data.message)
       handleModal()
@@ -75,7 +74,7 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
 
     setAmount(numericValue)
   }
-  console.log(amount)
+  
   // handle inputan no rekening
   const handleChangeNoRek = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event?.target.value

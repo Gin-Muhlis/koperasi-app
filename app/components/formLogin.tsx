@@ -43,7 +43,7 @@ const FormLogin = () => {
 
                 switch (res.error) {
                     case 'Request failed with status code 422':
-                        setErrorMessage('Format data tidak valid!')
+                        setErrorMessage('Email atau password salah!')
                         break
                     case 'Request failed with status code 400':
                         setErrorMessage('Email atau password salah!')

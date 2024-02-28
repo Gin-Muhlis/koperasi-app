@@ -11,7 +11,12 @@ import { usePathname } from "next/navigation";
 import { getProfile, logout } from "@/app/utils/featuresApi";
 import { useDispatch } from "react-redux";
 import { appDispatch } from "@/redux/store";
-import { resetState } from "@/redux/features/saving-slice";
+import { resetState as resetInvoice } from "@/redux/features/invoice-slice";
+import { resetState as resetInstallment } from "@/redux/features/installment-slice";
+import { resetState as resetDataInvoice } from "@/redux/features/dataInvoice-slice";
+import { resetState as resetPayment } from "@/redux/features/paymenMember-slice";
+import { resetState as resetReceivable } from "@/redux/features/receivable-slice";
+import { resetState as resetSaving } from "@/redux/features/saving-slice";
 import LogoutDialog from "@/app/components/logoutDialog";
 
 const Sidebar = () => {
@@ -37,7 +42,7 @@ const Sidebar = () => {
   }, [session]);
 
   return (
-    <div className="w-72 flex-1 h-screen fixed overflow-y-scroll p-4 bg-gradient-to-r from-[rgba(249,232,51,1)] to-[rgba(250,196,59,1)] sidenav">
+    <div className="w-72 flex-1 h-screen fixed overflow-y-scroll p-4 bg-[#FFB000] sidenav">
       <div className="w-full bg-white rounded-md p-3 flex items-center justify-start gap-3 mb-8">
         <img
           src={memberProfile?.imageProfile?.toString()}
@@ -74,7 +79,12 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
   const dispatch = useDispatch<appDispatch>();
 
   const handleResetState = () => {
-    dispatch(resetState());
+    dispatch(resetInvoice());
+    dispatch(resetInstallment());
+    dispatch(resetDataInvoice());
+    dispatch(resetPayment());
+    dispatch(resetReceivable());
+    dispatch(resetSaving());
   };
 
   return (
@@ -83,8 +93,8 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
         <>
           <button
             onClick={toggleSubMenu}
-            className={`flex flex-row items-center p-2 rounded text-black w-full justify-between hover:bg-zinc-100 ${
-              pathname.includes(item.path) ? "bg-zinc-100 " : ""
+            className={`flex flex-row items-center p-2 rounded text-black w-full justify-between hover:bg-white ${
+              pathname.includes(item.path) ? "bg-white" : ""
             }`}
           >
             <div className="flex flex-row space-x-4 items-center">
@@ -123,8 +133,8 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
       ) : (
         <Link
           href={item.path}
-          className={`flex flex-row space-x-4 items-center overflow-hidden p-2 rounded text-black hover:bg-zinc-100 ${
-            item.path === pathname ? "bg-zinc-100" : ""
+          className={`flex flex-row space-x-4 items-center overflow-hidden p-2 rounded text-black hover:bg-white ${
+            item.path === pathname ? "bg-white" : ""
           }`}
         >
           {item.icon}

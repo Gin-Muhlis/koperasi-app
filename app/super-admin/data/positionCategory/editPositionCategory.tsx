@@ -72,7 +72,6 @@ const EditPositionCategory = ({
       formData,
       session?.user.accessToken
     );
-    console.log(response);
 
     setIsLoading(false);
 

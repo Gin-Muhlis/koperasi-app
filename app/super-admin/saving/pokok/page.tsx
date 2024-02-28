@@ -25,7 +25,7 @@ const Saving = async () => {
   const subCategories: SubCategoryState[] = await getSubCategories(
     session?.user.accessToken
   );
-  console.log(members);
+  
   return (
     <MainLayout>
       <div className="bg-white rounded p-4 w-full">

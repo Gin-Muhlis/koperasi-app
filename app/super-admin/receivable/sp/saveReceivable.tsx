@@ -41,7 +41,7 @@ const SaveReceivable = ({
     };
 
     const response = await createLoanMember(data, session?.user.accessToken);
-    console.log(response);
+    console.log(response)
     if (response.status == 200) {
       setIsLoading(false);
       setSuccess(response.data.message);
@@ -55,9 +55,12 @@ const SaveReceivable = ({
       const message = errorsData[firstKey][0];
 
       setError(message);
-    } else {
+    } else if (response.status == 400) {
       setIsLoading(false);
       setError(response.data.message);
+    } else {
+      setIsLoading(false);
+      setError('Terjadi kesalahan dengan sistem');
     }
   };
 

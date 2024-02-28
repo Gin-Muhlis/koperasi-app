@@ -10,19 +10,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { months } from "@/constants/CONSTS";
-import { createSaving } from "@/redux/features/saving-slice";
+import { createInstallment } from "@/redux/features/installment-slice";
 import { appDispatch, useAppSelector } from "@/redux/store";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-const SavingTime = () => {
+const InstallmentTime = () => {
   const dispatch = useDispatch<appDispatch>();
-  const selector = useAppSelector((state) => state.savingReducer);
+  const selector = useAppSelector((state) => state.installmentReducer);
   const currentyear = new Date().getFullYear();
   const nextYear = currentyear + 1;
 
   const handleChange = (type: string, value: string) => {
-    dispatch(createSaving({ type: `SET_${type}`, value }));
+    dispatch(createInstallment({ type: `SET_${type}`, value }));
   };
   
   return (
@@ -70,4 +70,4 @@ const SavingTime = () => {
   );
 };
 
-export default SavingTime;
+export default InstallmentTime;

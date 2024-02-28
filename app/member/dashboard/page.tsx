@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 const Dashboard = async ({ searchParams }: IProps) => {
     const session = await getServerSession(authOptions)
     const dashboardData: DashboardMember = await getDashboardMember(session?.user.accessToken);
-    console.log(dashboardData)
+    
     return (
         <MainLayout>
             <div className="w-full">
