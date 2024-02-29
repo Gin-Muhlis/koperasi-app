@@ -201,7 +201,7 @@ export const categorySchema = z.object({
   name: z.string({
     invalid_type_error: "Nama kategori harus valid",
     required_error: "Nama tidak boleh kosong",
-  }),
+  }).toLowerCase(),
 });
 
 export const createSubCategorySchema = z.object({

@@ -33,6 +33,7 @@ import { useForm } from "react-hook-form"
 import { updateSubCategorySchema } from "@/app/utils/formSchema";
 import { CategoryState, SubCategoryState } from "@/types/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = updateSubCategorySchema;
 
@@ -43,6 +44,7 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
+    const [status, setStatus] = useState<number | boolean>(false);
     const router = useRouter();
 
     const handleModal = () => {
@@ -58,6 +60,13 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
         },
     })
 
+    const resetStateAction = () => {
+        setStatus(false);
+        setSuccess(false);
+        setError(false);
+        router.refresh();
+    }
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setIsLoading(true)
         const formData = new FormData();
@@ -68,13 +77,12 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
         formData.append("category_id", values.category_id as string);
 
         const response = await updateSubCategory(subCategory.id, formData, session?.user.accessToken)
-
+        setStatus(response.status)
         setIsLoading(false)
 
         if (response.status === 200) {
             setModal(!modal)
             form.reset();
-            router.refresh();
             setSuccess(response.data.message)
         } else if (response.status === 422) {
             const errorsData = response.data.errors
@@ -171,8 +179,8 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
                 </div>
 
             </div>
-            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </>
     );
 };

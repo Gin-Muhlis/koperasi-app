@@ -103,7 +103,7 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
         formData.append("phone_number", values.phone_number);
         formData.append("position", values.position);
         formData.append("gender", values.gender);
-        formData.append("religion", values.religion);
+        formData.append("religion", values.religion.toLowerCase());
         formData.append("role", values.role);
         formData.append("active", values.active ? '1' : '0');
         formData.append("password", values.password as string);

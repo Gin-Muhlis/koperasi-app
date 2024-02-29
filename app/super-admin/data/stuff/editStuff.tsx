@@ -33,6 +33,7 @@ import { useForm } from "react-hook-form"
 import { addStuffSchema, editStuffSchema } from "@/app/utils/formSchema";
 import { ProductState, StuffState } from "@/types/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = editStuffSchema;
 
@@ -49,6 +50,7 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
+    const [status, setStatus] = useState<number | boolean>(false);
     const router = useRouter();
 
     const handleModal = () => {
@@ -64,6 +66,15 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
         },
     })
 
+    const resetStateAction = () => {
+        setSuccess(false)
+        setError(false)
+        setStatus(false)
+        setPreviewImage(undefined)
+        setImage(undefined)
+        router.refresh();
+    }
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setIsLoading(true)
         const formData = new FormData();
@@ -78,7 +89,8 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
         }
 
         const response = await updateStuff(stuff.id, formData, session?.user.accessToken)
-        console.log(response)
+    
+        setStatus(response.status)
         setIsLoading(false)
 
         if (response.status === 200) {
@@ -209,8 +221,8 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
                 </div>
 
             </div>
-            {success && <AlertSuccess message={success.toString()} isShow={true} />}
-            {error && <AlertError message={error.toString()} isShow={true} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </>
     );
 };

@@ -22,6 +22,7 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { productSchema } from "@/app/utils/formSchema";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = productSchema;
 
@@ -32,6 +33,7 @@ const AddProduct = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | boolean>(false);
   const [error, setError] = useState<string | boolean>(false);
+  const [status, setStatus] = useState<number | boolean>(false);
   const router = useRouter();
 
   const handleModal = () => {
@@ -45,20 +47,28 @@ const AddProduct = () => {
     },
   })
 
+  const resetStateAction = () => {
+    setStatus(false)
+    setError(false)
+    setSuccess(false)
+    router.refresh();
+  }
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true)
     const formData = new FormData();
 
-    formData.append("name", values.name);
+    formData.append("name", values.name.toLowerCase());
 
     const response = await createProduct(formData, session?.user.accessToken)
-    
+
+    setStatus(response.status)
+
     setIsLoading(false)
 
     if (response.status === 200) {
       setModal(!modal)
       form.reset();
-      router.refresh();
       setSuccess(response.data.message)
     } else if (response.status === 422) {
       const errorsData = response.data.errors
@@ -110,8 +120,8 @@ const AddProduct = () => {
         </div>
 
       </div>
-      {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-      {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+      {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+      {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction}  />}
     </>
   );
 };

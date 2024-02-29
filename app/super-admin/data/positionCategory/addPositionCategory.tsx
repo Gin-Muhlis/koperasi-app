@@ -22,6 +22,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { positionCategorySchema } from "@/app/utils/formSchema";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = positionCategorySchema;
 
@@ -32,6 +33,7 @@ const AddPositionCategory = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | boolean>(false);
   const [error, setError] = useState<string | boolean>(false);
+  const [status, setStatus] = useState<number | boolean>(false);
   const router = useRouter();
 
   const handleModal = () => {
@@ -48,6 +50,13 @@ const AddPositionCategory = () => {
     },
   });
 
+  const resetStateAction = () => {
+    setSuccess(false)
+    setError(false)
+    setStatus(false)
+    router.refresh();
+  }
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     const formData = new FormData();
@@ -61,13 +70,13 @@ const AddPositionCategory = () => {
       formData,
       session?.user.accessToken
     );
+    setStatus(response.status)
 
     setIsLoading(false);
 
     if (response.status === 200) {
       setModal(!modal);
       form.reset();
-      router.refresh();
       setSuccess(response.data.message);
     } else if (response.status === 422) {
       const errorsData = response.data.errors;
@@ -201,17 +210,17 @@ const AddPositionCategory = () => {
         </div>
       </div>
       {success && (
-        <AlertSuccess
+        <SweetAlertPopup
           message={success.toString()}
-          isShow={true}
-          setSuccess={setSuccess}
+          status={status}
+          resetState={resetStateAction}
         />
       )}
       {error && (
-        <AlertError
+        <SweetAlertPopup
           message={error.toString()}
-          isShow={true}
-          setError={setError}
+          status={status}
+          resetState={resetStateAction}
         />
       )}
     </>

@@ -21,9 +21,10 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { productSchema } from "@/app/utils/formSchema";
-import { CategoryState, ProductState } from "@/types/interface";
+import { ProductState } from "@/types/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { updateCategory, updateProduct } from "@/app/utils/featuresApi";
+import {  updateProduct } from "@/app/utils/featuresApi";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = productSchema;
 
@@ -34,6 +35,7 @@ const EditProduct = ({ product }: { product: ProductState }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
+    const [status, setStatus] = useState<number | boolean>(false);
     const router = useRouter();
 
     const handleModal = () => {
@@ -47,21 +49,27 @@ const EditProduct = ({ product }: { product: ProductState }) => {
         },
     })
 
+    const resetStateAction  = () => {
+        setSuccess(false)
+        setError(false)
+        setStatus(false)
+        router.refresh()
+    }
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setIsLoading(true)
         const formData = new FormData();
 
         formData.append("_method", "PUT");
-        formData.append("name", values.name);
+        formData.append("name", values.name.toLowerCase());
 
         const response = await updateProduct(product.id, formData, session?.user.accessToken);
-
+        setStatus(response.status)
         setIsLoading(false)
 
         if (response.status === 200) {
             setModal(!modal)
             form.reset();
-            router.refresh();
             setSuccess(response.data.message)
         } else if (response.status === 422) {
             const errorsData = response.data.errors
@@ -115,8 +123,8 @@ const EditProduct = ({ product }: { product: ProductState }) => {
                 </div>
 
             </div>
-            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </>
     );
 };

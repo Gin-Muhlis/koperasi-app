@@ -21,23 +21,32 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import Loader from '@/app/components/loader';
+import SweetAlertPopup from '@/app/components/sweetAlertPopup';
 
 const DeleteProduct = ({ product }: { product: ProductState }) => {
     const { data: session } = useSession()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [success, setSuccess] = useState<string | boolean>(false)
     const [error, setError] = useState<string | boolean>(false)
+    const [status, setStatus] = useState<number | boolean>(false)
 
     const router = useRouter();
+
+    const resetStateAction = () => {
+        setSuccess(false)
+        setError(false)
+        setStatus(false)
+        router.refresh()
+    }
 
     const handleDelete = async () => {
         setIsLoading(true)
         const response = await deleteProduct(product.id, session?.user.accessToken);
+        setStatus(response.status)
 
         if (response.status === 200) {
             setIsLoading(false)
             setSuccess(response.data.message)
-            router.refresh();
         } else {
             setIsLoading(false)
             setError('Data member gagal dihapus')
@@ -69,8 +78,8 @@ const DeleteProduct = ({ product }: { product: ProductState }) => {
                 </AlertDialogContent>
             </AlertDialog>
 
-            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </div>
     )
 }

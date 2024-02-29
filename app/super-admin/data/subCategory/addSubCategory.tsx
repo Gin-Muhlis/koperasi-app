@@ -1,8 +1,5 @@
 "use client";
 
-import AlertError from "@/app/components/alertError";
-import AlertSuccess from "@/app/components/alertSuccess";
-import { createSubCategory } from "@/app/utils/featuresApi";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -30,6 +27,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { createSubCategorySchema } from "@/app/utils/formSchema";
 import { CategoryState } from "@/types/interface";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
+import { createSubCategory } from "@/app/utils/featuresApi";
 
 const formSchema = createSubCategorySchema;
 
@@ -40,6 +39,7 @@ const AddSubCategory = ({categories}: {categories: CategoryState[]}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | boolean>(false);
   const [error, setError] = useState<string | boolean>(false);
+  const [status, setStatus] = useState<number | boolean>(false);
   const router = useRouter();
 
   const handleModal = () => {
@@ -54,22 +54,28 @@ const AddSubCategory = ({categories}: {categories: CategoryState[]}) => {
     },
   })
 
+  const resetStateAction = () => {
+    setSuccess(false)
+    setError(false)
+    setStatus(false)
+    router.refresh();
+  }
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true)
     const formData = new FormData();
 
-    formData.append("name", values.name);
+    formData.append("name", values.name.toLowerCase());
     formData.append("type", values.type);
     formData.append("category_id", values.category_id);
 
     const response = await createSubCategory(formData, session?.user.accessToken)
-    console.log(response)
+    setStatus(response.status)
     setIsLoading(false)
 
     if (response.status === 200) {
       setModal(!modal)
       form.reset();
-      router.refresh();
       setSuccess(response.data.message)
     } else if (response.status === 422) {
       const errorsData = response.data.errors
@@ -164,8 +170,8 @@ const AddSubCategory = ({categories}: {categories: CategoryState[]}) => {
         </div>
 
       </div>
-      {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-      {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+      {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+      {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
     </>
   );
 };

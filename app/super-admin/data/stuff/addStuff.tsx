@@ -32,6 +32,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { addStuffSchema } from "@/app/utils/formSchema";
 import { ProductState } from "@/types/interface";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = addStuffSchema;
 
@@ -48,6 +49,7 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
+    const [status, setStatus] = useState<number | boolean>(false);
     const router = useRouter();
 
     const handleModal = () => {
@@ -62,6 +64,15 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
         },
     })
 
+    const resetStateAction = () => {
+        setSuccess(false)
+        setError(false)
+        setStatus(false)
+        setImage(undefined)
+        setPreviewImage(undefined)
+        router.refresh()
+    }
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setIsLoading(true)
         const formData = new FormData();
@@ -74,13 +85,13 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
             formData.append("image", image);
         }
         const response = await createStuff(formData, session?.user.accessToken)
+        setStatus(response.status)
 
         setIsLoading(false)
 
         if (response.status === 200) {
             setModal(!modal)
             form.reset();
-            router.refresh();
             setSuccess(response.data.message)
         } else if (response.status === 422) {
             const errorsData = response.data.errors
@@ -203,8 +214,8 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
                 </div>
 
             </div>
-            {success && <AlertSuccess message={success.toString()} isShow={true} />}
-            {error && <AlertError message={error.toString()} isShow={true} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </>
     );
 };

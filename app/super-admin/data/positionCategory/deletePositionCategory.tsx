@@ -21,6 +21,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Loader from "@/app/components/loader";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const DeletePositionCategory = ({
   positionCategory,
@@ -31,8 +32,16 @@ const DeletePositionCategory = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | boolean>(false);
   const [error, setError] = useState<string | boolean>(false);
+  const [status, setStatus] = useState<number | boolean>(false);
 
   const router = useRouter();
+
+  const resetStateAction = () => {
+    setSuccess(false)
+    setError(false)
+    setStatus(false)
+    router.refresh()
+  }
 
   const handleDelete = async () => {
     setIsLoading(true);
@@ -40,10 +49,10 @@ const DeletePositionCategory = ({
       positionCategory.id,
       session?.user.accessToken
     );
+    setStatus(response.status)
 
     if (response.status === 200) {
       setIsLoading(false);
-      router.refresh();
       setSuccess(response.data.message);
     } else {
       setIsLoading(false);
@@ -80,17 +89,17 @@ const DeletePositionCategory = ({
       </AlertDialog>
 
       {success && (
-        <AlertSuccess
+        <SweetAlertPopup
           message={success.toString()}
-          isShow={true}
-          setSuccess={setSuccess}
+          status={status}
+          resetState={resetStateAction}
         />
       )}
       {error && (
-        <AlertError
+        <SweetAlertPopup
           message={error.toString()}
-          isShow={true}
-          setError={setError}
+          status={status}
+          resetState={resetStateAction}
         />
       )}
     </div>
