@@ -21,6 +21,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import Loader from '@/app/components/loader';
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 
 const DeleteMember = ({ member }: { member: MemberState }) => {
@@ -28,16 +29,23 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState<string | boolean>(false)
     const [error, setError] = useState<string | boolean>(false)
+    const [status, setStatus] = useState<number | boolean>(false)
 
     const router = useRouter();
 
-
+    const resetStateAction = () => {
+        setSuccess(false);
+        setStatus(false);
+        setError(false);
+        router.refresh();
+    }
 
     const handleDelete = async () => {
 
         setIsLoading(true);
 
         const response = await deleteMember(member.id, session?.user.accessToken);
+        setStatus(response.status)
 
         if (response.status === 200) {
             setIsLoading(false)
@@ -74,8 +82,8 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
                 </AlertDialogContent>
             </AlertDialog>
 
-            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </div>
     )
 }

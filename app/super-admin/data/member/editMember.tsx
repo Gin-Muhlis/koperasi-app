@@ -34,6 +34,7 @@ import { updateMemberSchema } from "@/app/utils/formSchema";
 import { MemberState, PositionCategory, RoleState } from "@/types/interface";
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Switch } from "@/components/ui/switch";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = updateMemberSchema;
 
@@ -49,11 +50,18 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
+    const [status, setStatus] = useState<number | boolean>(false);
+    const [passwordShow, setPasswordShow] = useState<boolean>(false)
+
     const router = useRouter();
 
     const handleModal = () => {
         setModal(!modal);
     };
+
+    const handleShowPassword = () => {
+        setPasswordShow(!passwordShow);
+    }
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -71,6 +79,15 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
             position_category: member.position_category
         },
     })
+
+    const resetStateAction = () => {
+        setSuccess(false);
+        setStatus(false);
+        setError(false)
+        setImageProfile(undefined)
+        setPreviewImage(undefined)
+        router.refresh();
+    }
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setIsLoading(true)
@@ -97,15 +114,11 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
         }
 
         const response = await updateMember(member.id, formData, session?.user.accessToken)
-
+        setStatus(Number(response.status))
         setIsLoading(false)
-
         if (response.status === 200) {
             setModal(!modal)
-            setImageProfile(undefined)
-            setPreviewImage(undefined)
             form.reset();
-            router.refresh();
             setSuccess(response.data.message)
         } else if (response.status === 422) {
             const errorsData = response.data.errors
@@ -114,8 +127,12 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
             const message = errorsData[firstKey][0]
 
             setError(message)
+        } else if (response.status === 400) {
+            const message = response.data.message;
+
+            setError(message)
         } else {
-            setError(response.data.message)
+            setError("Terjadi kesalahan dengan sistem!")
         }
     }
 
@@ -156,7 +173,7 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
                                     name="name"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Nama</FormLabel>
+                                            <FormLabel>Nama Lengkap</FormLabel>
                                             <FormControl>
                                                 <Input placeholder="Nama Lengkap" {...field} disabled={isLoading} />
                                             </FormControl>
@@ -171,7 +188,7 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
                                         <FormItem>
                                             <FormLabel>Email</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Email" {...field} disabled={isLoading} />
+                                                <Input type="email" placeholder="Email" {...field} disabled={isLoading} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -199,7 +216,7 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
                                         <FormItem>
                                             <FormLabel>No Telp</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="No Telepon" {...field} disabled={isLoading} />
+                                                <Input type="number" placeholder="No Telepon" {...field} disabled={isLoading} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -307,7 +324,10 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
                                         <FormItem>
                                             <FormLabel>password</FormLabel>
                                             <FormControl>
-                                                <Input type="password" placeholder="password" {...field} disabled={isLoading} />
+                                                <div className="w-full flex items-center justify-center relative">
+                                                    <Input type={passwordShow ? 'text' : 'password'} placeholder="password" {...field} disabled={isLoading} />
+                                                    <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-amber-500 text-md' />
+                                                </div>
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -380,8 +400,8 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
                 </div>
 
             </div>
-            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </>
     );
 };

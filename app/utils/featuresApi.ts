@@ -696,7 +696,7 @@ export async function getMemberSpecialMandatorySaving(
   token: string | undefined
 ) {
   try {
-    const response = await axiosInstance.get("/member-special-mandatory", {
+    const response = await axiosInstance.get("/member-mandatory", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

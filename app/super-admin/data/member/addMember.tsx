@@ -32,6 +32,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { createMemberSchema } from "@/app/utils/formSchema";
 import { PositionCategory, RoleState } from "@/types/interface";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = createMemberSchema;
 
@@ -47,28 +49,37 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | boolean>(false);
   const [error, setError] = useState<string | boolean>(false);
+  const [status, setStatus] = useState<number | boolean>(false);
+
+  const [passwordShow, setPasswordShow] = useState<boolean>(false)
   const router = useRouter();
 
   const handleModal = () => {
     setModal(!modal);
   };
 
+  const handleShowPassword = () => {
+    setPasswordShow(!passwordShow);
+  }
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      address: "",
-      phone_number: "",
-      religion: "",
       gender: "L",
       position: "pns",
-      username: "",
-      password: "",
       role: "member",
       position_category: positionCategories.length > 0 ? positionCategories[0].name : ''
     },
   })
+
+  const resetStateAction = () => {
+    setSuccess(false);
+    setStatus(false);
+    setError(false)
+    setImageProfile(undefined)
+      setPreviewImage(undefined)
+    router.refresh();
+  }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true)
@@ -92,15 +103,12 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
     }
 
     const response = await createMember(formData, session?.user.accessToken)
-   
+    setStatus(Number(response.status))
     setIsLoading(false)
 
     if (response.status === 200) {
       setModal(!modal)
-      setImageProfile(undefined)
-      setPreviewImage(undefined)
       form.reset();
-      router.refresh();
       setSuccess(response.data.message)
     } else if (response.status === 422) {
       const errorsData = response.data.errors
@@ -109,8 +117,12 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
       const message = errorsData[firstKey][0]
 
       setError(message)
+    } else if (response.status === 400) {
+      const message = response.data.message;
+
+      setError(message)
     } else {
-      setError(response.data.message)
+      setError('Terjadi kesalahan dengan sistem!')
     }
   }
 
@@ -132,14 +144,13 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
     }
   };
 
-
   return (
     <>
       <Button className="text-white bg-amber-400" onClick={handleModal}>Tambah Data</Button>
       <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
         <div className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
           <div className="p-4 border-b border-b-slate-300 mb-4">
-            <h3 className="font-bold text-lg text-black">Tambah Data Member</h3>
+            <h3 className="font-bold text-lg text-black">Tambah Data Anggota</h3>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -149,7 +160,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nama</FormLabel>
+                      <FormLabel>Nama Lengkap</FormLabel>
                       <FormControl>
                         <Input placeholder="Nama Lengkap" {...field} disabled={isLoading} />
                       </FormControl>
@@ -164,7 +175,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="Email" {...field} disabled={isLoading} />
+                        <Input type="email" placeholder="Email" {...field} disabled={isLoading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -192,12 +203,13 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     <FormItem>
                       <FormLabel>No Telp</FormLabel>
                       <FormControl>
-                        <Input placeholder="No Telepon" {...field} disabled={isLoading} />
+                        <Input type="number" placeholder="No Telepon" {...field} disabled={isLoading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="religion"
@@ -211,6 +223,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="gender"
@@ -255,7 +268,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     </FormItem>
                   )}
                 />
-                   <FormField
+                <FormField
                   control={form.control}
                   name="position_category"
                   render={({ field }) => (
@@ -300,7 +313,10 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     <FormItem>
                       <FormLabel>password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="password" {...field} disabled={isLoading}/>
+                        <div className="w-full flex items-center justify-center relative">
+                          <Input type={passwordShow ? 'text' : 'password'} placeholder="password" {...field} disabled={isLoading} />
+                          <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-amber-500 text-md' />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -331,7 +347,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     </FormItem>
                   )}
                 />
-                   <FormField
+                <FormField
                   control={form.control}
                   name="image"
                   render={({ field }) => (
@@ -357,8 +373,8 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
         </div>
 
       </div>
-      {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-      {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+      {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+      {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
     </>
   );
 };

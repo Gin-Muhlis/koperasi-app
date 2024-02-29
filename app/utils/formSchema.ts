@@ -4,65 +4,55 @@ export const createMemberSchema = z.object({
   name: z
     .string({
       invalid_type_error: "Nama harus valid",
+      required_error: "Nama tidak boleh kosong"
     })
     .max(100, {
       message: "Nama tidak boleh lebih dari 100 karakter",
-    })
-    .min(1, {
-      message: "Nama tidak boleh kosong",
     }),
   email: z
     .string({
+      required_error: "Email tidak boleh kosong",
       invalid_type_error: "Email harus valid",
     })
     .email({
       message: "Email harus valid",
-    })
-    .min(1, {
-      message: "Email tidak boleh kosong",
     }),
   address: z
     .string({
       invalid_type_error: "Alamat harus valid",
-    })
-    .min(1, {
-      message: "Alamat tidak boleh kosong",
+      required_error:  "Alamat tidak boleh kosong"
     }),
   phone_number: z
-    .string()
+    .string({
+      invalid_type_error: "Alamat harus valid",
+      required_error:  "Alamat tidak boleh kosong"
+    })
     .max(20, {
       message: "No Telp tidak boleh lebih dari 20 karakter",
-    })
-    .min(1, {
-      message: "No Telp tidak boleh kosong",
     }),
   religion: z
     .string({
-      invalid_type_error: "Alamat harus valid",
-    })
-    .min(1, {
-      message: "Agama tidak boleh kosong",
+      invalid_type_error: "Agama harus valid",
+      required_error: "Agama tidak boleh kosong"
     })
     .max(20, {
-      message: "No Telp tidak boleh lebih dari 20 karakter",
+      message: "Agama tidak boleh lebih dari 20 karakter",
     })
     .toLowerCase(),
   gender: z.enum(["L", "P"]),
   position: z.enum(["pns", "p3k", "cpns"]),
   position_category: z.string({
-    required_error: "Golongan member tidak boleh ksosong",
-    invalid_type_error: "Golongan tidak valid",
+    required_error: "Golongan anggota tidak boleh ksosong",
+    invalid_type_error: "Golongan anggota tidak valid",
   }),
   image: z.any(),
   username: z
     .string({
       invalid_type_error: "Username harus valid",
+      required_error: "Username tidak boleh kosong"
     })
     .max(100, {
       message: "Username tidak boleh lebih dari 100 karakter",
-    })
-    .min(1, {
-      message: "Username tidak boleh kosong",
     }),
   password: z
     .string({
@@ -71,75 +61,73 @@ export const createMemberSchema = z.object({
     .min(8, {
       message: "Password minimal 8 karakter",
     }),
-  role: z.enum(["super-admin", "member", "nasabah"]),
+  role: z.string({
+    required_error: "Role untuk anggota tidak boleh ksosong",
+    invalid_type_error: "Role untuk anggota tidak valid",
+  }),
 });
 
 export const updateMemberSchema = z.object({
   name: z
     .string({
       invalid_type_error: "Nama harus valid",
+      required_error: "Nama tidak boleh kosong"
     })
     .max(100, {
       message: "Nama tidak boleh lebih dari 100 karakter",
-    })
-    .min(1, {
-      message: "Nama tidak boleh kosong",
     }),
   email: z
     .string({
+      required_error: "Email tidak boleh kosong",
       invalid_type_error: "Email harus valid",
     })
     .email({
       message: "Email harus valid",
-    })
-    .min(1, {
-      message: "Email tidak boleh kosong",
     }),
   address: z
     .string({
       invalid_type_error: "Alamat harus valid",
-    })
-    .min(1, {
-      message: "Alamat tidak boleh kosong",
+      required_error:  "Alamat tidak boleh kosong"
     }),
   phone_number: z
-    .string()
+    .string({
+      invalid_type_error: "Alamat harus valid",
+      required_error:  "Alamat tidak boleh kosong"
+    })
     .max(20, {
       message: "No Telp tidak boleh lebih dari 20 karakter",
-    })
-    .min(1, {
-      message: "No Telp tidak boleh kosong",
     }),
   religion: z
     .string({
-      invalid_type_error: "Alamat harus valid",
-    })
-    .min(1, {
-      message: "Agama tidak boleh kosong",
+      invalid_type_error: "Agama harus valid",
+      required_error: "Agama tidak boleh kosong"
     })
     .max(20, {
-      message: "No Telp tidak boleh lebih dari 20 karakter",
+      message: "Agama tidak boleh lebih dari 20 karakter",
     })
     .toLowerCase(),
   gender: z.enum(["L", "P"]),
   position: z.enum(["pns", "p3k", "cpns"]),
   position_category: z.string({
-    required_error: "Golongan member tidak boleh ksosong",
-    invalid_type_error: "Golongan tidak valid",
+    required_error: "Golongan anggota tidak boleh ksosong",
+    invalid_type_error: "Golongan anggota tidak valid",
   }),
   image: z.any(),
   username: z
     .string({
       invalid_type_error: "Username harus valid",
+      required_error: "Username tidak boleh kosong"
     })
     .max(100, {
       message: "Username tidak boleh lebih dari 100 karakter",
-    })
-    .min(1, {
-      message: "Username tidak boleh kosong",
     }),
-  password: z.optional(z.string()),
-  role: z.enum(["super-admin", "member", "nasabah"]),
+  password: z.optional(z.string({
+    invalid_type_error: "Password harus valid",
+  })),
+  role: z.string({
+    required_error: "Role untuk anggota tidak boleh ksosong",
+    invalid_type_error: "Role untuk anggota tidak valid",
+  }),
   active: z.boolean(),
 });
 
