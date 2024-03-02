@@ -3,17 +3,25 @@
 import { Button } from '@/components/ui/button'
 import React, { useState } from 'react'
 import FormInvoice from './formAddInvoice';
-import { InvoiceState, MemberState, Receivable, SubCategoryInvoice } from '@/types/interface';
+import { InvoiceState, MemberState, PositionCategory, Receivable, SubCategoryInvoice, SubCategoryState } from '@/types/interface';
 import DetailInvoice from './detailInvoice';
 import AlertSuccess from '@/app/components/alertSuccess';
+import SweetAlertPopup from '@/app/components/sweetAlertPopup';
 
-const AddInvoice = ({ members, membersPrincipal, membersMandatory, memberSpecialMandatory, memberVoluntary, memberRecretional, memberReceivable, memberAccountReceivable }: { members: MemberState[], membersPrincipal: SubCategoryInvoice[], membersMandatory: SubCategoryInvoice[], memberSpecialMandatory: SubCategoryInvoice[], memberVoluntary: SubCategoryInvoice[], memberRecretional: SubCategoryInvoice[], memberReceivable: Receivable[], memberAccountReceivable: Receivable[] }) => {
+const AddInvoice = ({ subCategories, members, positionCategories }: { subCategories: SubCategoryState[], members: any[], positionCategories: PositionCategory[] }) => {
     const [modal, setModal] = useState(false);
     const [dataInvoice, setDataInvoice] = useState<InvoiceState | null>(null)
     const [success, setSuccess] = useState<string | boolean>(false)
+    const [status, setStatus] = useState<number | boolean>(false)
 
     const handleModal = () => {
         setModal(!modal);
+    }
+
+    const resetStateAction = () => {
+        setStatus(false)
+        setSuccess(false)
+        setDataInvoice(null)
     }
 
     return (
@@ -27,9 +35,9 @@ const AddInvoice = ({ members, membersPrincipal, membersMandatory, memberSpecial
                 </div>
             </div>
 
-            {dataInvoice != null && <DetailInvoice memberPrincipalSaving={membersPrincipal} members={members} memberMandatorySaving={membersMandatory} memberSpecialMandatorySaving={memberSpecialMandatory} memberVoluntarySaving={memberVoluntary} memberRecretionalSaving={memberRecretional} memberReceivable={memberReceivable} memberAccountReceivable={memberAccountReceivable} dataInvoice={dataInvoice} setSuccess={setSuccess} setDataInvoice={setDataInvoice} />}
+            {dataInvoice != null && <DetailInvoice subCategories={subCategories} members={members} positionCategories={positionCategories} dataInvoice={dataInvoice} resetState={resetStateAction} />}
 
-            {success && <AlertSuccess message={success} isShow={true} setSuccess={setSuccess} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
         </div>
     )
 }

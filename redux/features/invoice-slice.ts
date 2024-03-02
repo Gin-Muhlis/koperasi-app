@@ -1,13 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
-  listSimpananPokok: "[]",
-  listSimpananWajib: "[]",
-  listSimpananWajibKhusus: "[]",
-  listSimpananSukarela: "[]",
-  listTabunganRekreasi: "[]",
-  listPiutangSp: "[]",
-  listPiutangDagang: "[]",
+  selectedMembers: "[]",
   month: new Date().getMonth() + 1,
   year: new Date().getFullYear(),
   description: "-"
@@ -42,46 +36,10 @@ const invoice = createSlice({
             description: value
           }
           break;
-        case "SET_SIMPANAN_POKOK":
+        case "SET_SELECTED_MEMBERS":
           return {
             ...state,
-            listSimpananPokok: value,
-          };
-          break;
-        case "SET_SIMPANAN_WAJIB":
-          return {
-            ...state,
-            listSimpananWajib: value,
-          };
-          break;
-        case "SET_SIMPANAN_WAJIB_KHUSUS":
-          return {
-            ...state,
-            listSimpananWajibKhusus: value,
-          };
-          break;
-        case "SET_SIMPANAN_SUKARELA":
-          return {
-            ...state,
-            listSimpananSukarela: value,
-          };
-          break;
-        case "SET_TABUNGAN_REKREASI":
-          return {
-            ...state,
-            listTabunganRekreasi: value,
-          };
-          break;
-        case "SET_PIUTANG_SP":
-          return {
-            ...state,
-            listPiutangSp: value,
-          };
-          break;
-        case "SET_PIUTANG_DAGANG":
-          return {
-            ...state,
-            listPiutangDagang: value,
+            selectedMembers: value,
           };
           break;
         default:

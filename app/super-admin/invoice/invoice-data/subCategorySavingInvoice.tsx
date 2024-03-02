@@ -14,38 +14,47 @@ import {
 } from "@/components/ui/select";
 import { useDispatch } from 'react-redux'
 import { appDispatch, useAppSelector } from '@/redux/store'
-import { Member, Status, SubCategoryInvoice } from '@/types/interface'
-import { handleFormat } from '@/app/utils/helper'
+import { Member, PositionCategory, Status, SubCategoryInvoice, SubCategoryState } from '@/types/interface'
+import { capitalizeString, handleFormat } from '@/app/utils/helper'
 import { setInvoice } from '@/redux/features/invoice-slice'
 import { Badge } from '@/components/ui/badge'
 
-const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCategory }: { memberSpecialMandatorySaving: SubCategoryInvoice[], setSubCategory: React.Dispatch<React.SetStateAction<string>> }) => {
+const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCategory, setSubCategory }: { listMembers: any[], positionCategories: PositionCategory[], subCategory: SubCategoryState, setSubCategory: React.Dispatch<React.SetStateAction<SubCategoryState | undefined>> }) => {
     const dispatch = useDispatch<appDispatch>();
     const selector = useAppSelector((state) => state.invoiceReducer);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-    const [members, setMembers] = useState<SubCategoryInvoice[]>(memberSpecialMandatorySaving);
-    const [listSimpananWajibKhusus, setListSimpananWajibKhusus] = useState<Member[]>([])
+    const [members, setMembers] = useState<any[]>(listMembers);
+    const [selectedMembers, setSelectedMembers] = useState<any[]>([])
+    const [typePayment, setTypePayment] = useState<string>(subCategory.type_payment)
+    const [subCategoryName, setSubCategoryName] = useState<string>(subCategory.name)
+    
+    useEffect(() => {
+        if (selector) {
+            const data = JSON.parse(selector.selectedMembers)
 
+            setSelectedMembers(data)
+        }
+    }, [selector, selector.selectedMembers])
+    
+    useEffect(() => {
+        if (listMembers && subCategoryName == "simpanan pokok") {
+            const dataMembers = listMembers.filter((member) => member.data['simpanan pokok'].length == 0)
+            
+            setMembers(dataMembers)
+        }
+    }, [listMembers, subCategoryName])
+
+    // konfigurasi pagination
     const lastItemIndex = currentPage * itemsPerPage;
     const firstItemIndex = lastItemIndex - itemsPerPage;
     const currentItems = members.slice(firstItemIndex, lastItemIndex);
-
-    // parse state list simpanan pokok
-    useEffect(() => {
-        if (selector) {
-            const data = JSON.parse(selector.listSimpananWajibKhusus)
-
-            setListSimpananWajibKhusus(data)
-        }
-    }, [selector, selector.listSimpananWajibKhusus])
-
 
     // handle set state data list
     const setStateData = (data: Member[]) => {
         dispatch(
             setInvoice({
-                type: "SET_SIMPANAN_WAJIB_KHUSUS",
+                type: "SET_SELECTED_MEMBERS",
                 value: JSON.stringify(data),
             })
         );
@@ -53,53 +62,67 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
 
     // handle pop up modal
     const handleModal = () => {
-        setSubCategory("")
+        setSubCategory(undefined)
     }
 
     // filter member berdasarkan jabatan
     const filterMembersByPosition = (value: string) => {
-        const newMembers = memberSpecialMandatorySaving.filter((member) => member.position == value);
+        const newMembers = members.filter((member) => member.position == value);
 
         setMembers(newMembers);
     };
 
     // tambah member ke state data
     const handleAddMember = (id: number) => {
-        const existingItemIndex = listSimpananWajibKhusus.findIndex(
-            (item: Member) => item.id == id
+        const existingItemIndex = selectedMembers.findIndex(
+            (item: any) => item.id == id
         );
 
+        const member = members.find((member) => member.id == id);
+        
         if (existingItemIndex >= 0) {
-            const data = listSimpananWajibKhusus[existingItemIndex];
-            const updatedItems: Member[] = [...listSimpananWajibKhusus];
+            const data = selectedMembers[existingItemIndex];
+            const updatedItems: any[] = [...selectedMembers];
             updatedItems[existingItemIndex] = {
                 ...data,
-                status: "added",
+                [subCategoryName]: {
+                    ...data[subCategoryName],
+                    status: 'added'
+                },
             };
             setStateData(updatedItems)
         } else {
-            const amount = members.find((data) => data.id == id)?.payment
-            const newMembers: Member[] = [
-                ...listSimpananWajibKhusus,
-                { id, amount: Number(amount), status: "added" },
+            const subData = {
+                amount: Number(handleValueAmount(member.position_category_id, member.id).replaceAll(".", "")), 
+                status: 'added',
+            }
+            
+            const newMembers: any[] = [
+                ...selectedMembers,
+                { id, name: member.name, [subCategoryName]: subData },
             ];
             setStateData(newMembers)
         }
     };
+    
 
-    //   hapus member dari state data
+    //  hapus member dari state data
     const handleDeleteMember = (id: number) => {
-        let newMembers: Member[] = listSimpananWajibKhusus.filter((item: any) => item.id != id);
-        setStateData(newMembers)
+        const indexMember = selectedMembers.findIndex((data) => data.id == id);
+        const updatedMembers = [...selectedMembers];
+
+        delete updatedMembers[indexMember][subCategoryName]
+        
+        setStateData(updatedMembers)
     };
 
     //handle tampilan button tabel   
     const handleButtonAdd = (id: number) => {
-        const isInputed = listSimpananWajibKhusus.find(
+        const isInputed = selectedMembers.find(
             (item: any) => item.id == id
         );
 
-        if (!isInputed || isInputed.status == "not_added") {
+        if (!isInputed || !isInputed[subCategoryName] || isInputed[subCategoryName]?.status == "not_added") {
             return (
                 <Button
                     className="text-white bg-amber-400"
@@ -122,12 +145,16 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
 
     // handle cek is payed member
     const handlePayedMember = (dataPayments: Status[] | undefined) => {
+        if (typePayment != 'monthly') {
+            return false
+        }
+        
         const month = selector.month < 10 ? `0${selector.month}` : selector.month;
         const year = selector.year;
         let status: string | boolean = false
 
         dataPayments?.map((data) => {
-            if (data.month == `${month}-${year}`) {
+            if (data.month_year == `${month}-${year}`) {
                 status = data.status
                 return
             }
@@ -137,19 +164,38 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
 
     // handle disable input pembayaran
     const handleDisableInput = (dataPayments: Status[] | undefined, id: number) => {
-        const isAdded = listSimpananWajibKhusus.find(data => data.id == id && data.status == "added");
+        if (subCategoryName == "simpanan pokok") {
+            return true;
+        }
+        const isAdded = selectedMembers.find(data => data.id == id && data.status == "added");
 
         return isAdded != undefined || handlePayedMember(dataPayments) ? true : false;
     }
 
     // handle tambah semua member ke state data
-    const handleAddAllmember = () => {
-        const updatedList: Member[] = [...listSimpananWajibKhusus];
+    const handleAddAllMember = () => {
+        const updatedList: any[] = [...selectedMembers];
 
         members.map((item) => {
-            const isAdded = listSimpananWajibKhusus.find((data) => data.id == item.id);
-            if (isAdded == undefined && !handlePayedMember(item.month_status)) {
-                const data = { id: item.id, amount: item.payment, status: "added" }
+            const subData = {
+                amount: handleValueAmount(item.position_category_id, item.id),
+                status: "added"
+            }
+            
+            const indexAdded = updatedList.findIndex((data) => data.id == item.id);
+
+            if (indexAdded >= 0) {
+                const data = updatedList[indexAdded];
+
+                if (!data.hasOwnProperty(subCategory) || (data.hasOwnProperty(subCategoryName) && data[subCategoryName].status == "not_added")) {
+                    const newData = { ...data, [subCategoryName]: subData }
+                    
+                    updatedList[indexAdded] = newData
+                }
+            }
+
+            if (indexAdded < 0 && !handlePayedMember(item.data[subCategoryName].months_status)) {
+                const data = { id: item.id, name: item.name, [subCategoryName]: subData }
 
                 updatedList.push(data)
             }
@@ -160,44 +206,67 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
 
     // handle batalkan semua data yang dipilih
     const cancelAllMember = () => {
-        const updatedList: Member[] = [];
+        const updatedList: any[] = selectedMembers.map((data) => {
+            const dataMember = data;
+            delete dataMember[subCategoryName]
+
+            return dataMember
+        })
 
         setStateData(updatedList)
     }
 
     // handle update data jumlah pembayaran
     const handleUpdateAmount = (amount: string, id: number) => {
-        const existingItemIndex = listSimpananWajibKhusus.findIndex(
-            (item: Member) => item.id === id
+        const existingItemIndex = selectedMembers.findIndex(
+            (item: any) => item.id === id
         );
 
         const numericValue = amount.replace(/\D/g, '');
 
+        const member = members.find((member) => member.id == id);
+
+        const subData = {
+            amount: numericValue,
+            status: "not_added"
+        }
+
         if (existingItemIndex >= 0) {
-            const updatedItems = [...listSimpananWajibKhusus];
+            const updatedItems = [...selectedMembers];
             const data = updatedItems[existingItemIndex];
-            updatedItems[existingItemIndex] = { ...data, amount: Number(numericValue) };
+
+            updatedItems[existingItemIndex] = { ...data, [subCategoryName]: subData};
             setStateData(updatedItems)
         } else {
             const newMembers = [
-                ...listSimpananWajibKhusus,
-                { id, amount: Number(numericValue), status: "not_added" },
+                ...selectedMembers,
+                { id, name: member.name, [subCategoryName]: subData },
             ];
             setStateData(newMembers)
         }
     }
-
+    
     // handle value oembayaran
-    const handleValueAmount = (id: number) => {
-        const isInputed = listSimpananWajibKhusus.find((data) => data.id == id)
+    const handleValueAmount = (positionCategoryId: number, id: number) => {
+        const isInputed = selectedMembers.find((data) => data.id == id)
 
-        if (isInputed != undefined) {
-            return handleFormat(isInputed.amount)
+        if (isInputed != undefined && isInputed[subCategoryName]) {
+            return handleFormat(isInputed[subCategoryName].amount)
         }
 
-        const defaultAmount = members.find((data) => data.id == id)?.payment
+        const member = members.find((member) => member.id == id)
+        
+        if (member.data[subCategoryName].amount) {
+            const lastPayment = member.data[subCategoryName].amount;
+            
+            return handleFormat(lastPayment);
+        }
 
-        return handleFormat(Number(defaultAmount))
+        const defaultAmount: any = positionCategories.find((data) => data.id == positionCategoryId);
+        
+        const payment = defaultAmount ? defaultAmount[subCategoryName] : 0
+
+        return handleFormat(Number(payment))
 
     }
 
@@ -212,16 +281,22 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
 
         return <Badge className='bg-green-400 text-white'>{textStatus}</Badge>
     }
-
+    console.log(selectedMembers)
     // handle length available member
     const handleLengthAvailableMember = () => {
         const availables: SubCategoryInvoice[] = []
 
         members.map((member) => {
-            const isAdded = listSimpananWajibKhusus.find((data) => data.id == member.id);
-            if (isAdded == undefined && !handlePayedMember(member.month_status)) {
-                availables.push(member)
+            const isAdded = selectedMembers.find((data) => data.id == member.id);
+            if (isAdded != undefined) {
+                if (!isAdded.hasOwnProperty(subCategoryName) || (isAdded.hasOwnProperty(subCategoryName) && isAdded[subCategoryName].status == 'not_added')) {
+                    availables.push(member)
+                }   
             }
+
+            if (isAdded == undefined && !handlePayedMember(member.data[subCategoryName].months_status)) {
+                availables.push(member)
+            } 
         })
 
         return availables.length;
@@ -229,11 +304,16 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
 
     // handle jumlah data yang bisa di cancel
     const handleCountCancel = () => {
-        const dataAdded = listSimpananWajibKhusus.filter(data => data.status === 'added')
+        const dataAdded = selectedMembers.filter(data => {
+            if (data.hasOwnProperty(subCategoryName) && data[subCategoryName].status == 'added') {
+                return true
+            } else {
+                return false
+            }
+        })
 
         return dataAdded.length
     }
-
 
     return (
         <>
@@ -241,7 +321,7 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
                 <div className="bg-white rounded p-5 w-full">
                     <div className="w-full flex flex-col gap-5 mb-5">
                         <div className="w-1/2">
-                            <h1 className="text-black text-xl font-bold mb-3">Simpanan Wajib Khusus</h1>
+                            <h1 className="text-black text-xl font-bold mb-3">{capitalizeString(subCategoryName)}</h1>
                             <Select onValueChange={filterMembersByPosition}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Pilih Jabatan" />
@@ -264,22 +344,22 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
                                 </tr>
                             </thead>
                             <tbody className="border border-solid">
-                                {currentItems.map((item) => (
-                                    <tr key={item.id}>
-                                        <td className="p-3">{item.name}</td>
+                                {currentItems.map((member) => (
+                                    <tr key={member.id}>
+                                        <td className="p-3">{member.name}</td>
                                         <td className="p-3">
                                             <Input
                                                 type="text"
                                                 placeholder="Pembayaran"
-                                                data-id={item.id}
-                                                value={handleValueAmount(item.id)}
-                                                onChange={(event) => handleUpdateAmount(event.target.value, item.id)}
+                                                data-id={member.id}
+                                                value={handleValueAmount(member.position_category_id, member.id)}
+                                                onChange={(event) => handleUpdateAmount(event.target.value, member.id)}
                                                 min={0}
-                                                disabled={handleDisableInput(item.month_status, item.id)}
+                                                disabled={handleDisableInput(member.data[subCategoryName].months_status, member.id)}
                                             />
                                         </td>
                                         <td className="text-center p-3">
-                                            {handlePayedMember(item.month_status) ? handleShowStatus(handlePayedMember(item.month_status)) : handleButtonAdd(item.id)}
+                                            {handlePayedMember(member.data[subCategoryName].months_status) ? handleShowStatus(handlePayedMember(member.data[subCategoryName].months_status)) : handleButtonAdd(member.id)}
                                         </td>
                                     </tr>
                                 ))}
@@ -289,7 +369,7 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
                             <Button size={"sm"} onClick={cancelAllMember}>
                                 Batalkan Semua ({handleCountCancel()})
                             </Button>
-                            <Button size={"sm"} onClick={handleAddAllmember}>
+                            <Button size={"sm"} onClick={handleAddAllMember}>
                                 Tambah Semua ({handleLengthAvailableMember()})
                             </Button>
                         </div>
@@ -303,7 +383,7 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-end gap-3">
-                        <Button size={"sm"} onClick={handleModal}>Batal</Button>
+                    <Button size={"sm"} onClick={handleModal}>Batal</Button>
                         <Button size={"sm"} className='bg-green-400' onClick={handleModal}>Konfirmasi</Button>
                     </div>
                 </div>
@@ -313,4 +393,4 @@ const SpecialMandatorySavingPopup = ({ memberSpecialMandatorySaving, setSubCateg
     )
 }
 
-export default SpecialMandatorySavingPopup
+export default SubCategorySavingInvoicePopup

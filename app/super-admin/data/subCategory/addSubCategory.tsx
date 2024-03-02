@@ -65,7 +65,7 @@ const AddSubCategory = ({categories}: {categories: CategoryState[]}) => {
     setIsLoading(true)
     const formData = new FormData();
 
-    formData.append("name", values.name.toLowerCase());
+    formData.append("name", values.name.trim().toLowerCase());
     formData.append("type", values.type);
     formData.append("category_id", values.category_id);
 

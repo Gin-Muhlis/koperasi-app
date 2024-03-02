@@ -76,6 +76,7 @@ export type SubCategoryState = {
   code: number;
   name: string;
   type: "debit" | "kredit";
+  type_payment: string;
   category: string;
   category_id: string;
 };
@@ -114,22 +115,23 @@ export type TypeTab = {
 export type PositionCategory = {
   id: number;
   name: string;
-  pokok: number;
-  wajib: number;
-  wajib_khusus: number;
+  "simpanan pokok": number;
+  "simpanan wajib": number;
+  "simpanan wajib khusus": number;
 };
 
 export type Member = {
   id: number;
   amount: number;
   status: string;
+  sub_category: number;
   loanId?: number;
 };
 
 export type Status = {
-  month: string;
-    status: string
-}
+  month_year: string;
+  status: string;
+};
 
 export type Receivable = {
   id: number;
@@ -141,7 +143,7 @@ export type Receivable = {
   monthly: number;
   paid: number;
   remain_payment: number;
-  month_status?: Status[]
+  month_status?: Status[];
 };
 
 export type TotalColumn = {
@@ -192,7 +194,7 @@ export type SubCategoryInvoice = {
   name: string;
   position: string;
   payment: number;
-  month_status?: Status[]
+  month_status?: Status[];
 };
 
 export type PaymentState = {
@@ -209,25 +211,25 @@ export type PaymentState = {
 export type History = {
   date: string;
   amount: number;
-  code: number
-}
+  code: number;
+};
 
 export type DashboardMember = {
-  total_mandatory_saving: number,
-  total_special_mandatory_saving: number,
-  total_voluntary_saving: number,
-  total_recretional_saving: number,
-  history_savings: History[],
-  history_installments: History[],
-}
+  total_mandatory_saving: number;
+  total_special_mandatory_saving: number;
+  total_voluntary_saving: number;
+  total_recretional_saving: number;
+  history_savings: History[];
+  history_installments: History[];
+};
 
 export type HistoryInvoice = {
-  invoice_name: number,
+  invoice_name: number;
   date: string;
   status: string;
   payment_source: string;
   payment_method: string;
-}
+};
 
 export type DashboardAdmin = {
   count_member: number;
@@ -235,8 +237,8 @@ export type DashboardAdmin = {
   count_invoices_paid: number;
   total_savings: number;
   total_loans: number;
-  history_invoices: HistoryInvoice[]
-}
+  history_invoices: HistoryInvoice[];
+};
 
 export type MemberReceivable = {
   id: number;
@@ -246,13 +248,13 @@ export type MemberReceivable = {
   duration: number;
   deadline: string;
   total: number;
-}
+};
 
 export type ReceivableData = {
   members: MemberReceivable;
   description: string;
-  sub_category_id: number
-}
+  sub_category_id: number;
+};
 
 export type ReportMember = {
   id: number;
@@ -264,7 +266,7 @@ export type ReportMember = {
   recretional_saving: number;
   receivable: number;
   account_receivable: number;
-}
+};
 
 export type DataNasabah = {
   principal_saving: number;
@@ -273,7 +275,7 @@ export type DataNasabah = {
   voluntary_saving: number;
   recretional_saving: number;
   receivable: number;
-}
+};
 
 export type ReportLoanmember = {
   id: number;
@@ -289,5 +291,5 @@ export type MemberInstallment = {
   id: number;
   name: string;
   amount: number;
-  remain_payment: number; 
-}
+  remain_payment: number;
+};

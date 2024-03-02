@@ -72,7 +72,7 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
         const formData = new FormData();
 
         formData.append("_method", "PUT");
-        formData.append("name", values.name);
+        formData.append("name", values.name.trim().toLowerCase());
         formData.append("type", values.type);
         formData.append("category_id", values.category_id as string);
 

@@ -973,3 +973,33 @@ export async function createInstallmentMember(data: any, token: string | undefin
   } 
 
 }
+
+// API GET MEMBERS INVOICES
+export async function getMembersInvoice(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/members-invoice`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }   
+}
+
+// API GET Sub Category Invoices
+export async function getSubCategoriesInvoice(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/sub-categories-invoice`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}

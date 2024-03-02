@@ -14,18 +14,20 @@ import {
 } from "@/components/ui/select";
 import { useDispatch } from 'react-redux'
 import { appDispatch, useAppSelector } from '@/redux/store'
-import { Member, Receivable, Status, SubCategoryInvoice } from '@/types/interface'
-import { handleFormat } from '@/app/utils/helper'
+import { Member, Receivable, Status, SubCategoryInvoice, SubCategoryState } from '@/types/interface'
+import { capitalizeString, handleFormat } from '@/app/utils/helper'
 import { setInvoice } from '@/redux/features/invoice-slice'
 import { Badge } from '@/components/ui/badge'
 
-const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { memberAccountReceivable: Receivable[], setSubCategory: React.Dispatch<React.SetStateAction<string>> }) => {
+const SubCategoryReceivablePopup = ({ listMembers, subCategory, setSubCategory }: { listMembers: any[], subCategory: SubCategoryState, setSubCategory: React.Dispatch<React.SetStateAction<SubCategoryState | undefined>> }) => {
     const dispatch = useDispatch<appDispatch>();
     const selector = useAppSelector((state) => state.invoiceReducer);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-    const [members, setMembers] = useState<Receivable[]>(memberAccountReceivable);
-    const [listPiutangDagang, setListPiutangDagang] = useState<Member[]>([])
+    const [members, setMembers] = useState<any[]>(listMembers);
+    const [selectedMembers, setSelectedMembers] = useState<any[]>([])
+    const [typePayment, setTypePayment] = useState<string>(subCategory.type_payment)
+    const [subCategoryName, setSubCategoryName] = useState<string>(subCategory.name)
 
     const lastItemIndex = currentPage * itemsPerPage;
     const firstItemIndex = lastItemIndex - itemsPerPage;
@@ -34,18 +36,25 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
     // parse state list piutang s/p
     useEffect(() => {
         if (selector) {
-            const data = JSON.parse(selector.listPiutangDagang)
+            const data = JSON.parse(selector.selectedMembers)
 
-            setListPiutangDagang(data)
+            setSelectedMembers(data)
         }
-    }, [selector, selector.listPiutangDagang])
+    }, [selector, selector.selectedMembers])
 
+    useEffect(() => {
+        if (listMembers && subCategoryName) {
+            const dataMembers = listMembers.filter((member) => member.data[subCategoryName].amount)
+
+            setMembers(dataMembers)
+        }
+    }, [listMembers, subCategoryName])
 
     // handle set state data list
-    const setStateData = (data: Member[]) => {
+    const setStateData = (data: any[]) => {
         dispatch(
             setInvoice({
-                type: "SET_PIUTANG_DAGANG",
+                type: "SET_SELECTED_MEMBERS",
                 value: JSON.stringify(data),
             })
         );
@@ -53,39 +62,68 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
 
     // handle pop up modal
     const handleModal = () => {
-        setSubCategory("")
+        setSubCategory(undefined)
     }
 
     // filter member berdasarkan jabatan
     const filterMembersByPosition = (value: string) => {
-        const newMembers = memberAccountReceivable.filter((member) => member.position == value);
+        const newMembers = members.filter((member) => member.position == value);
 
         setMembers(newMembers);
     };
 
     // tambah member ke state data
     const handleAddMember = (id: number) => {
-        const data = members.find((data) => data.id == id)
-        const newMembers: Member[] = [
-            ...listPiutangDagang,
-            { id, amount: Number(data?.monthly), status: "added", loanId: data?.loan_id },
-        ];
-        setStateData(newMembers)
+        const existingItemIndex = selectedMembers.findIndex(
+            (item: any) => item.id == id
+        );
+
+        const member = members.find((member) => member.id == id);
+
+        if (existingItemIndex >= 0) {
+            const data = selectedMembers[existingItemIndex];
+            const updatedItems: any[] = [...selectedMembers];
+            updatedItems[existingItemIndex] = {
+                ...data,
+                [subCategoryName]: {
+                    amount: member.data[subCategoryName].monthly,
+                    loanId: member.data[subCategoryName].loan_id,
+                    status: 'added'
+                },
+            };
+            setStateData(updatedItems)
+        } else {
+            const subData = {
+                amount: member.data[subCategoryName].monthly,
+                loanId: member.data[subCategoryName].loan_id,
+                status: 'added',
+            }
+
+            const newMembers: any[] = [
+                ...selectedMembers,
+                { id, name: member.name, [subCategoryName]: subData },
+            ];
+            setStateData(newMembers)
+        }
     };
 
     //   hapus member dari state data
     const handleDeleteMember = (id: number) => {
-        let newMembers: Member[] = listPiutangDagang.filter((item: any) => item.id != id);
-        setStateData(newMembers)
+        const indexMember = selectedMembers.findIndex((data) => data.id == id);
+        const updatedMembers = [...selectedMembers];
+
+        delete updatedMembers[indexMember][subCategoryName]
+        
+        setStateData(updatedMembers)
     };
 
     //handle tampilan button tabel   
     const handleButtonAdd = (id: number) => {
-        const isInputed = listPiutangDagang.find(
+        const isInputed = selectedMembers.find(
             (item: any) => item.id == id
         );
 
-        if (!isInputed || isInputed.status == "not_added") {
+        if (!isInputed || !isInputed[subCategoryName] || isInputed[subCategoryName]?.status == "not_added") {
             return (
                 <Button
                     className="text-white bg-amber-400"
@@ -108,12 +146,16 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
 
     // handle cek is payed member
     const handlePayedMember = (dataPayments: Status[] | undefined) => {
+        if (typePayment != 'monthly') {
+            return false
+        }
+        
         const month = selector.month < 10 ? `0${selector.month}` : selector.month;
         const year = selector.year;
         let status: string | boolean = false
 
         dataPayments?.map((data) => {
-            if (data.month == `${month}-${year}`) {
+            if (data.month_year == `${month}-${year}`) {
                 status = data.status
                 return
             }
@@ -122,13 +164,30 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
     }
 
     // handle tambah semua member ke state data
-    const handleAddAllmember = () => {
-        const updatedList: Member[] = [...listPiutangDagang];
+    const handleAddAllMember = () => {
+        const updatedList: any[] = [...selectedMembers];
 
         members.map((item) => {
-            const isAdded = listPiutangDagang.find((data) => data.id == item.id);
-            if (isAdded == undefined && !handlePayedMember(item.month_status)) {
-                const data = { id: item.id, amount: item.monthly, status: "added", loanId: item.loan_id }
+            const subData = {
+                amount: item.data[subCategoryName].amount,
+                status: "added",
+                loanId: item.data[subCategoryName].loan_id
+            }
+            
+            const indexAdded = updatedList.findIndex((data) => data.id == item.id);
+
+            if (indexAdded >= 0) {
+                const data = updatedList[indexAdded];
+
+                if (!data.hasOwnProperty(subCategory)) {
+                    const newData = { ...data, [subCategoryName]: subData }
+                    
+                    updatedList[indexAdded] = newData
+                }
+            }
+
+            if (indexAdded < 0 && !handlePayedMember(item.data[subCategoryName].months_status)) {
+                const data = { id: item.id, name: item.name, [subCategoryName]: subData }
 
                 updatedList.push(data)
             }
@@ -139,7 +198,12 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
 
     // handle batalkan semua data yang dipilih
     const cancelAllMember = () => {
-        const updatedList: Member[] = [];
+        const updatedList: any[] = selectedMembers.map((data) => {
+            const dataMember = data;
+            delete dataMember[subCategoryName]
+
+            return dataMember
+        })
 
         setStateData(updatedList)
     }
@@ -158,16 +222,35 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
 
     // handle length available member
     const handleLengthAvailableMember = () => {
-        const availables: Receivable[] = []
+        const availables: SubCategoryInvoice[] = []
 
         members.map((member) => {
-            const isAdded = listPiutangDagang.find((data) => data.id == member.id);
-            if (isAdded == undefined && !handlePayedMember(member.month_status)) {
-                availables.push(member)
+            const isAdded = selectedMembers.find((data) => data.id == member.id);
+            if (isAdded != undefined) {
+                if (!isAdded.hasOwnProperty(subCategoryName)) {
+                    availables.push(member)
+                }   
             }
+
+            if (isAdded == undefined && !handlePayedMember(member.data[subCategoryName].months_status)) {
+                availables.push(member)
+            } 
         })
 
         return availables.length;
+    }
+
+     // handle jumlah data yang bisa di cancel
+     const handleCountCancel = () => {
+        const dataAdded = selectedMembers.filter(data => {
+            if (data.hasOwnProperty(subCategoryName) && data[subCategoryName].status == 'added') {
+                return true
+            } else {
+                return false
+            }
+        })
+
+        return dataAdded.length
     }
 
     return (
@@ -176,7 +259,7 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
                 <div className="bg-white rounded p-5 w-full">
                     <div className="w-full flex flex-col gap-5 mb-5">
                         <div className="w-1/2">
-                            <h1 className="text-black text-xl font-bold mb-3">Piutang Dagang</h1>
+                            <h1 className="text-black text-xl font-bold mb-3">{capitalizeString(subCategoryName)}</h1>
                             <Select onValueChange={filterMembersByPosition}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Pilih Jabatan" />
@@ -206,17 +289,17 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
                                 {currentItems.map((item) => (
                                     <tr key={item.id}>
                                         <td className="p-3">{item.name}</td>
-                                        <td className="p-3">Rp. {handleFormat(item.total_payment)}</td>
-                                        <td className="p-3">Rp. {handleFormat(item.paid)}</td>
-                                        <td className="p-3">Rp. {handleFormat(item.remain_payment)}</td>
+                                        <td className="p-3">Rp. {handleFormat(item.data[subCategoryName].total_payment)}</td>
+                                        <td className="p-3">Rp. {handleFormat(item.data[subCategoryName].paid)}</td>
+                                        <td className="p-3">Rp. {handleFormat(item.data[subCategoryName].remain_payment)}</td>
                                         <td className="p-3">
-                                            <Input
+                                            {<Input
                                                 type="text"
                                                 placeholder="Jumlah pembayaran"
                                                 data-id={item.id}
-                                                value={handleFormat(item.monthly)}
-                                                disabled
-                                            />
+                                                value={handleFormat(item.data[subCategoryName].monthly)}
+                                                readOnly
+                                            />}
                                         </td>
                                         <td className="text-center p-3">
                                             {handlePayedMember(item.month_status) ? handleShowStatus(handlePayedMember(item.month_status)) : handleButtonAdd(item.id)}
@@ -227,9 +310,9 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
                         </table>
                         <div className="flex justify-end gap-3">
                             <Button size={"sm"} onClick={cancelAllMember}>
-                                Batalkan Semua ({listPiutangDagang.length})
+                                Batalkan Semua ({handleCountCancel()})
                             </Button>
-                            <Button size={"sm"} onClick={handleAddAllmember}>
+                            <Button size={"sm"} onClick={handleAddAllMember}>
                                 Tambah Semua ({handleLengthAvailableMember()})
                             </Button>
                         </div>
@@ -253,4 +336,4 @@ const AccountReceivablePopup = ({ memberAccountReceivable, setSubCategory }: { m
     )
 }
 
-export default AccountReceivablePopup
+export default SubCategoryReceivablePopup
