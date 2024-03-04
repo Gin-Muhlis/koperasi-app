@@ -86,7 +86,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
             updatedItems[existingItemIndex] = {
                 ...data,
                 [subCategoryName]: {
-                    ...data[subCategoryName],
+                    amount: Number(handleValueAmount(member.position_category_id, member.id).replaceAll(".", "")),
                     status: 'added'
                 },
             };
@@ -112,8 +112,17 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         const updatedMembers = [...selectedMembers];
 
         delete updatedMembers[indexMember][subCategoryName]
+
+        const keysMember = Object.getOwnPropertyNames(updatedMembers[indexMember]);
         
-        setStateData(updatedMembers)
+        if (keysMember.length <= 2) {
+            console.log('cuma dua')
+            const filterMembers = updatedMembers.filter((data) => data.id != id)
+            setStateData(filterMembers)
+        } else {
+            setStateData(updatedMembers)
+        }
+        
     };
 
     //handle tampilan button tabel   
@@ -167,9 +176,20 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         if (subCategoryName == "simpanan pokok") {
             return true;
         }
-        const isAdded = selectedMembers.find(data => data.id == id && data.status == "added");
+        const isAdded = selectedMembers.find(data => data.id == id);
+        const isPayed = handlePayedMember(dataPayments) ? true : false;
+        
 
-        return isAdded != undefined || handlePayedMember(dataPayments) ? true : false;
+        if (isAdded != undefined && isAdded.hasOwnProperty(subCategoryName) && isAdded[subCategoryName].status == "added") {
+            return true
+        }
+        
+
+        if (isAdded == undefined && isPayed) {
+            return true
+        }
+      
+        return false
     }
 
     // handle tambah semua member ke state data
@@ -178,23 +198,24 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
 
         members.map((item) => {
             const subData = {
-                amount: handleValueAmount(item.position_category_id, item.id),
+                amount: Number(handleValueAmount(item.position_category_id, item.id).replaceAll(".", "")),
                 status: "added"
             }
             
             const indexAdded = updatedList.findIndex((data) => data.id == item.id);
+            const amountMember = Number(handleValueAmount(item.position_category_id, item.id).replaceAll(".", ""));
 
             if (indexAdded >= 0) {
                 const data = updatedList[indexAdded];
 
-                if (!data.hasOwnProperty(subCategory) || (data.hasOwnProperty(subCategoryName) && data[subCategoryName].status == "not_added")) {
+                if ((!data.hasOwnProperty(subCategoryName) || (data.hasOwnProperty(subCategoryName) && data[subCategoryName].status == 'not_added')) && !handlePayedMember(item.data[subCategoryName].months_status) && amountMember != 0) {
                     const newData = { ...data, [subCategoryName]: subData }
                     
                     updatedList[indexAdded] = newData
                 }
             }
 
-            if (indexAdded < 0 && !handlePayedMember(item.data[subCategoryName].months_status)) {
+            if (indexAdded < 0 && !handlePayedMember(item.data[subCategoryName].months_status) && amountMember != 0) {
                 const data = { id: item.id, name: item.name, [subCategoryName]: subData }
 
                 updatedList.push(data)
@@ -206,16 +227,20 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
 
     // handle batalkan semua data yang dipilih
     const cancelAllMember = () => {
-        const updatedList: any[] = selectedMembers.map((data) => {
+        const updatedList: any[] = selectedMembers.filter(data => {
             const dataMember = data;
             delete dataMember[subCategoryName]
-
-            return dataMember
-        })
+            const keysMember = Object.getOwnPropertyNames(dataMember);
+            if (keysMember.length <= 2) {
+                return false;
+            } else {
+                return true;
+            }
+        });
 
         setStateData(updatedList)
     }
-
+    console.log(selectedMembers)
     // handle update data jumlah pembayaran
     const handleUpdateAmount = (amount: string, id: number) => {
         const existingItemIndex = selectedMembers.findIndex(
@@ -227,7 +252,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         const member = members.find((member) => member.id == id);
 
         const subData = {
-            amount: numericValue,
+            amount: Number(numericValue),
             status: "not_added"
         }
 
@@ -264,7 +289,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
 
         const defaultAmount: any = positionCategories.find((data) => data.id == positionCategoryId);
         
-        const payment = defaultAmount ? defaultAmount[subCategoryName] : 0
+        const payment = defaultAmount != undefined  ? defaultAmount[subCategoryName] : 0
 
         return handleFormat(Number(payment))
 
@@ -281,20 +306,22 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
 
         return <Badge className='bg-green-400 text-white'>{textStatus}</Badge>
     }
-    console.log(selectedMembers)
+    
     // handle length available member
     const handleLengthAvailableMember = () => {
         const availables: SubCategoryInvoice[] = []
 
         members.map((member) => {
             const isAdded = selectedMembers.find((data) => data.id == member.id);
+            const amountMember = Number(handleValueAmount(member.position_category_id, member.id).replaceAll(".", ""));
+            
             if (isAdded != undefined) {
-                if (!isAdded.hasOwnProperty(subCategoryName) || (isAdded.hasOwnProperty(subCategoryName) && isAdded[subCategoryName].status == 'not_added')) {
-                    availables.push(member)
+                if ((!isAdded.hasOwnProperty(subCategoryName) || (isAdded.hasOwnProperty(subCategoryName) && isAdded[subCategoryName].status == 'not_added')) && !handlePayedMember(member.data[subCategoryName].months_status) && amountMember != 0) {
+                    availables.push(member) 
                 }   
             }
 
-            if (isAdded == undefined && !handlePayedMember(member.data[subCategoryName].months_status)) {
+            if (isAdded == undefined && !handlePayedMember(member.data[subCategoryName].months_status) && amountMember != 0) {
                 availables.push(member)
             } 
         })

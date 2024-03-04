@@ -19,9 +19,14 @@ const AddInvoice = ({ subCategories, members, positionCategories }: { subCategor
     }
 
     const resetStateAction = () => {
-        setStatus(false)
-        setSuccess(false)
+        setStatus(200)
+        setSuccess('Invoice berhasil ditambahkan')
         setDataInvoice(null)
+    }
+
+    const resetStatePopup = () => {
+        setSuccess(false)
+        setStatus(false)
     }
 
     return (
@@ -37,7 +42,7 @@ const AddInvoice = ({ subCategories, members, positionCategories }: { subCategor
 
             {dataInvoice != null && <DetailInvoice subCategories={subCategories} members={members} positionCategories={positionCategories} dataInvoice={dataInvoice} resetState={resetStateAction} />}
 
-            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStatePopup} />}
         </div>
     )
 }

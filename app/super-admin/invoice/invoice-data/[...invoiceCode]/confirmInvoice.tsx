@@ -45,7 +45,8 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
     }
 
     const response = await createPaymentInvoice(data, session?.user.accessToken)
-    setIsLoading(false)
+    console.log(response)
+    setIsLoading(false) 
     if (response.status == 200) {
       setSuccess(response.data.message)
       handleModal()

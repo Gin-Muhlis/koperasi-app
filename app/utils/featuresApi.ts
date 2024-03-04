@@ -608,27 +608,15 @@ export async function createInvoice(
 
 // CREATE API Detail Invoice
 export async function createDetailInvoice(
-  principalSavings: Member[] | undefined,
-  mandatorySavings: Member[] | undefined,
-  specialMandatorySavings: Member[] | undefined,
-  voluntarySavings: Member[] | undefined,
-  recretionalSavings: Member[] | undefined,
-  receivables: Member[] | undefined,
-  accountsReceivable: Member[] | undefined,
-  token: string | undefined,
+  members: any[],
   monthYear: string,
   description: string,
-  invoiceId: number
+  invoiceId: number,
+  token: string | undefined
 ) {
   try {
     const data = {
-      principal_savings: principalSavings,
-      mandatory_savings: mandatorySavings,
-      special_mandatory_savings: specialMandatorySavings,
-      voluntary_savings: voluntarySavings,
-      recretional_savings: recretionalSavings,
-      receivables,
-      accounts_receivable: accountsReceivable,
+      members,
       month_year: monthYear,
       description,
       invoice_id: invoiceId,

@@ -59,7 +59,7 @@ const SubCategoryReceivablePopup = ({ listMembers, subCategory, setSubCategory }
             })
         );
     }
-
+    console.log(selectedMembers)
     // handle pop up modal
     const handleModal = () => {
         setSubCategory(undefined)
@@ -112,9 +112,17 @@ const SubCategoryReceivablePopup = ({ listMembers, subCategory, setSubCategory }
         const indexMember = selectedMembers.findIndex((data) => data.id == id);
         const updatedMembers = [...selectedMembers];
 
-        delete updatedMembers[indexMember][subCategoryName]
+       
+        const keysMember = Object.getOwnPropertyNames(updatedMembers[indexMember]);
         
-        setStateData(updatedMembers)
+        if (keysMember.length <= 2) {
+            console.log('cuma dua')
+            const filterMembers = updatedMembers.filter((data) => data.id != id)
+            setStateData(filterMembers)
+        } else {
+            setStateData(updatedMembers)
+        }
+        
     };
 
     //handle tampilan button tabel   
@@ -169,7 +177,7 @@ const SubCategoryReceivablePopup = ({ listMembers, subCategory, setSubCategory }
 
         members.map((item) => {
             const subData = {
-                amount: item.data[subCategoryName].amount,
+                amount: item.data[subCategoryName].monthly,
                 status: "added",
                 loanId: item.data[subCategoryName].loan_id
             }
@@ -198,12 +206,16 @@ const SubCategoryReceivablePopup = ({ listMembers, subCategory, setSubCategory }
 
     // handle batalkan semua data yang dipilih
     const cancelAllMember = () => {
-        const updatedList: any[] = selectedMembers.map((data) => {
+        const updatedList: any[] = selectedMembers.filter(data => {
             const dataMember = data;
             delete dataMember[subCategoryName]
-
-            return dataMember
-        })
+            const keysMember = Object.getOwnPropertyNames(dataMember);
+            if (keysMember.length <= 2) {
+                return false;
+            } else {
+                return true;
+            }
+        });
 
         setStateData(updatedList)
     }
@@ -226,9 +238,10 @@ const SubCategoryReceivablePopup = ({ listMembers, subCategory, setSubCategory }
 
         members.map((member) => {
             const isAdded = selectedMembers.find((data) => data.id == member.id);
+            
             if (isAdded != undefined) {
-                if (!isAdded.hasOwnProperty(subCategoryName)) {
-                    availables.push(member)
+                if ((!isAdded.hasOwnProperty(subCategoryName) || (isAdded.hasOwnProperty(subCategoryName) && isAdded[subCategoryName].status == 'not_added')) && !handlePayedMember(member.data[subCategoryName].months_status)) {
+                    availables.push(member) 
                 }   
             }
 
@@ -302,7 +315,7 @@ const SubCategoryReceivablePopup = ({ listMembers, subCategory, setSubCategory }
                                             />}
                                         </td>
                                         <td className="text-center p-3">
-                                            {handlePayedMember(item.month_status) ? handleShowStatus(handlePayedMember(item.month_status)) : handleButtonAdd(item.id)}
+                                        {handlePayedMember(item.data[subCategoryName].months_status) ? handleShowStatus(handlePayedMember(item.data[subCategoryName].months_status)) : handleButtonAdd(item.id)}
                                         </td>
                                     </tr>
                                 ))}

@@ -13,10 +13,12 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { capitalizeString, handleFormat } from "@/app/utils/helper";
 import { useDispatch } from "react-redux";
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { subCategories: SubCategoryState[], dataInvoice: InvoiceState, resetStateAction: () => void }) => {
-    const [modal, setModal] = useState(false);
+
     const [error, setError] = useState<string | boolean>(false);
+    const [status, setStatus] = useState<number | boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [selectedMembers, setSelectedMembers] = useState<any[]>([])
 
@@ -34,28 +36,36 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
         }
     }, [selector, selector.selectedMembers])
 
+    const resetError = () => {
+        setStatus(false)
+        setError(false)
+    }
+
 
     const handleSaveDetailInvoice = async () => {
         setIsLoading(true)
 
         const monthYear = `${selector.month < 10 ? `0${selector.month}` : selector.month}-${selector.year}`
 
-        // const response = await {}
+        const response = await createDetailInvoice(selectedMembers, monthYear, selector.description, dataInvoice.id, session?.user.accessToken)
+        
+        setIsLoading(false);
+        if (response.status == 200) {
+            resetStateAction()
+            dispatch(resetState())
+            router.refresh()
+        } else if (response.status == 422) {
+            setStatus(response.status)
+            const errorData = response.data.errors;
+            const keys = Object.keys(errorData)
+            const firstKey = keys[0]
+            const message = errorData[firstKey][0]
 
-        // if (response.status == 200) {
-        //     resetStateAction()
-        //     dispatch(resetState())
-        //     router.refresh()
-        // } else if (response.status == 422) {
-        //     const errorData = response.data.errors;
-        //     const keys = Object.keys(errorData)
-        //     const firstKey = keys[0]
-        //     const message = errorData[firstKey][0]
-
-        //     setError(message)
-        // } else {
-        //     setError(response.data.message)
-        // }
+            setError(message)
+        } else {
+            setStatus(response.status)
+            setError("Terjadi kesalahan dengan sistem")
+        }
 
     }
 
@@ -78,9 +88,37 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
         })
 
         return handleFormat(total);
-        
     }   
 
+    const handleTotalCol = (subCategoryName: string) => {
+        let total = 0;
+        selectedMembers.forEach((data) => {
+            if (!data.hasOwnProperty(subCategoryName)) {
+                total += 0
+            } else {
+                total += data[subCategoryName].amount
+            }
+        })
+
+        return total
+    }
+
+    const handleTotalData = () => {
+        let total = 0;
+
+        selectedMembers.map((data) => {
+            subCategories.map((subCategory) => {
+                if (!data.hasOwnProperty(subCategory.name)) {
+                    total += 0
+                } else {
+                    total += data[subCategory.name].amount
+                }
+            })
+        })
+
+        return total;
+        
+    }
 
     return (
         <div>
@@ -128,11 +166,11 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
                                 </td>
                                 {subCategories.map((item) => (
                                     <td key={item.id} className="text-center border border-solid p-3">
-                                        {capitalizeString(item.name)}
+                                        {handleFormat(handleTotalCol(item.name))}
                                     </td>
                                 ))}
                                 <td className="text-center border border-solid p-3">
-                                    0
+                                    {handleFormat(handleTotalData())}
                                 </td>
                             </tr>
                         </> : <tr><td className="text-center border border-solid p-3" colSpan={subCategories.length + 3}>Tidak ada data</td></tr>}
@@ -150,7 +188,7 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
                     {isLoading ? <Loader /> : "Simpan Data"}
                 </Button>
             </div>
-            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetError} />}
         </div>
     );
 };
