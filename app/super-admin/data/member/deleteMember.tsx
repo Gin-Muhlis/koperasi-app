@@ -24,12 +24,13 @@ import Loader from '@/app/components/loader';
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 
-const DeleteMember = ({ member }: { member: MemberState }) => {
+const DeleteMember = ({ isModal, resetModal, member }: { isModal: boolean, member: MemberState | undefined, resetModal: () => void }) => {
     const { data: session } = useSession()
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState<string | boolean>(false)
     const [error, setError] = useState<string | boolean>(false)
     const [status, setStatus] = useState<number | boolean>(false)
+    const [modal, setModal] = useState(isModal);
 
     const router = useRouter();
 
@@ -38,19 +39,20 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
         setStatus(false);
         setError(false);
         router.refresh();
+        resetModal()
     }
 
     const handleDelete = async () => {
 
         setIsLoading(true);
 
-        const response = await deleteMember(member.id, session?.user.accessToken);
+        const response = await deleteMember(member?.id as number, session?.user.accessToken);
         setStatus(response.status)
 
         if (response.status === 200) {
             setIsLoading(false)
             setSuccess(response.data.message)
-            router.refresh();
+            setModal(false)
         } else {
             setIsLoading(false)
             setError('Data member gagal dihapus')
@@ -58,23 +60,17 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
     }
 
     return (
-        <div>
-            <AlertDialog>
-                <AlertDialogTrigger asChild>
-                    <span className="w-5 h-5 rounded bg-red-500 text-white flex items-center justify-center cursor-pointer">
-
-                        <Icon icon="lucide:trash-2" width="16" height="16" />
-                    </span>
-                </AlertDialogTrigger>
+        <>
+            <AlertDialog open={modal}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah kamu yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Data {member.name} akan dihapus!
+                            Data {member?.name} akan dihapus!
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogCancel onClick={resetModal}>Batal</AlertDialogCancel>
                         <AlertDialogAction onClick={handleDelete} className="bg-red-500" disabled={isLoading}>
                             {isLoading ? <Loader /> : 'Hapus'}
                         </AlertDialogAction>
@@ -84,7 +80,7 @@ const DeleteMember = ({ member }: { member: MemberState }) => {
 
             {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
             {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
-        </div>
+        </>
     )
 }
 

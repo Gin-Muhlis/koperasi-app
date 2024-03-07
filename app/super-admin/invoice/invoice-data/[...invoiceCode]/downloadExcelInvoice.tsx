@@ -3,6 +3,7 @@
 import AlertError from '@/app/components/alertError'
 import AlertSuccess from '@/app/components/alertSuccess'
 import Loader from '@/app/components/loader'
+import SweetAlertPopup from '@/app/components/sweetAlertPopup'
 import { downloadExcelInvoice } from '@/app/utils/featuresApi'
 import { Button } from '@/components/ui/button'
 import { Invoice } from '@/types/interface'
@@ -11,10 +12,11 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
-const DownloadExcelInvoiceButton = ({detailInvoice, timeInvoice}: {detailInvoice: Invoice[], timeInvoice: string}) => {
+const DownloadExcelInvoiceButton = ({invoiceCode, timeInvoice}: {invoiceCode: string, timeInvoice: string}) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [success, setSuccess] = useState<string | boolean>(false)
     const [error, setError] = useState<string | boolean>(false)
+    const [status, setStatus] = useState<number | boolean>(false)
 
     const router = useRouter()
     const { data: session } = useSession()
@@ -26,26 +28,28 @@ const DownloadExcelInvoiceButton = ({detailInvoice, timeInvoice}: {detailInvoice
         const time = `${splitTime[1]} ${splitTime[2]}`
 
         const response = await downloadExcelInvoice(
-            detailInvoice,
-            timeInvoice,
+            invoiceCode,
             session?.user.accessToken
         );
+        console.log(response)
+
+        setStatus(response.status);
+        
+        setIsLoading(false);
             
         if (response.status == 200) {
             const blob = await response.data;
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute("download", `Pembayaran Invoice ${time}.xlsx`); // or any other extension
+            link.setAttribute("download", `Zie Koperasi ${time}.xlsx`); // or any other extension
             document.body.appendChild(link);
             link.click();
             link.parentNode?.removeChild(link);
 
-            setIsLoading(false);
             router.refresh();
             setSuccess("Download data berhasil");
         } else if (response.status === 422) {
-            setIsLoading(false);
             const errorsData = response.data.errors;
             const keys = Object.keys(errorsData);
             const firstKey = keys[0];
@@ -53,10 +57,15 @@ const DownloadExcelInvoiceButton = ({detailInvoice, timeInvoice}: {detailInvoice
 
             setError(message);
         } else {
-            setIsLoading(false);
-            setError(response.data.message);
+            setError('Terjadi kesalahan dengan sistem');
         }
     };
+
+    const resetStateAction = () => {
+        setStatus(false)
+        setSuccess(false)
+        setError(false)
+    }
 
     return (
         <>
@@ -66,8 +75,8 @@ const DownloadExcelInvoiceButton = ({detailInvoice, timeInvoice}: {detailInvoice
                     <span>Download Excel</span>
                 </>}
             </Button>
-            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </>
     )
 }

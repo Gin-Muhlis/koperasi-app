@@ -19,28 +19,28 @@ const Content = ({
       header: "Posisi",
     },
     {
-      accessorKey: "pokok",
+      accessorKey: "simpanan pokok",
       header: () => <div className="text-center">Pembayaran Pokok</div>,
       cell: ({ row }) => {
-        const value = parseFloat(row.getValue("pokok"));
+        const value = parseFloat(row.getValue("simpanan pokok"));
 
         return <div className="text-center">{handleFormat(value)}</div>;
       },
     },
     {
-      accessorKey: "wajib",
+      accessorKey: "simpanan wajib",
       header: () => <div className="text-center">Pembayaran Wajib</div>,
       cell: ({ row }) => {
-        const value = parseFloat(row.getValue("wajib"));
+        const value = parseFloat(row.getValue("simpanan wajib"));
 
         return <div className="text-center">{handleFormat(value)}</div>;
       },
     },
     {
-      accessorKey: "wajib_khusus",
+      accessorKey: "simpanan wajib khusus",
       header: () => <div className="text-center">Pembayaran Wajib Khusus</div>,
       cell: ({ row }) => {
-        const value = parseFloat(row.getValue("wajib_khusus"));
+        const value = parseFloat(row.getValue("simpanan wajib khusus"));
 
         return <div className="text-center">{handleFormat(value)}</div>;
       },

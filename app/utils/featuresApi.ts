@@ -776,13 +776,14 @@ export async function getDetailInvoice(
 
 // CREATE API Payment
 export async function createPaymentInvoice(
-  data: PaymentState,
+  data: FormData,
   token: string | undefined
 ) {
   try {
     const response = await axiosInstance.post(`payment`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
 
@@ -794,21 +795,15 @@ export async function createPaymentInvoice(
 
 // DOWNLOAD API Detail Invoice Excel
 export async function downloadExcelInvoice(
-  data: Invoice[],
-  timeInvoice: string,
+  invoiceCode: string,
   token: string | undefined
 ) {
   try {
-    const invoiceData = {
-      data: data,
-      time_invoice: timeInvoice,
-    };
 
-    const response: any = await axiosInstance.post(
-      `export/invoice-excel`,
-      invoiceData,
+    const response: any = await axiosInstance.get(
+      `export/invoice-excel/${invoiceCode}`,
       {
-        responseType: "blob",
+         responseType: "blob",
         headers: {
           Authorization: `Bearer ${token}`,
           Accept:
@@ -825,19 +820,43 @@ export async function downloadExcelInvoice(
 
 // DOWNLOAD API Detail Invoice PDF
 export async function downloadPdfInvoice(
-  data: Invoice[],
-  timeInvoice: string,
+  invoiceCode: string,
   token: string | undefined
 ) {
   try {
-    const invoiceData = {
-      data: data,
-      time_invoice: timeInvoice,
+
+    const response: any = await axiosInstance.get(
+      `export/invoice-pdf/${invoiceCode}`,
+      {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/pdf",
+        },
+      }
+    );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// DOWNLOAD API Detail Invoice member PDF
+export async function downloadPdfInvoiceMember(
+  memberId: number,
+  invoiceCode: string,
+  token: string | undefined
+) {
+  try {
+    const data = {
+      member_id: memberId,
+      invoice_code: invoiceCode
     };
 
     const response: any = await axiosInstance.post(
-      `export/invoice-pdf`,
-      invoiceData,
+      `/export/invoice-member`,
+      data,
       {
         responseType: "blob",
         headers: {
@@ -987,6 +1006,21 @@ export async function getSubCategoriesInvoice(token: string | undefined) {
     });
 
     return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API UPDATE Password User
+export async function changePassword(data: FormData, id: number, token: string | undefined) {
+  try {
+    const response = await axiosInstance.post(`/change-password/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response;
   } catch (error: any) {
     return error.response;
   }

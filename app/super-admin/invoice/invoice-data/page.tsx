@@ -3,9 +3,9 @@ import React from 'react'
 import AddInvoice from './addInvoice'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { getInvoices, getMemberAccountReceivable, getMemberMandatorySaving, getMemberPrincipalSaving, getMemberReceivable, getMemberRecretionalSaving, getMemberSpecialMandatorySaving, getMemberVoluntarySaving, getMembers, getMembersInvoice, getPositionCategories, getSubCategories, getSubCategoriesInvoice } from '@/app/utils/featuresApi'
+import { getInvoices, getMembersInvoice, getPositionCategories,  getSubCategoriesInvoice } from '@/app/utils/featuresApi'
 import ListInvoice from './listInvoice'
-import { InvoiceState, MemberState, PositionCategory, Receivable, SubCategoryInvoice, SubCategoryState } from '@/types/interface'
+import { InvoiceState, PositionCategory, SubCategoryState } from '@/types/interface'
 
 const Invoice = async () => {
     const session = await getServerSession(authOptions)

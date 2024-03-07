@@ -21,6 +21,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
       { role: "super-admin", title: "Produk", path: "/super-admin/data/product" },
       { role: "super-admin", title: "Barang", path: "/super-admin/data/stuff" },
       { role: "super-admin", title: "Golongan", path: "/super-admin/data/positionCategory" },
+      { role: "super-admin", title: "Profil App", path: "/super-admin/data/profileApp" },
     ],
   },
   {

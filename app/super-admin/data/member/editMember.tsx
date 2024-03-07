@@ -38,15 +38,15 @@ import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = updateMemberSchema;
 
-const EditMember = ({ member, roles, positionCategories }: { member: MemberState, roles: RoleState[] | undefined, positionCategories: PositionCategory[] }) => {
+const EditMember = ({ isModal, resetModal, member, roles, positionCategories }: { isModal: boolean, resetModal: () => void, member: MemberState | undefined, roles: RoleState[] | undefined, positionCategories: PositionCategory[] }) => {
     const { data: session } = useSession();
     const [imageProfile, setImageProfile] = useState<
         File | string | Blob | undefined
-    >(member.imageProfile);
+    >(member?.imageProfile);
     const [previewImage, setPreviewImage] = useState<File | string | undefined>(
         undefined
     );
-    const [modal, setModal] = useState(false);
+    const [modal, setModal] = useState(isModal);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
@@ -57,6 +57,7 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
 
     const handleModal = () => {
         setModal(!modal);
+        resetModal()
     };
 
     const handleShowPassword = () => {
@@ -66,17 +67,17 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: member.name,
-            email: member.email,
-            address: member.address,
-            phone_number: member.phone_number,
-            religion: member.religion,
-            gender: member.gender,
-            position: member.position,
-            username: member.username,
-            role: member.role,
-            active: member.active == 1 ? true : false,
-            position_category: member.position_category
+            name: member?.name,
+            email: member?.email,
+            address: member?.address,
+            phone_number: member?.phone_number,
+            religion: member?.religion,
+            gender: member?.gender,
+            position: member?.position,
+            username: member?.username,
+            role: member?.role,
+            active: member?.active == 1 ? true : false,
+            position_category: member?.position_category
         },
     })
 
@@ -113,7 +114,7 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
             formData.append("image", imageProfile as Blob);
         }
 
-        const response = await updateMember(member.id, formData, session?.user.accessToken)
+        const response = await updateMember(member?.id as number, formData, session?.user.accessToken)
         setStatus(Number(response.status))
         setIsLoading(false)
         if (response.status === 200) {
@@ -157,9 +158,6 @@ const EditMember = ({ member, roles, positionCategories }: { member: MemberState
 
     return (
         <>
-            <span className="w-5 h-5 rounded bg-green-500 text-white flex items-center justify-center cursor-pointer" onClick={handleModal}>
-                <Icon icon="lucide:square-pen" width="16" height="16" />
-            </span>
             <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
                 <div className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
                     <div className="p-4 border-b border-b-slate-300 mb-4">

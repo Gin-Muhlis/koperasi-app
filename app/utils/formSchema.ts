@@ -57,6 +57,7 @@ export const createMemberSchema = z.object({
   password: z
     .string({
       invalid_type_error: "Password harus valid",
+      required_error: "Password tidak boleh kosong"
     })
     .min(8, {
       message: "Password minimal 8 karakter",
@@ -322,3 +323,13 @@ export const positionCategorySchema = z.object({
     invalid_type_error: "Jumlah Pembayaran Simpanan Wajib Khusus tidak valid",
   }),
 });
+
+export const changePasswordSchema = z.object({
+  password: z.string({
+    invalid_type_error: "Password harus valid",
+    required_error: "Password tidak boleh kosong"
+  })
+  .min(8, {
+    message: "Password minimal 8 karakter",
+  }),
+})

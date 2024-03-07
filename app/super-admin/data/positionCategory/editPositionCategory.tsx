@@ -53,9 +53,9 @@ const EditPositionCategory = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       position: positionCategory.name,
-      pokok: positionCategory.pokok.toString(),
-      wajib: positionCategory.wajib.toString(),
-      wajib_khusus: positionCategory.wajib_khusus.toString(),
+      pokok: positionCategory['simpanan pokok'].toString(),
+      wajib: positionCategory["simpanan wajib"].toString(),
+      wajib_khusus: positionCategory["simpanan wajib khusus"].toString(),
     },
   });
 
