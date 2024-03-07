@@ -11,7 +11,7 @@ export default function Home() {
         <NavHome />
         <div className="px-10 w-full md:w-2/3 hero-section flex flex-col items-start justify-center">
           <h1 className='text-white text-5xl font-bold mb-7'>Sejalin Harapan, Bangun Bersama. Koperasi, Ladang Kesejahteraan Kita.</h1>
-          <p className='text-slate-300 text-md w-full md:w-3/4 leading-6'>Zie Koperasi, layanan simpan pinjam untuk merangkul impian finansial Anda. Dengan keamanan dan kenyamanan sebagai prioritas. Bergabunglah dengan kami, karena di Zie Koperasi, kita membangun masa depan bersama. </p>
+          <p className='text-slate-300 text-md w-full md:w-3/4 leading-6'>Zie Koperasi, layanan simpan pinjam untuk merangkul impian finansial Anda. Dengan keamanan dan kenyamanan sebagai prioritas. Bergabunglah dengan kami, karena di Zie Koperasi, kita membangun masa depan bersama.</p>
         </div>
       </div>
     </DefaultLayout>

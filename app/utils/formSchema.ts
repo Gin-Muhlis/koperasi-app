@@ -324,12 +324,22 @@ export const positionCategorySchema = z.object({
   }),
 });
 
-export const changePasswordSchema = z.object({
-  password: z.string({
-    invalid_type_error: "Password harus valid",
-    required_error: "Password tidak boleh kosong"
-  })
-  .min(8, {
-    message: "Password minimal 8 karakter",
+export const profileSchema = z.object({
+  name: z.string({
+    invalid_type_error: "Nama app harus valid",
+    required_error: "Nama app tidak boleh kosong"
+  }),
+  address: z.string({
+    invalid_type_error: "Alamat harus valid",
+    required_error: "Alamat tidak boleh kosong"
+  }),
+  phone_number: z.string({
+    invalid_type_error: "No Telepon harus valid",
+    required_error: "No Telepon tidak boleh kosong"
+  }),
+  icon: z.any(),
+  about: z.string({
+    invalid_type_error: "Alamat harus valid",
+    required_error: "Alamat tidak boleh kosong"
   }),
 })

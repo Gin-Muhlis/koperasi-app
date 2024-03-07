@@ -294,3 +294,13 @@ export type MemberInstallment = {
   amount: number;
   remain_payment: number;
 };
+
+
+export type ProfileApp = {
+  id: number;
+  name: string;
+  icon: string;
+  address: string;
+  phone_number: number;
+  about: string;
+}

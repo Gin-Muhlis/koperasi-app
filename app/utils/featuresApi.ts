@@ -173,7 +173,7 @@ export async function updateProfile(
 ) {
   try {
     
-    const response = await axiosInstance.post(`/profile/${id}`, data, {
+    const response = await axiosInstance.post(`/profile-app/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -1014,9 +1014,44 @@ export async function getSubCategoriesInvoice(token: string | undefined) {
 // API UPDATE Password User
 export async function changePassword(data: FormData, id: number, token: string | undefined) {
   try {
-    const response = await axiosInstance.post(`/change-password/${id}`, data, {
+    const response = await axiosInstance.post(`change-password/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Profil App
+export async function getProfilApp(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`profile-app`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API Update Profile App
+export async function updateProfileApp(
+  id: number,
+  data: FormData,
+  token: string | undefined
+) {
+  try {
+    const response = await axiosInstance.post(`profile-app/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
 
