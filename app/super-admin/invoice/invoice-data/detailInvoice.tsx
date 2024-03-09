@@ -30,6 +30,7 @@ import { months, numberMonths } from '@/constants/CONSTS';
 import SubCategoryInvoicePopup from './subCategorySavingInvoice';
 import SubCategorySavingInvoicePopup from './subCategorySavingInvoice';
 import SubCategoryReceivablePopup from './subCategoryReceivableInvoice';
+import { Badge } from '@/components/ui/badge';
 
 const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice, resetState }: { subCategories: SubCategoryState[], members: MemberState[], positionCategories: PositionCategory[], dataInvoice: InvoiceState, resetState: () => void }) => {
     const dispatch = useDispatch<appDispatch>()
@@ -107,10 +108,10 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
                         </div>
                         <div className="w-full mb-3 flex items-center">
                             <span className="basis-1/3">
-                                Metode Pembayaran
+                                Status
                             </span>
                             <span className='flex-1 font-semibold'>
-                                : {dataInvoice.payment_method}
+                                : {dataInvoice.status != 'dibayar' ? <Badge className='bg-red-500'>{dataInvoice.status}</Badge> : <Badge className='bg-green-500'>{dataInvoice.status}</Badge>}
                             </span>
                         </div>
                     </div>

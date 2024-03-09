@@ -34,8 +34,8 @@ import { format } from "date-fns"
 import { createInvoice } from '@/app/utils/featuresApi'
 import { useSession } from 'next-auth/react'
 import Loader from '@/app/components/loader'
-import AlertError from '@/app/components/alertError'
 import { InvoiceState } from '@/types/interface'
+import SweetAlertPopup from '@/app/components/sweetAlertPopup'
 
 const formSchema = invoiceSchema;
 
@@ -44,6 +44,7 @@ const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, se
 
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | boolean>(false)
+    const [status, setStatus] = useState<number | boolean>(false)
 
     // definisi form  
     const form = useForm<z.infer<typeof formSchema>>({
@@ -51,7 +52,6 @@ const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, se
         defaultValues: {
             invoice_name: "",
             payment_source: "gaji p3k",
-            payment_method: "cash"
         },
     })
 
@@ -63,21 +63,20 @@ const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, se
             invoice_name: values.invoice_name,
             due_date: format(values.due, "yyyy-MM-dd"),
             payment_source: values.payment_source,
-            payment_method: values.payment_method
         } as {
             invoice_name: string;
             due_date: string;
-            payment_source: string;
-            payment_method: string
+            payment_source: string
         }
         
         const response = await createInvoice(data, session?.user.accessToken)
-        
+        console.log(response)
         if (response.status === 200) {
             handleModal()
             form.reset();
             setDataInvoice(response.data.invoice);
         } else if (response.status === 422) {
+            setStatus(response.status)
             const errors = response.data.errors
             const keys = Object.keys(errors)
             const firstKey = keys[0]
@@ -86,9 +85,15 @@ const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, se
 
             setError(message)
         } else {
+            setStatus(response.status)
             setError("Terjadi kesalahan dengan sistem")
         }
         setIsLoading(false)
+    }
+
+    const resetStateAction = () => {
+        setStatus(false)
+        setError(false)
     }
 
     return (
@@ -174,28 +179,6 @@ const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, se
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="payment_method"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Metode Pembayaran</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Metode Pembayaran" />
-                                        </SelectTrigger>
-                                    </FormControl>
-
-                                    <SelectContent>
-                                        <SelectItem value="cash">Cash</SelectItem>
-                                        <SelectItem value="transfer">Transfer</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                     <div className="w-full flex justify-end gap-3">
                         <Button type="button" className='text-white' onClick={handleModal}>Batal</Button>
                         <Button type="submit" className='text-white bg-green-400' disabled={isLoading}>
@@ -204,7 +187,7 @@ const FormInvoice = ({handleModal, setDataInvoice}: {handleModal: () => void, se
                     </div>
                 </form>
             </Form>
-            {error && <AlertError message={error.toString()} setError={setError} isShow={true} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </div>
     )
 }

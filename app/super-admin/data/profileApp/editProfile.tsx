@@ -51,7 +51,9 @@ const EditProfile = ({ profile }: { profile: ProfileApp }) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: profile.name,
+            app_name: profile.app_name,
+            chairmans_name: profile.chairmans_name,
+            treasurer_name: profile.treasurer_name,
             address: profile.address,
             phone_number: profile.phone_number.toString(),
             about: profile.about
@@ -81,7 +83,9 @@ const EditProfile = ({ profile }: { profile: ProfileApp }) => {
         const formData = new FormData();
 
         formData.append("_method", "PUT");
-        formData.append("name", values.name);
+        formData.append("app_name", values.app_name);
+        formData.append("chairmans_name", values.chairmans_name);
+        formData.append("treasurer_name", values.treasurer_name);
         formData.append("phone_number", values.phone_number);
         formData.append("address", values.address);
         formData.append("about", values.about);
@@ -132,12 +136,38 @@ const EditProfile = ({ profile }: { profile: ProfileApp }) => {
                             <div className="p-4 grid grid-col-1">
                                 <FormField
                                     control={form.control}
-                                    name="name"
+                                    name="app_name"
                                     render={({ field }) => (
                                         <FormItem className="mb-3">
-                                            <FormLabel>Nama Kategori</FormLabel>
+                                            <FormLabel>Nama App</FormLabel>
                                             <FormControl>
-                                                <Input className="text-sm" placeholder="Nama Kategori" {...field} disabled={isLoading} />
+                                                <Input className="text-sm" placeholder="Nama App" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="chairmans_name"
+                                    render={({ field }) => (
+                                        <FormItem className="mb-3">
+                                            <FormLabel>Nama Ketua</FormLabel>
+                                            <FormControl>
+                                                <Input className="text-sm" placeholder="Nama Ketua" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="treasurer_name"
+                                    render={({ field }) => (
+                                        <FormItem className="mb-3">
+                                            <FormLabel>Nama Bendahara</FormLabel>
+                                            <FormControl>
+                                                <Input className="text-sm" placeholder="Nama Bendahara" {...field} disabled={isLoading} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

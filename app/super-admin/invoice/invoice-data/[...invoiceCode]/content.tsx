@@ -4,12 +4,10 @@ import { convertDateFormat, handleFormat } from '@/app/utils/helper';
 import { Invoice, InvoiceState, SubCategoryState } from '@/types/interface';
 import React from 'react'
 import ConfirmInvoiceButton from './confirmInvoice';
-import PrintInvoiceButton from './printInvoice';
 import DownloadPdfInvoiceButton from './downloadPdfInvoice';
 import DownloadExcelInvoiceButton from './downloadExcelInvoice';
-import { usePDF } from 'react-to-pdf';
-import { Button } from '@/components/ui/button';
 import PrintButton from './printButton';
+import { Badge } from '@/components/ui/badge';
 
 const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState, subCategories: SubCategoryState[] }) => {
 
@@ -94,10 +92,10 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
           </div>
           <div className="w-full mb-3 flex items-center">
             <span className="basis-1/3">
-              Metode Pembayaran
+              Status
             </span>
-            <span className='flex-1 font-semibold capitalize'>
-              : {detailInvoice.payment_method}
+            <span className='flex-1 font-semibold'>
+              : {detailInvoice.status != 'dibayar' ? <Badge className='bg-red-500'>{detailInvoice.status}</Badge> : <Badge className='bg-green-500'>{detailInvoice.status}</Badge>}
             </span>
           </div>
         </div>
@@ -105,7 +103,7 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
 
       {/* button aksi */}
       <div className="w-full flex items-center justify-start gap-2 mb-5">
-        <ConfirmInvoiceButton statusInvoice={detailInvoice.status} paymentMethod={detailInvoice.payment_method} invoiceId={detailInvoice.id} totalPayment={handleTotalData()} />
+        <ConfirmInvoiceButton statusInvoice={detailInvoice.status} invoiceId={detailInvoice.id} totalPayment={handleTotalData()} />
         <DownloadPdfInvoiceButton invoiceCode={detailInvoice.invoice_code} timeInvoice={convertDateFormat(detailInvoice.due_date)} />
         <DownloadExcelInvoiceButton invoiceCode={detailInvoice.invoice_code} timeInvoice={convertDateFormat(detailInvoice.due_date)} />
       </div>
@@ -147,7 +145,7 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
                   {handleFormat(handleValueTotalRow(data))}
                 </td>
                 <td className="text-center border border-solid p-3">
-                  <PrintButton memberName={data.member_name} memberId={data.member_id} invoiceCode={detailInvoice.invoice_code}  />
+                  <PrintButton memberName={data.member_name} memberId={data.member_id} invoiceCode={detailInvoice.invoice_code} />
                 </td>
               </tr>
             ))}

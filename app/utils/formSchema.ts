@@ -300,8 +300,6 @@ export const invoiceSchema = z.object({
   }),
 
   payment_source: z.enum(["gaji pns", "gaji p3k", "komite", "TPP"]),
-
-  payment_method: z.enum(["cash", "transfer"]),
 });
 
 export const positionCategorySchema = z.object({
@@ -325,9 +323,17 @@ export const positionCategorySchema = z.object({
 });
 
 export const profileSchema = z.object({
-  name: z.string({
+  app_name: z.string({
     invalid_type_error: "Nama app harus valid",
     required_error: "Nama app tidak boleh kosong"
+  }),
+  chairmans_name: z.string({
+    invalid_type_error: "Nama ketua harus valid",
+    required_error: "Nama ketua tidak boleh kosong"
+  }),
+  treasurer_name: z.string({
+    invalid_type_error: "Nama bendahara harus valid",
+    required_error: "Nama bendahara tidak boleh kosong"
   }),
   address: z.string({
     invalid_type_error: "Alamat harus valid",

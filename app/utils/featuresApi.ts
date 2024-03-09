@@ -589,7 +589,6 @@ export async function createInvoice(
     invoice_name: string;
     due_date: string;
     payment_source: string;
-    payment_method: string;
   },
   token: string | undefined
 ) {

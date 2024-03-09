@@ -53,7 +53,7 @@ const DownloadPdfInvoiceButton = ({invoiceCode, timeInvoice}: {invoiceCode: stri
 
             setError(message);
         } else {
-            setError(response.data.message);
+            setError('Terjadi kesalahan dengan sistem');
         }
     };
 

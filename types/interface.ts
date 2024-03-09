@@ -298,7 +298,9 @@ export type MemberInstallment = {
 
 export type ProfileApp = {
   id: number;
-  name: string;
+  app_name: string;
+  chairmans_name: string;
+  treasurer_name: string;
   icon: string;
   address: string;
   phone_number: number;

@@ -15,8 +15,18 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
-const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusInvoice }: { paymentMethod: string, invoiceId: number, totalPayment: string, statusInvoice: string }) => {
+
+const ConfirmInvoiceButton = ({ invoiceId, totalPayment, statusInvoice }: { invoiceId: number, totalPayment: string, statusInvoice: string }) => {
   const [modal, setModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<string | boolean>(false)
@@ -24,13 +34,8 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
   const [status, setStatus] = useState<number | boolean>(false)
   const [amount, setAmount] = useState(totalPayment.replaceAll('.', ''));
   const [noRek, setNoRek] = useState<string>("");
-  const [transferName, setTransferName] = useState<string>("");
-  const [previewImage, setPreviewImage] = useState<File | string | undefined>(
-    undefined
-  );
-  const [imageProfile, setImageProfile] = useState<
-  File | string | Blob | undefined
->();
+  const [payer, setPayer] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
 
   const router = useRouter()
   const { data: session } = useSession()
@@ -44,11 +49,10 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
     setError(false)
     setSuccess(false)
     setStatus(false)
-    setPreviewImage(undefined)
-    setImageProfile(undefined)
     setAmount(totalPayment.replaceAll('.', ''))
     setNoRek("")
-    setTransferName("")
+    setPayer("")
+    setPaymentMethod("")
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -59,14 +63,10 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
     formData.append("amount", amount);
     formData.append("invoice_id", invoiceId.toString());
     formData.append("total_invoice", totalPayment.replaceAll('.', ''));
+    formData.append("payer", payer);
+    formData.append("payment_method", paymentMethod);
     if (noRek.length > 0) {
       formData.append("no_rek", noRek);
-    }
-    if (transferName.length > 0) {
-      formData.append("transfer_name", transferName);
-    }
-    if (imageProfile) {
-      formData.append("image", imageProfile);
     }
 
 
@@ -95,23 +95,6 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
     }
   }
 
-  const handleImageInput = (event: any) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      setImageProfile(file);
-
-      const render = new FileReader();
-
-      render.onloadend = () => {
-        setPreviewImage(render.result as string);
-      };
-
-      render.readAsDataURL(file);
-    } else {
-      setPreviewImage(undefined);
-    }
-  };
 
 
   // handle inputan jumlah pembayaran
@@ -133,12 +116,12 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
   }
 
   // handle inputan nama peneransfer
-  const handleChangeTransferName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePayer = (event: React.ChangeEvent<HTMLInputElement>) => {
 
     const value = event?.target.value
 
     const filteredValue = value.replace(/[^a-zA-Z\s]/g, '');
-    setTransferName(filteredValue)
+    setPayer(filteredValue)
   }
 
 
@@ -173,19 +156,28 @@ const ConfirmInvoiceButton = ({ paymentMethod, invoiceId, totalPayment, statusIn
               </div>
             </div>
             <div className="w-full mb-3">
-              <Label>Bukti pembayaran</Label>
-              {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-28 h-28 object-cover rounded mb-2" /> : <div className="w-28 h-28 bg-slate-300 rounded mb-2"></div>}
-
-              <Input type="file" required accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
+              <Label>Nama Pembayar</Label>
+              <Input placeholder="Nama Pembayar" onChange={handlePayer} value={payer} />
+            </div>
+            <div className="w-full mb-3">
+              <Label>Metode Pembayaran</Label>
+              <Select onValueChange={(value) => setPaymentMethod(value)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Pilih Metode Pembayaran" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Metode Pembayaran</SelectLabel>
+                    <SelectItem value="cash">Cash</SelectItem>
+                    <SelectItem value="transfer">Transfer</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
             {paymentMethod == "transfer" && <>
               <div className="w-full mb-3">
                 <Label>No Rekening</Label>
                 <Input placeholder="No Rekening" onChange={handleChangeNoRek} value={noRek} />
-              </div>
-              <div className="w-full mb-3">
-                <Label>Nama Pembayar</Label>
-                <Input placeholder="Nama Pembayar" onChange={handleChangeTransferName} value={transferName} />
               </div>
             </>}
             <div className="w-full flex items-center justify-end gap-3">

@@ -10,8 +10,16 @@ const Content = ({ profile }: { profile: ProfileApp }) => {
     return (
         <div className='w-full flex flex-col justify-start items-start gap-5 mb-7'>
             <div className='w-full'>
-                <Label>Nama</Label>
-                <Input value={profile.name} readOnly className='w-full' />
+                <Label>Nama Aplikasi</Label>
+                <Input value={profile.app_name} readOnly className='w-full' />
+            </div>
+            <div className='w-full'>
+                <Label>Nama Ketua</Label>
+                <Input value={profile.chairmans_name} readOnly className='w-full' />
+            </div>
+            <div className='w-full'>
+                <Label>Nama Bendahara</Label>
+                <Input value={profile.treasurer_name} readOnly className='w-full' />
             </div>
             <div className='w-full'>
                 <Label>Logo</Label>
