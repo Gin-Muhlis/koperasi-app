@@ -1059,3 +1059,33 @@ export async function updateProfileApp(
     return error.response;
   }
 }
+
+// API GET Saving Sub Categories
+export async function getSubCategoriesSaving(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`sub-categories-saving`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Savings Member
+export async function getSavingsMember(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`saving`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}

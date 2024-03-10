@@ -32,15 +32,6 @@ const HistoryInvoices = ({historyInvoices}: {historyInvoices: HistoryInvoice[]})
             }
         },
         {
-            accessorKey: "payment_method",
-            header: "Metode Pembayaran",
-            cell: ({row}) => {
-                const value: string = row.getValue('payment_method');
-
-                return <div>{capitalizeString(value)}</div>
-            }
-        },
-        {
             accessorKey: "status",
             header: "status",
             cell: ({row}) => {

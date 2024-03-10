@@ -35,39 +35,49 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     ],
   },
   {
-    title: "Simpanan",
-    path: "/super-admin/saving",
+    title: "Aplikasi",
+    path: "/super-admin/applications",
     icon: <Icon icon="lucide:file-plus" width="24" height="24" />,
     submenu: true,
     role: "super-admin",
     subMenuItems: [
-      { role: "super-admin", title: "Simpanan Pokok", path: "/super-admin/saving/pokok" },
-      { role: "super-admin", title: "Simpanan Wajib", path: "/super-admin/saving/wajib" },
-      {
-        role: "super-admin", title: "Simpanan Wajib Khusus",
-        path: "/super-admin/saving/wajib-khusus",
-      },
-      { role: "super-admin", title: "Simpanan Sukarela", path: "/super-admin/saving/sukarela" },
-      {
-        role: "super-admin",
-        title: "Tabungan Rekreasi",
-        path: "/super-admin/saving/tabungan-rekreasi",
-      },
+      { role: "super-admin", title: "Simpanan", path: "/super-admin/applications/saving" },
     ],
   },
-  {
-    title: "Piutang",
-    path: "/super-admin/receivable",
-    icon: <Icon icon="lucide:file-minus" width="24" height="24" />,
-    submenu: true,
-    role: "super-admin",
-    subMenuItems: [
-      { role: "super-admin", title: "Piutang S/P", path: "/super-admin/receivable/sp" },
-      { role: "super-admin", title: "Piutang Dagang", path: "/super-admin/receivable/dagang" },
-      { role: "super-admin", title: "Pembayaran Angsuran", path: "/super-admin/receivable/angsuran" },
+  // {
+  //   title: "Simpanan",
+  //   path: "/super-admin/saving",
+  //   icon: <Icon icon="lucide:file-plus" width="24" height="24" />,
+  //   submenu: true,
+  //   role: "super-admin",
+  //   subMenuItems: [
+  //     { role: "super-admin", title: "Simpanan Pokok", path: "/super-admin/saving/pokok" },
+  //     { role: "super-admin", title: "Simpanan Wajib", path: "/super-admin/saving/wajib" },
+  //     {
+  //       role: "super-admin", title: "Simpanan Wajib Khusus",
+  //       path: "/super-admin/saving/wajib-khusus",
+  //     },
+  //     { role: "super-admin", title: "Simpanan Sukarela", path: "/super-admin/saving/sukarela" },
+  //     {
+  //       role: "super-admin",
+  //       title: "Tabungan Rekreasi",
+  //       path: "/super-admin/saving/tabungan-rekreasi",
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: "Piutang",
+  //   path: "/super-admin/receivable",
+  //   icon: <Icon icon="lucide:file-minus" width="24" height="24" />,
+  //   submenu: true,
+  //   role: "super-admin",
+  //   subMenuItems: [
+  //     { role: "super-admin", title: "Piutang S/P", path: "/super-admin/receivable/sp" },
+  //     { role: "super-admin", title: "Piutang Dagang", path: "/super-admin/receivable/dagang" },
+  //     { role: "super-admin", title: "Pembayaran Angsuran", path: "/super-admin/receivable/angsuran" },
 
-    ],
-  },
+  //   ],
+  // },
   {
     title: "laporan",
     path: "/super-admin/report",

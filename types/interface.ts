@@ -306,3 +306,24 @@ export type ProfileApp = {
   phone_number: number;
   about: string;
 }
+
+export type DetailSaving = {
+  [key: string]: number
+};
+
+export type HistorySaving = {
+  id: number;
+  amount: number;
+  sub_category: string;
+  date: string;
+  status: string;
+}
+
+export type ListSaving = {
+  id: number;
+  name: string;
+  position: string;
+  total_saving: number;
+  detail_savings: DetailSaving;
+  history_savings: HistorySaving[];
+}   
