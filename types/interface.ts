@@ -189,7 +189,6 @@ export type InvoiceState = {
   details: any[];
 };
 
-
 export type SubCategoryInvoice = {
   id: number;
   name: string;
@@ -252,9 +251,14 @@ export type MemberReceivable = {
 };
 
 export type ReceivableData = {
-  members: MemberReceivable;
-  description: string;
+  member_id: number;
+  amount: number;
   sub_category_id: number;
+  duration: number;
+  date: string;
+  total: number;
+  deadline: string;
+  description: string;
 };
 
 export type ReportMember = {
@@ -295,7 +299,6 @@ export type MemberInstallment = {
   remain_payment: number;
 };
 
-
 export type ProfileApp = {
   id: number;
   app_name: string;
@@ -305,10 +308,10 @@ export type ProfileApp = {
   address: string;
   phone_number: number;
   about: string;
-}
+};
 
 export type DetailSaving = {
-  [key: string]: number
+  [key: string]: number;
 };
 
 export type HistorySaving = {
@@ -317,7 +320,7 @@ export type HistorySaving = {
   sub_category: string;
   date: string;
   status: string;
-}
+};
 
 export type ListSaving = {
   id: number;
@@ -326,4 +329,25 @@ export type ListSaving = {
   total_saving: number;
   detail_savings: DetailSaving;
   history_savings: HistorySaving[];
-}   
+};
+
+export type DetailLoan = {
+  code: number;
+  total_loan: number;
+  paid: number;
+  remain_payment: number;
+  deadline: string;
+  date_completion: string |  null;
+  status: string;
+  sub_category: string;
+  duration: string;
+};
+
+export type ListLoan = {
+  id: number;
+  name: string;
+  position: string;
+  total_loan: number;
+  loan_progress: boolean;
+  detail_loans: DetailLoan[];
+};

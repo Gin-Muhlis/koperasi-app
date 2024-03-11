@@ -2,14 +2,14 @@
 
 import { handleFormat } from '@/app/utils/helper'
 import { DataTable } from '@/components/data-table'
-import { ListSaving, SubCategoryState } from '@/types/interface'
+import { ListLoan, ListSaving, SubCategoryState } from '@/types/interface'
 import { ColumnDef } from '@tanstack/react-table'
 import React from 'react'
-import DetailSavingMember from './detailSaving'
+import DetailLoanMember from './detailLoan'
 
-const ListSavingMember = ({ listSavings, subCategories }: { listSavings: ListSaving[], subCategories: SubCategoryState[] }) => {
+const ListLoanMember = ({ listLoan, subCategories }: { listLoan: ListLoan[], subCategories: SubCategoryState[] }) => {
 
-    const columns: ColumnDef<ListSaving>[] = [
+    const columns: ColumnDef<ListLoan>[] = [
         {
             accessorKey: "name",
             header: "Nama",
@@ -19,22 +19,22 @@ const ListSavingMember = ({ listSavings, subCategories }: { listSavings: ListSav
             header: "Jabatan",
         },
         {
-            accessorKey: "total_saving",
-            header: () => <div className='text-center'>Total Simpanan</div>,
+            accessorKey: "total_loan",
+            header: () => <div className='text-center'>Total Pinjaman</div>,
             cell: ({row}) => {
-                const value = Number(row.getValue('total_saving'));
+                const value = Number(row.getValue('total_loan'));
 
                 return <div className='text-center'>Rp. {handleFormat(value)}</div>
             }
         },
         {
             id: "actions",
-            header: () => <div className="text-center">Detail Simpanan</div>,
+            header: () => <div className="text-center">Detail Pinjaman</div>,
             cell: ({ row }) => {
                 const data = row.original;
 
                 return <div className='flex justify-center'>
-                    <DetailSavingMember data={data} subCategories={subCategories} />    
+                    <DetailLoanMember data={data} />
                 </div>
             }
         },
@@ -42,9 +42,9 @@ const ListSavingMember = ({ listSavings, subCategories }: { listSavings: ListSav
 
     return (
         <>
-            <DataTable columns={columns} data={listSavings} />
+            <DataTable columns={columns} data={listLoan} />
         </>
     )
 }
 
-export default ListSavingMember
+export default ListLoanMember

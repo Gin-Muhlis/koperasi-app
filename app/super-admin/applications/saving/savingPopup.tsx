@@ -24,6 +24,7 @@ import { createSavingMembers } from '@/app/utils/featuresApi'
 import { useRouter } from 'next/navigation'
 import SweetAlertPopup from '@/app/components/sweetAlertPopup'
 import ListMember from './listMember'
+import { Icon } from '@iconify/react/dist/iconify.js'
 
 const SavingPopup = ({ listMembers, positionCategories, subCategory, setSubCategory }: { listMembers: any[], positionCategories: PositionCategory[], subCategory: SubCategoryState, setSubCategory: React.Dispatch<React.SetStateAction<SubCategoryState | undefined>> }) => {
     const { data: session } = useSession();
@@ -116,6 +117,10 @@ const SavingPopup = ({ listMembers, positionCategories, subCategory, setSubCateg
     return (
         <>
             <div className='w-full min-h-screen z-50 bg-zinc-200 p-5 md:p-12 fixed inset-0 overflow-y-scroll'>
+                <div className="flex items-center justify-start gap-1 mb-3 text-black cursor-pointer" onClick={() => setSubCategory(undefined)}>
+                    <Icon icon="lucide:arrow-left" width={20} height={20}/>
+                    <span>Kembali</span>
+                </div>
                 <div className="w-full rounded bg-white p-5">
                     <h1 className='text-2xl font-bold text-black mb-7'>{capitalizeString(subCategory.name)}</h1>
 

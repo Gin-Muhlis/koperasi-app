@@ -1104,3 +1104,33 @@ export async function getMemberSaving(token: string | undefined) {
     return error.response;
   }
 }
+
+// API GET Loan Sub Categories
+export async function getSubCategoriesLoan(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`sub-categories-receivable`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Loan Sub Categories
+export async function getLoansMember(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`receivable`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}

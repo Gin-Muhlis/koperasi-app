@@ -2,12 +2,9 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import React, { useEffect, useState } from 'react'
-import { appDispatch, useAppSelector } from '@/redux/store';
 import { DataTable } from './dataTable/data-table-add';
 import { PositionCategory, Status, SubCategoryState } from '@/types/interface';
 import FormAddSavingMember from './formAddSavingMember';
-import { Badge } from '@/components/ui/badge';
-
 const ListMember = ({ members, subCategory, positionCategories, setSubCategory }: { members: any[], subCategory: SubCategoryState, positionCategories: PositionCategory[], setSubCategory: React.Dispatch<React.SetStateAction<SubCategoryState | undefined>> }) => {
     const [listMembers, setListmembers] = useState<any[]>(members)
 
