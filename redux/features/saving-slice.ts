@@ -1,17 +1,16 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
-  typeSaving: "",
-  idTypesaving: "",
+  selectedMembers: "[]",
   month: new Date().getMonth() + 1,
   year: new Date().getFullYear(),
   description: "-",
-  members: "[]",
-  isSelectAll: false,
+  subCategoryId: 0,
+  modal: false
 };
 
-export const saving = createSlice({
-  name: "saving",
+const saving = createSlice({
+  name: "Saving",
   initialState,
   reducers: {
     createSaving: (
@@ -19,47 +18,42 @@ export const saving = createSlice({
       action: PayloadAction<{ type: string; value: any }>
     ) => {
       const { type, value } = action.payload;
+
       switch (type) {
-        case "SET_TYPE_SAVING":
+        case "SET_MONTH": 
           return {
             ...state,
-            typeSaving: value,
+            month: value
+          }
+          break;
+        case "SET_YEAR": 
+          return {
+            ...state,
+            year: value
+          }
+          break;
+        case "SET_DESCRIPTION": 
+          return {
+            ...state,
+            description: value
+          }
+          break;
+        case "SET_SUB_CATEGORY_ID": 
+          return {
+            ...state,
+            subCategoryId: value
+          }
+          break;
+        case "SET_SELECTED_MEMBERS":
+          return {
+            ...state,
+            selectedMembers: value,
           };
           break;
-        case "SET_ID_TYPE_SAVING":
+        case "SET_MODAL":
           return {
             ...state,
-            idTypeSaving: value,
-          };
-          break;
-        case "SET_MONTH":
-          return {
-            ...state,
-            month: value,
-          };
-          break;
-        case "SET_YEAR":
-          return {
-            ...state,
-            year: value,
-          };
-          break;
-        case "SET_MEMBERS":
-          return {
-            ...state,
-            members: value,
-          };
-          break;
-        case "SET_DESCRIPTION":
-          return {
-            ...state,
-            description: value,
-          };
-          break;
-        case "SET_IS_SELECT_ALL":
-          return {
-            ...state,
-            isSelectAll: value,
+            modal: value,
           };
           break;
         default:

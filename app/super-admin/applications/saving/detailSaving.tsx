@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { convertDateFormat, handleFormat } from "@/app/utils/helper";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { DataTable } from "./data-table";
+import { DataTable } from "./dataTable/data-table-list";
 import { Button } from "@/components/ui/button";
 
 const DetailSavingMember = ({ data, subCategories }: { data: ListSaving, subCategories: SubCategoryState[] }) => {

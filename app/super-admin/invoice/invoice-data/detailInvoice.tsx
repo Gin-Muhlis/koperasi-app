@@ -27,7 +27,6 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { setInvoice } from '@/redux/features/invoice-slice'
 import { months, numberMonths } from '@/constants/CONSTS';
-import SubCategoryInvoicePopup from './subCategorySavingInvoice';
 import SubCategorySavingInvoicePopup from './subCategorySavingInvoice';
 import SubCategoryReceivablePopup from './subCategoryReceivableInvoice';
 import { Badge } from '@/components/ui/badge';

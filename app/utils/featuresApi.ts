@@ -1089,3 +1089,18 @@ export async function getSavingsMember(token: string | undefined) {
     return error.response;
   }
 }
+
+// API GET Member Saving
+export async function getMemberSaving(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`member-saving`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}

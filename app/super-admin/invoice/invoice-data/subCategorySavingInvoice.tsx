@@ -38,12 +38,12 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
     }, [selector, selector.selectedMembers])
     
     useEffect(() => {
-        if (listMembers && subCategoryName == "simpanan pokok") {
-            const dataMembers = listMembers.filter((member) => member.data['simpanan pokok'].length == 0)
+        if (listMembers && subCategory.type_payment == 'once') {
+            const dataMembers = listMembers.filter((member) =>  member.data[subCategory.name].length  == 0)
             
             setMembers(dataMembers)
         }
-    }, [listMembers, subCategoryName])
+    }, [listMembers, subCategory])
 
     // konfigurasi pagination
     const lastItemIndex = currentPage * itemsPerPage;
@@ -51,7 +51,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
     const currentItems = members.slice(firstItemIndex, lastItemIndex);
 
     // handle set state data list
-    const setStateData = (data: Member[]) => {
+    const setStateData = (data: any[]) => {
         dispatch(
             setInvoice({
                 type: "SET_SELECTED_MEMBERS",
@@ -289,7 +289,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
 
         const defaultAmount: any = positionCategories.find((data) => data.id == positionCategoryId);
         
-        const payment = defaultAmount != undefined  ? defaultAmount[subCategoryName] : 0
+        const payment = defaultAmount[subCategoryName] ?? 0
 
         return handleFormat(Number(payment))
 
