@@ -1151,3 +1151,26 @@ export async function getInstallmentMembers(token: string | undefined) {
   }
 }
 
+// DOWNLOAD API Detail Invoice Excel
+export async function downloadExcelReportMembers(
+  token: string | undefined
+) {
+  try {
+
+    const response: any = await axiosInstance.get(
+      `report/export/report-members`,
+      {
+         responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+      }
+    );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}

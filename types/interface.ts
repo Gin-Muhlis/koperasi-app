@@ -261,16 +261,15 @@ export type ReceivableData = {
   description: string;
 };
 
+
+export type SubCategory = {
+  [key: string]: number
+}
+
 export type ReportMember = {
   id: number;
   name: string;
-  principal_saving: number;
-  mandatory_saving: number;
-  special_mandatory_saving: number;
-  voluntary_saving: number;
-  recretional_saving: number;
-  receivable: number;
-  account_receivable: number;
+  list: SubCategory
 };
 
 export type DataNasabah = {
