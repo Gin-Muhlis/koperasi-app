@@ -292,12 +292,6 @@ export type ReportLoanmember = {
   remain_payment: number;
 };
 
-export type MemberInstallment = {
-  id: number;
-  name: string;
-  amount: number;
-  remain_payment: number;
-};
 
 export type ProfileApp = {
   id: number;
@@ -350,4 +344,26 @@ export type ListLoan = {
   total_loan: number;
   loan_progress: boolean;
   detail_loans: DetailLoan[];
+};
+
+export type MemberInstallment = {
+  id: number;
+  name: string;
+  duration: number;
+  remain_duration: number;
+  sub_category_id: number;
+  loan_id: number;
+  loan_date: string;
+  total_payment: number;
+  paid: number;
+  remain_payment: number;
+  monthly: number;
+  months_status: Status[]
+};
+
+export type installmentData ={
+  member_id: number,
+  amount: number,
+  loan_id: number,
+  sub_category_id: number,
 };

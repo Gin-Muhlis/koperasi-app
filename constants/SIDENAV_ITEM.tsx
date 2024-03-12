@@ -43,6 +43,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     subMenuItems: [
       { role: "super-admin", title: "Simpanan", path: "/super-admin/applications/saving" },
       { role: "super-admin", title: "Pinjaman", path: "/super-admin/applications/loan" },
+      { role: "super-admin", title: "Angsuran", path: "/super-admin/applications/installment" },
     ],
   },
   {

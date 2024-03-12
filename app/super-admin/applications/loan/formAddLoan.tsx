@@ -53,10 +53,6 @@ const FormAddLoan = ({ member, subCategory, setSubCategory }: { member: ListLoan
         const interest = 1.5 / 100;
 
         let interestAmount = Number(amount) * Number(interest) * Number(duration)
-        console.log('duration:' + duration)
-        console.log('amount:' + handleFormat(Number(amount)))
-        console.log('interest:' + interest)
-        console.log('jumlah interest:' + handleFormat(interestAmount))
         const total = Number(amount) + interestAmount;
 
         return total;

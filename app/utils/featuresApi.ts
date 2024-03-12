@@ -5,6 +5,7 @@ import {
   PaymentState,
   ReceivableData,
   RegisterState,
+  installmentData,
 } from "@/types/interface";
 import axiosInstance from "@/axiosConfig";
 
@@ -965,7 +966,7 @@ export async function getReportLoanMembers(token: string | undefined) {
 }
 
 // API CREATE Angsuran
-export async function createInstallmentMember(data: any, token: string | undefined) {
+export async function createInstallmentMember(data: installmentData, token: string | undefined) {
   try {
       const response = await axiosInstance.post('/installment', data, {
         headers: {
@@ -1134,3 +1135,19 @@ export async function getLoansMember(token: string | undefined) {
     return error.response;
   }
 }
+
+// API GET Member Have Loan
+export async function getInstallmentMembers(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`installment`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
