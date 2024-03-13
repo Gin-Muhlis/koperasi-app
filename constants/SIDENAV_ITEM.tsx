@@ -71,11 +71,10 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     icon: <Icon icon="lucide:circle-user-round" width="22" height="22" />,
     role: "member",
   },
-  // nasabah menu
   {
-    title: "Dashboard",
-    path: "/nasabah/dashboard",
-    icon: <Icon icon="lucide:home" width="22" height="22" />,
-    role: "nasabah",
+    title: "Ganti Password",
+    path: "/member/change-password",
+    icon: <Icon icon="lucide:circle-user-round" width="22" height="22" />,
+    role: "member",
   },
 ];

@@ -69,8 +69,13 @@ const ChangePassword = ({ isModal, resetModal, member }: { isModal: boolean, res
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        
+        if (password !== confirmPassword) {
+            return
+        }
+        
         setIsLoading(true)
-
+        
         if (password.length < 8) {
             setErrorPassword('Password harus lebih dari 8 karakter')
             setIsLoading(false)

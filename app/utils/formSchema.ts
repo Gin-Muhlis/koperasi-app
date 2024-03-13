@@ -331,6 +331,10 @@ export const profileSchema = z.object({
     invalid_type_error: "Nama ketua harus valid",
     required_error: "Nama ketua tidak boleh kosong"
   }),
+  secretary_name: z.string({
+    invalid_type_error: "Nama sekretaris harus valid",
+    required_error: "Nama sekretaris tidak boleh kosong"
+  }),
   treasurer_name: z.string({
     invalid_type_error: "Nama bendahara harus valid",
     required_error: "Nama bendahara tidak boleh kosong"

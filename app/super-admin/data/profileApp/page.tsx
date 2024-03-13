@@ -24,11 +24,13 @@ const Category = async () => {
           Profile Koperasi
         </h1>
 
-        <Content profile={profile} />
-
         <div className="mb-8">
           <EditProfile profile={profile} />
         </div>
+
+        <Content profile={profile} />
+
+       
 
       </div>
 

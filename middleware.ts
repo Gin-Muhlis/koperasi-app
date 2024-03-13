@@ -14,7 +14,7 @@ export default withAuth(
     // cek user belum login
     if ((pathname.startsWith('/super-admin') || pathname.startsWith("/member")) && !req.nextauth?.token)
       return NextResponse.redirect(
-        new URL(`/`, req.url)
+        new URL(`/login`, req.url)
       );
 
     // cek role user access

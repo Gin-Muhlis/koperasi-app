@@ -2,13 +2,10 @@
 
 import React from 'react';
 import { useState } from 'react'
-import { useRouter } from 'next/navigation';
-import { MemberState, StuffState } from '@/types/interface';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { signOut, useSession } from 'next-auth/react';
-import AlertSuccess from '@/app/components/alertSuccess';
 import AlertError from '@/app/components/alertError';
-import { deleteMember, deleteStuff, logout } from '@/app/utils/featuresApi';
+import { logout } from '@/app/utils/featuresApi';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -28,7 +25,7 @@ const LogoutDialog = () => {
 
     const handleLogout = async () => {
         const response = await logout(session?.user.accessToken);
-        console.log(response)
+        
         if (response.status === 200) {
             signOut();
         } else {

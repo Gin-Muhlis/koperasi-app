@@ -296,6 +296,7 @@ export type ProfileApp = {
   id: number;
   app_name: string;
   chairmans_name: string;
+  secretary_name: string;
   treasurer_name: string;
   icon: string;
   address: string;

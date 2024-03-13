@@ -485,7 +485,7 @@ export async function getPrincivalSavings(token: string | undefined) {
 // API GET Position Category
 export async function getPositionCategories(token: string | undefined) {
   try {
-    const response = await axiosInstance.get(`/position-category`, {
+    const response = await axiosInstance.get(`/group-member`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -1200,6 +1200,21 @@ export async function downloadPdfReportLoanMember(
         },
       }
     );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API UPDATE Password Member
+export async function changePasswordMember(data: FormData, token: string | undefined) {
+  try {
+    const response = await axiosInstance.post(`change-password-member`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response;
   } catch (error: any) {

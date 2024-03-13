@@ -53,6 +53,7 @@ const EditProfile = ({ profile }: { profile: ProfileApp }) => {
         defaultValues: {
             app_name: profile.app_name,
             chairmans_name: profile.chairmans_name,
+            secretary_name: profile.secretary_name,
             treasurer_name: profile.treasurer_name,
             address: profile.address,
             phone_number: profile.phone_number.toString(),
@@ -85,6 +86,7 @@ const EditProfile = ({ profile }: { profile: ProfileApp }) => {
         formData.append("_method", "PUT");
         formData.append("app_name", values.app_name);
         formData.append("chairmans_name", values.chairmans_name);
+        formData.append("secretary_name", values.secretary_name);
         formData.append("treasurer_name", values.treasurer_name);
         formData.append("phone_number", values.phone_number);
         formData.append("address", values.address);
@@ -129,7 +131,7 @@ const EditProfile = ({ profile }: { profile: ProfileApp }) => {
             <div className={`p-5 w-full fixed inset-0 z-50  min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
                 <div className={`w-full max-w-xl bg-white rounded transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
                     <div className="p-4 border-b border-b-slate-300 mb-4">
-                        <h3 className="font-bold text-lg text-black">Edit Data Profile App</h3>
+                        <h3 className="font-bold text-lg text-black">Edit Data Profile Aplikasi</h3>
                     </div>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -155,6 +157,19 @@ const EditProfile = ({ profile }: { profile: ProfileApp }) => {
                                             <FormLabel>Nama Ketua</FormLabel>
                                             <FormControl>
                                                 <Input className="text-sm" placeholder="Nama Ketua" {...field} disabled={isLoading} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="secretary_name"
+                                    render={({ field }) => (
+                                        <FormItem className="mb-3">
+                                            <FormLabel>Nama Sekretaris</FormLabel>
+                                            <FormControl>
+                                                <Input className="text-sm" placeholder="Nama Sekretaris" {...field} disabled={isLoading} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

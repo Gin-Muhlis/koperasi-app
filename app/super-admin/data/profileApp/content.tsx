@@ -18,6 +18,10 @@ const Content = ({ profile }: { profile: ProfileApp }) => {
                 <Input value={profile.chairmans_name} readOnly className='w-full' />
             </div>
             <div className='w-full'>
+                <Label>Nama Sekretaris</Label>
+                <Input value={profile.secretary_name} readOnly className='w-full' />
+            </div>
+            <div className='w-full'>
                 <Label>Nama Bendahara</Label>
                 <Input value={profile.treasurer_name} readOnly className='w-full' />
             </div>
