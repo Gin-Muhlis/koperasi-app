@@ -3,7 +3,7 @@ import AlertError from '@/app/components/alertError';
 import AlertSuccess from '@/app/components/alertSuccess';
 import Loader from '@/app/components/loader';
 import SweetAlertPopup from '@/app/components/sweetAlertPopup';
-import { downloadPdfInvoice, downloadPdfReportMember, downloadPdfReportSavingMember } from '@/app/utils/featuresApi';
+import { downloadPdfInvoice, downloadPdfReportLoanMember, downloadPdfReportMember, downloadPdfReportSavingMember } from '@/app/utils/featuresApi';
 import { Button } from '@/components/ui/button';
 import { Invoice } from '@/types/interface';
 import { Icon } from '@iconify/react/dist/iconify.js';
@@ -25,7 +25,7 @@ const DownloadPdfReportmember = ({ name, id }: { name: string, id: number }) => 
 
         const year = new Date().getFullYear()
 
-        const response = await downloadPdfReportSavingMember(
+        const response = await downloadPdfReportLoanMember(
             id,
             session?.user.accessToken
         );
@@ -38,7 +38,7 @@ const DownloadPdfReportmember = ({ name, id }: { name: string, id: number }) => 
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute("download", `Laporan Simpanan Anggota Koperasi ${name} ${year}`); // or any other extension
+            link.setAttribute("download", `Laporan Piutang Anggota Koperasi ${name} ${year}`); // or any other extension
             document.body.appendChild(link);
             link.click();
             link.parentNode?.removeChild(link);
