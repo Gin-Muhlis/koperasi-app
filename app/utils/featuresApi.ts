@@ -1151,7 +1151,7 @@ export async function getInstallmentMembers(token: string | undefined) {
   }
 }
 
-// DOWNLOAD API Detail Invoice Excel
+// DOWNLOAD API Laporan Anggota
 export async function downloadExcelReportMembers(
   token: string | undefined
 ) {
@@ -1190,6 +1190,46 @@ export async function downloadPdfReportMember(
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/pdf",
+        },
+      }
+    );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Sub Kategori SImpanan
+export async function getReportSavingMembers(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`report/saving-members`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+
+// DOWNLOAD API Laporan Simpanan Anggota
+export async function downloadExcelReportSavingMembers(
+  token: string | undefined
+) {
+  try {
+
+    const response: any = await axiosInstance.get(
+      `report/export/report-saving-members`,
+      {
+         responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         },
       }
     );
