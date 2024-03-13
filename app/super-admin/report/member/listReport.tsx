@@ -5,6 +5,7 @@ import { capitalizeString, handleFormat } from '@/app/utils/helper';
 import { ReportMember, SubCategoryState } from '@/types/interface'
 import { Icon } from '@iconify/react/dist/iconify.js';
 import React, { useState } from 'react'
+import DownloadPdfReportmember from './downloadPdfReportMember';
 
 const ListReportMember = ({ data, subCategories }: { data: ReportMember[], subCategories: SubCategoryState[] }) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -53,7 +54,7 @@ const ListReportMember = ({ data, subCategories }: { data: ReportMember[], subCa
                                         </td>
                                     ))}
                                     <td className="text-center border border-solid p-3">
-                                        <button className='bg-amber-400 text-white p-1 outline-none rounded text-xs cursor-pointer'><Icon icon="lucide:file" width={16} height={16}></Icon></button>
+                                       <DownloadPdfReportmember name={member.name}  id={member.id} />
                                     </td>
                                 </tr>
                             ))}

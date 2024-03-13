@@ -78,7 +78,7 @@ const SavingPopup = ({ listMembers, positionCategories, subCategory, setSubCateg
 
         const data = {
             members: selectedMembers,
-            month_year: `${selector.month < 9 ? `0${selector.month}` : `${selector.year}`
+            month_year: `${selector.month < 9 ? `0${selector.month}` : `${selector.month}`
                 }-${selector.year}`,
             sub_category_id: subCategory.id,
             description: selector.description,

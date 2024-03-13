@@ -1174,3 +1174,28 @@ export async function downloadExcelReportMembers(
     return error.response;
   }
 }
+
+
+// DOWNLOAD API Report member
+export async function downloadPdfReportMember(
+  id: number,
+  token: string | undefined
+) {
+  try {
+
+    const response: any = await axiosInstance.get(
+      `report/export/report-member/${id}`,
+      {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/pdf",
+        },
+      }
+    );
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}

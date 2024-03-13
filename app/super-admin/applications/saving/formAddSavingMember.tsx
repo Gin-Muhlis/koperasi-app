@@ -135,7 +135,7 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
 
         const data = {
             members: arrayData,
-            month_year: `${month < 9 ? `0${month}` : `${year}`
+            month_year: `${month < 9 ? `0${month}` : `${month}`
                 }-${year}`,
             sub_category_id: subCategory.id,
             description: description,
