@@ -1,36 +1,20 @@
-import { handleFormat } from '@/app/utils/helper'
-import { DashboardMember } from '@/types/interface'
+import { capitalizeString, handleFormat } from '@/app/utils/helper'
+import { DashboardMember, SubCategoryState } from '@/types/interface'
 import React from 'react'
 
-const DataSavingMember = ({ data }: { data: DashboardMember }) => {
+const DataSavingMember = ({ data, subCategories }: { data: DashboardMember, subCategories: SubCategoryState[] }) => {
     return (
         <div>
             <h2 className='text-md font-bold mb-5 text-gray-700'>Data Simpanan</h2>
-            <div className='w-full flex items-start justify-start gap-5'>
-                <div className="flex flex-col gap-1 rounded bg-[#a6004a] p-4 w-full">
-                    <span className="text-lg font-bold text-white">
-                        Rp. {handleFormat(data.total_mandatory_saving)}
-                    </span>
-                    <span className='opacity-80 text-xs text-gray-100'>Simpanan Wajib</span>
-                </div>
-                <div className="flex flex-col gap-1 rounded bg-[#6982c7] p-4 w-full">
-                    <span className="text-lg font-bold text-white">
-                        Rp. {handleFormat(data.total_special_mandatory_saving)}
-                    </span>
-                    <span className='opacity-80 text-xs text-gray-100'>Simpanan Wajib Khusus</span>
-                </div>
-                <div className="flex flex-col gap-1 rounded bg-[#9e379f] p-4 w-full">
-                    <span className="text-lg font-bold text-white">
-                        Rp. {handleFormat(data.total_voluntary_saving)}
-                    </span>
-                    <span className='opacity-80 text-xs text-gray-100'>Simpanan Sukarela</span>
-                </div>
-                <div className="flex flex-col gap-1 rounded bg-[#493267] p-4 w-full">
-                    <span className="text-lg font-bold text-white">
-                        Rp. {handleFormat(data.total_recretional_saving)}
-                    </span>
-                    <span className='opacity-80 text-xs text-gray-100'>Tabungan Rekreasi</span>
-                </div>
+            <div className='w-full flex items-start justify-start flex-wrap gap-5'>
+                {subCategories.map(item => (
+                    <div className="flex flex-col gap-1 rounded bg-[#a6004a] p-4 basis-full md:basis-[20%]">
+                        <span className="text-lg font-bold text-white">
+                            Rp. {handleFormat(data.data_saving[item.name])}
+                        </span>
+                        <span className='opacity-80 text-xs text-gray-100'>{capitalizeString(item.name)}</span>
+                    </div>
+                ))}
             </div>
         </div>
     )

@@ -214,13 +214,14 @@ export type History = {
   code: number;
 };
 
+export type DataSaving = {
+  [key: string]: number;
+}
+
 export type DashboardMember = {
-  total_mandatory_saving: number;
-  total_special_mandatory_saving: number;
-  total_voluntary_saving: number;
-  total_recretional_saving: number;
   history_savings: History[];
   history_installments: History[];
+  data_saving: DataSaving
 };
 
 export type HistoryInvoice = {

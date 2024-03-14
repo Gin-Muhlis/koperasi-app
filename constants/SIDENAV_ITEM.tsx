@@ -74,7 +74,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   {
     title: "Ganti Password",
     path: "/member/change-password",
-    icon: <Icon icon="lucide:circle-user-round" width="22" height="22" />,
+    icon: <Icon icon="lucide:key-round" width="22" height="22" />,
     role: "member",
   },
 ];
