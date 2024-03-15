@@ -30,6 +30,7 @@ import { months, numberMonths } from '@/constants/CONSTS';
 import SubCategorySavingInvoicePopup from './subCategorySavingInvoice';
 import SubCategoryReceivablePopup from './subCategoryReceivableInvoice';
 import { Badge } from '@/components/ui/badge';
+import { capitalizeString } from '@/app/utils/helper';
 
 const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice, resetState }: { subCategories: SubCategoryState[], members: MemberState[], positionCategories: PositionCategory[], dataInvoice: InvoiceState, resetState: () => void }) => {
     const dispatch = useDispatch<appDispatch>()
@@ -166,14 +167,14 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
                 <div className="mb-7">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button className='bg-amber-400 text-white'>Tambah Data Invoice</Button>
+                            <Button className='bg-indigo-500 text-white'>Tambah Data Invoice</Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56 bg-amber-400 text-white">
+                        <DropdownMenuContent className="w-56 bg-indigo-500 text-white">
                             <DropdownMenuLabel>Sub Kategori</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuRadioGroup value={subCategory?.toString()} onValueChange={(value) => handleDropdownChange(value)}>
                                 {subCategories.map((item) => (
-                                    <DropdownMenuRadioItem key={item.id} value={item.name} className="cursor-pointer">{item.name}</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem key={item.id} value={item.name} className="cursor-pointer">{capitalizeString(item.name)}</DropdownMenuRadioItem>
                                 ))}
 
                             </DropdownMenuRadioGroup>

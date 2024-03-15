@@ -173,7 +173,7 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
     
     return (
         <>
-            <Button className='bg-amber-400 text-white' onClick={handleModal}>Tambah Simpanan</Button>
+            <Button className='bg-indigo-500 text-white' onClick={handleModal}>Tambah Simpanan</Button>
             <div
                 className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? "block" : "hidden"
                     }`}
@@ -240,7 +240,7 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
                         </div>
                         <div className="flex items-center justify-end gap-3">
                             <Button onClick={handleModal}>Batal</Button>
-                            { handlePayedMember(member.data[subCategoryName].months_status) ? <Button disabled className={`text-white ${ handlePayedMember(member.data[subCategoryName].months_status).toString() == 'dibayar' ? 'bg-green-500' : 'bg-red-500'}`}>{ handlePayedMember(member.data[subCategoryName].months_status).toString() == 'dibayar' ?  handlePayedMember(member.data[subCategoryName].months_status) : 'Menunggu Pembayaran'}</Button> : <Button className="bg-amber-400 text-white" disabled={isLoading} onClick={saveSaving}>{isLoading ? <Loader /> : 'Simpan Data'}</Button>}
+                            { handlePayedMember(member.data[subCategoryName].months_status) ? <Button disabled className={`text-white ${ handlePayedMember(member.data[subCategoryName].months_status).toString() == 'dibayar' ? 'bg-green-500' : 'bg-red-500'}`}>{ handlePayedMember(member.data[subCategoryName].months_status).toString() == 'dibayar' ?  handlePayedMember(member.data[subCategoryName].months_status) : 'Menunggu Pembayaran'}</Button> : <Button className="bg-indigo-500 text-white" disabled={isLoading} onClick={saveSaving}>{isLoading ? <Loader /> : 'Simpan Data'}</Button>}
                         </div>
                     </div>
 

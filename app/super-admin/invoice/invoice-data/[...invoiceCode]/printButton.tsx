@@ -48,7 +48,7 @@ const PrintButton = ({ memberName, memberId, invoiceCode }: { memberName: string
 
     return (
         <>
-            <button className='bg-amber-400 text-white p-1 outline-none rounded text-xs cursor-pointer' onClick={handleDownloadInvoice}>{isLoading ? <Loader /> :  <Icon icon="lucide:file" width={16} height={16}></Icon>}</button>
+            <button className='bg-indigo-500 text-white p-1 outline-none rounded text-xs cursor-pointer' onClick={handleDownloadInvoice}>{isLoading ? <Loader /> :  <Icon icon="lucide:file" width={16} height={16}></Icon>}</button>
 
             {success && <SweetAlertPopup status={status} message={success.toString()} resetState={resetStateAction} />}
 

@@ -105,7 +105,7 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
             <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
                 <div className={`w-11/12 max-w-lg bg-white rounded transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
                     <div className="p-4 border-b border-b-slate-300 mb-4">
-                        <h3 className="font-bold text-lg text-black">Edit Data Kategori</h3>
+                        <h3 className="font-bold text-lg text-black">Edit Data Sub Kategori</h3>
                     </div>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -170,7 +170,7 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
                             </div>
                             <div className="p-4 flex items-center justify-end gap-3">
                                 <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
-                                <Button type="submit" className="bg-amber-400 text-white" disabled={isLoading}>
+                                <Button type="submit" className="bg-indigo-500 text-white" disabled={isLoading}>
                                     {isLoading ? <Loader /> : 'Simpan'}
                                 </Button>
                             </div>

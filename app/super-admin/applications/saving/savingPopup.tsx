@@ -136,7 +136,7 @@ const SavingPopup = ({ listMembers, positionCategories, subCategory, setSubCateg
                             </div>
                             <ListMembers members={listMembers} subCategory={subCategory} positionCategories={positionCategories} />
                             <div className="w-full flex items-center justify-end">
-                                <Button className='text-white bg-amber-400' disabled={isLoading} onClick={saveSaving}>
+                                <Button className='text-white bg-indigo-500' disabled={isLoading} onClick={saveSaving}>
                                     {isLoading ? <Loader /> : 'Simpan Data'}
                                 </Button>
                             </div>

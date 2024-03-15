@@ -5,11 +5,13 @@ import './globals.css'
 import { ReduxProvider } from '@/redux/provider'
 import { Suspense } from 'react'
 import LoadingPage from './components/loading'
+import { SessionProvider } from 'next-auth/react'
+import DefaultLayout from '@/components/defaultLayout'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Koperasi App',
+  title: 'Koperasi Ap',
   description: 'Aplikasi untuk pendataan di koperasi',
 }
 
@@ -23,7 +25,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReduxProvider>
           <Suspense fallback={<LoadingPage />}>
-          {children}
+            
+            <DefaultLayout>
+              {children}
+            </DefaultLayout>
           </Suspense>
         </ReduxProvider>
       </body>

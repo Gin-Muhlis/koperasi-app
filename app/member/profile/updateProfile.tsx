@@ -33,6 +33,7 @@ import { useForm } from "react-hook-form"
 import { updateProfileSchema } from "@/app/utils/formSchema";
 import { MemberState, PositionCategory } from "@/types/interface";
 import { Icon } from '@iconify/react/dist/iconify.js';
+import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = updateProfileSchema;
 
@@ -49,6 +50,7 @@ const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositi
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
+    const [status, setStatus] = useState<number | boolean>(false);
     const router = useRouter();
     const handleModal = () => {
         setModal(!modal);
@@ -92,13 +94,14 @@ const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositi
 
         const response = await updateProfile(member.id, formData, session?.user.accessToken)
         setIsLoading(false)
+        setStatus(response.status)
 
         if (response.status === 200) {
             setModal(!modal)
             setImageProfile(member.imageProfile)
             setPreviewImage(undefined)
             
-            router.refresh();
+            
             setSuccess(response.data.message)
         } else if (response.status === 422) {
             const errorsData = response.data.errors
@@ -130,10 +133,19 @@ const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositi
         }
     };
 
+    const resetStateAction = () => {
+        setStatus(false)
+        setError(false)
+        if (success) {
+            setSuccess(false)
+            router.refresh();
+        }
+    }
+
 
     return (
         <>
-            <Button onClick={handleModal} className="bg-amber-400">Update Profile</Button>
+            <Button onClick={handleModal} className="bg-indigo-500">Update Profile</Button>
             <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
                 <div className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
                     <div className="p-4 border-b border-b-slate-300 mb-4">
@@ -308,7 +320,7 @@ const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositi
                             </div>
                             <div className="p-4 flex items-center justify-end gap-3">
                                 <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
-                                <Button type="submit" className="bg-amber-400 text-white" disabled={isLoading}>
+                                <Button type="submit" className="bg-indigo-500 text-white" disabled={isLoading}>
                                     {isLoading ? <Loader /> : 'Simpan'}
                                 </Button>
                             </div>
@@ -317,8 +329,8 @@ const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositi
                 </div>
 
             </div>
-            {success && <AlertSuccess message={success.toString()} isShow={true} setSuccess={setSuccess} />}
-            {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
+            {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
+            {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
         </>
     );
 };

@@ -16,11 +16,11 @@ export const metadata: Metadata = {
 const Category = async () => {
   const session = await getServerSession(authOptions);
   const profile: ProfileApp = await getProfilApp(session?.user.accessToken);
-  console.log(profile)
+
   return (
-    <MainLayout>
-      <div className="bg-white rounded p-4 w-full">
-        <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-amber-400">
+    <>
+      <div className="bg-white shadow-md border rounded p-4 w-full">
+        <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-indigo-500">
           Profile Koperasi
         </h1>
 
@@ -34,7 +34,7 @@ const Category = async () => {
 
       </div>
 
-    </MainLayout>
+    </>
   );
 };
 

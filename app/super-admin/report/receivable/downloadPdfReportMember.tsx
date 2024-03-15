@@ -1,11 +1,8 @@
 "use client"
-import AlertError from '@/app/components/alertError';
-import AlertSuccess from '@/app/components/alertSuccess';
 import Loader from '@/app/components/loader';
 import SweetAlertPopup from '@/app/components/sweetAlertPopup';
 import { downloadPdfInvoice, downloadPdfReportLoanMember, downloadPdfReportMember, downloadPdfReportSavingMember } from '@/app/utils/featuresApi';
 import { Button } from '@/components/ui/button';
-import { Invoice } from '@/types/interface';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -64,7 +61,7 @@ const DownloadPdfReportmember = ({ name, id }: { name: string, id: number }) => 
 
     return (
         <>
-            <Button onClick={handleDownloadPdf} className='bg-amber-400 text-white p-1 outline-none rounded text-xs cursor-pointer' disabled={isLoading}>
+            <Button onClick={handleDownloadPdf} className='bg-indigo-500 text-white p-1 outline-none rounded text-xs cursor-pointer' disabled={isLoading}>
                 {isLoading ? <Loader /> : <>
                     <Icon icon="lucide:file" width={16} height={16}></Icon>
                 </>}

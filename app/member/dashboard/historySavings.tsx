@@ -21,7 +21,7 @@ const HistorySavings = ({ data }: { data: DashboardMember }) => {
                             </div>
                         </div>
                     </div>
-                )) : <div className='flex items-center justity-start gap-1 text-amber-500'><Icon icon="mingcute:alert-fill" width={24} height={24} />
+                )) : <div className='flex items-center justity-start gap-1 text-indigo-500'><Icon icon="mingcute:alert-fill" width={24} height={24} />
                     <span className=" font-semibold text-md alert-access">
                         Tidak ada data
                     </span></div>}

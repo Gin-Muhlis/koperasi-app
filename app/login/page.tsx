@@ -1,27 +1,21 @@
-import DefaultLayout from '@/components/defaultLayout'
+
 import FormLogin from '../components/formLogin'
-import { getSession } from 'next-auth/react'
 import { IProps } from '@/types/interface'
-import AlertSuccess from '../components/alertSuccess'
-import NavHome from '../components/navHome'
+import Header from '@/components/header'
 
 const Login = ({ searchParams }: IProps) => {
 
     return (
-        <DefaultLayout>
-            <div className="w-full min-h-screen">
-                <NavHome />
-                <div className="w-full p-5 mt-20 flex items-center justify-center">
-                    <div className="w-[350px] h-[360px] overflow-hidden">
-                        <div className=" w-full h-full shadow-sm bg-white p-4 md:p-8 flex flex-col items-center justify-center rounded-sm">
-                            <span className="text-lg font-bold text-amber-400 mb-5">Masuk Akun</span>
-                            <FormLogin />
-                        </div>
-                    </div>
+        <>
+            <Header />
+            <div className="h-full flex items-center justify-center w-full">
+                <div className="bg-white border shadow-md rounded-lg px-8 py-6 w-11/12 md:w-[360px] max-w-lg">
+                    <h1 className="text-2xl font-bold text-center mb-4 dark:text-gray-200">Masuk</h1>
+                    <FormLogin message={searchParams?.message} />
                 </div>
-            </div>
-            {searchParams?.message && <AlertSuccess message={searchParams.message.toString()} isShow={true} />}
-        </DefaultLayout>
+            </div >
+
+        </>
     )
 }
 

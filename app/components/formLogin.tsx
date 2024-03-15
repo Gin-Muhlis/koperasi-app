@@ -7,11 +7,15 @@ import { useRouter } from 'next/navigation'
 import React, { SyntheticEvent, useEffect, useState } from 'react'
 import AlertError from './alertError'
 import Loader from './loader'
+import NavHome from '../components/navHome'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import SweetAlertPopup from './sweetAlertPopup'
 
-const FormLogin = () => {
+
+const FormLogin = ({message}: {message: string | string[] | undefined}) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [errorMessage, setErrorMessage] = useState<any>(false)
     const [passwordShow, setPasswordShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | boolean>(false)
@@ -33,6 +37,8 @@ const FormLogin = () => {
                 callbackUrl: '/'
             })
 
+
+
             if (res.ok && res.status === 200) {
                 setIsLoading(false)
 
@@ -43,16 +49,16 @@ const FormLogin = () => {
 
                 switch (res.error) {
                     case 'Request failed with status code 422':
-                        setErrorMessage('Email atau password salah!')
+                        setError('Email atau password salah!')
                         break
                     case 'Request failed with status code 400':
-                        setErrorMessage('Email atau password salah!')
+                        setError('Email atau password salah!')
                         break
                     default:
-                        setErrorMessage('Terjadi kesalahan')
+                        setError('Terjadi kesalahan')
                 }
             }
-        } catch (error) {
+        } catch (error: any) {
             setIsLoading(false)
             setError('Terjadi kesalahan dengan sistem!')
         }
@@ -60,38 +66,33 @@ const FormLogin = () => {
 
     return (
         <>
-            <form className='w-full' onSubmit={handleLogin}>
-                <div className="w-full mb-3">
-                    <div className="flex items-start justify-start w-full h-8 mb-4">
-                        <div className="w-1 h-full bg-amber-400"></div>
-                        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className="flex-1 p-2 bg-slate-200 h-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none focus:border focus:border-solid " placeholder='email@domain.com' />
-                    </div>
-                    <div className="flex items-start justify-start w-full h-8 mb-4 relative">
-                        <div className="w-1 h-full bg-amber-400"></div>
-                        <input type={passwordShow ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} className="flex-1 p-2 bg-slate-200 h-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none focus:border focus:border-solid " placeholder='Password' />
-
-                        {passwordShow ? <Icon icon="mingcute:eye-close-fill" width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1 text-amber-500 text-md' /> : <Icon icon="solar:eye-bold" width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1 text-amber-500 text-md' />}
-
-                    </div>
-
-                    <button type='submit' className='outline-none border-none bg-amber-400 text-white w-full rounded-full p-1 h-9 mb-3 flex items-center justify-center' disabled={isLoading}>
-                        {isLoading ? <Loader /> : 'Masuk'}
-                    </button>
-                    <span className='block text-xs text-black mb-4 text-center'>
-                        Belum punya akun? <Link href="/register"><span className='text-amber-500'>Daftar</span></Link>
-                    </span>
+            <form onSubmit={handleLogin}>
+                <div className="mb-4">
+                    <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</Label>
+                    <Input type="email" value={email} disabled={isLoading} onChange={(e) => setEmail(e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="example@gmail.com" required />
                 </div>
+                <div className="mb-4">
+                    <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</Label>
+                    <div className="relative w-full">
+                        <Input type={passwordShow ? "text" : "password"} disabled={isLoading} value={password} onChange={(e) => setPassword(e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your password" required />
+                        {passwordShow ? <Icon icon="mingcute:eye-close-fill" width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-indigo-500 text-md' /> : <Icon icon="solar:eye-bold" width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-indigo-500 text-md' />}
+                    </div>
+
+                </div>
+                <div className="flex items-center justify-between mb-4">
+                    <a href="#"
+                        className="text-xs text-indigo-500 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Belum punya akun? <span className='underline'>
+                            Daftar</span></a>
+                </div>
+                <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" disabled={isLoading}>
+                    {isLoading ? <Loader /> : 'Masuk'}
+                </button>
             </form>
-            {errorMessage && <div className='p-4 bg-red-500 rounded fixed bottom-7 right-7 text-white flex items-center gap-1'>
-                <Icon icon="mingcute:alert-fill" width={24} height={24} />
-                <span className=" font-semibold text-md alert-access">
-                    {errorMessage}
-                </span>
-                <span onClick={() => setErrorMessage(false)} className='w-6 h-6 cursor-pointer text-md rounded-full flex items-center justify-center bg-white text-black absolute right-[-10px] top-[-10px]'>
-                    <Icon icon="jam:close" />
-                </span>
-            </div>}
-            {error && <AlertError message='error' isShow={true} setError={setError} />}
+
+            {error && <SweetAlertPopup message={error.toString()} status={500} resetState={() => setError(false)} />}
+
+            {message && <SweetAlertPopup message={message.toString()} status={200} resetState={() => {}} />}
+            
         </>
     )
 }

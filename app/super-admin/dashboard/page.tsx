@@ -19,13 +19,13 @@ const Dashboard = async ({ searchParams }: IProps) => {
   const dashboardData: DashboardAdmin = await getDashboardAdmin(session?.user.accessToken);
 
   return (
-    <MainLayout>
+    <>
       <div className="w-full grid grid-cols-1 gap-5">
         <DataDetail data={dashboardData} />
         <HistoryInvoices historyInvoices={dashboardData.history_invoices} />
       </div>
       {searchParams?.message && <AlertError message={searchParams.message.toString()} isShow={true} />}
-    </MainLayout>
+    </>
   )
 }
 

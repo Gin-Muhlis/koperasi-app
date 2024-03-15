@@ -146,7 +146,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
 
   return (
     <>
-      <Button className="text-white bg-amber-400" onClick={handleModal}>Tambah Data</Button>
+      <Button className="text-white bg-indigo-500" onClick={handleModal}>Tambah Data</Button>
       <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
         <div className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
           <div className="p-4 border-b border-b-slate-300 mb-4">
@@ -315,7 +315,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                       <FormControl>
                         <div className="w-full flex items-center justify-center relative">
                           <Input type={passwordShow ? 'text' : 'password'} placeholder="password" {...field} disabled={isLoading} />
-                          <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-amber-500 text-md' />
+                          <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-indigo-500 text-md' />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -364,7 +364,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
               </div>
               <div className="p-4 flex items-center justify-end gap-3">
                 <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
-                <Button type="submit" className="bg-amber-400 text-white" disabled={isLoading}>
+                <Button type="submit" className="bg-indigo-500 text-white" disabled={isLoading}>
                   {isLoading ? <Loader /> : 'Simpan'}
                 </Button>
               </div>

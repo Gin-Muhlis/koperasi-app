@@ -25,7 +25,7 @@ const DetailMember = ({ isModal, resetModal,  member }: { isModal: boolean, memb
             <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
                 <div className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
                     <div className="p-4 border-b border-b-slate-300 mb-4">
-                        <h3 className="font-bold text-lg text-black">Data Member</h3>
+                        <h3 className="font-bold text-lg text-black">Data Anggota</h3>
                     </div>
                     <div className="p-4 grid grid-col-1 md:grid-cols-2 gap-4">
                         <div>

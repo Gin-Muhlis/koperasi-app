@@ -174,7 +174,7 @@ export async function updateProfile(
 ) {
   try {
     
-    const response = await axiosInstance.post(`/profile-app/${id}`, data, {
+    const response = await axiosInstance.post(`/profile/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -186,6 +186,8 @@ export async function updateProfile(
     return error.response;
   }
 }
+
+
 
 // API GET Category
 export async function getCategories(token: string | undefined) {
@@ -1215,6 +1217,30 @@ export async function changePasswordMember(data: FormData, token: string | undef
         Authorization: `Bearer ${token}`,
       },
     });
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Download Daftar Anggota
+export async function downloadMembersData(
+  token: string | undefined
+) {
+  try {
+
+    const response: any = await axiosInstance.get(
+      `export/members`,
+      {
+         responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+      }
+    );
 
     return response;
   } catch (error: any) {

@@ -1,15 +1,18 @@
 "use client"
 
-import NavHome from '@/app/components/navHome'
 import { SessionProvider } from 'next-auth/react'
 import React, { ReactNode } from 'react'
+import Header from './header'
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
+
     return (
 
-        <div className="w-full min-h-screen bg-zinc-200">
+        <div className="2xl:container 2xl:mx-auto min-h-screen bg-white">
             <SessionProvider>
-                {children}
+                <div className="height-section">
+                    {children}
+                </div>
             </SessionProvider>
         </div>
     )

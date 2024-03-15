@@ -323,10 +323,6 @@ export const positionCategorySchema = z.object({
 });
 
 export const profileSchema = z.object({
-  app_name: z.string({
-    invalid_type_error: "Nama app harus valid",
-    required_error: "Nama app tidak boleh kosong"
-  }),
   chairmans_name: z.string({
     invalid_type_error: "Nama ketua harus valid",
     required_error: "Nama ketua tidak boleh kosong"
@@ -340,15 +336,6 @@ export const profileSchema = z.object({
     required_error: "Nama bendahara tidak boleh kosong"
   }),
   address: z.string({
-    invalid_type_error: "Alamat harus valid",
-    required_error: "Alamat tidak boleh kosong"
-  }),
-  phone_number: z.string({
-    invalid_type_error: "No Telepon harus valid",
-    required_error: "No Telepon tidak boleh kosong"
-  }),
-  icon: z.any(),
-  about: z.string({
     invalid_type_error: "Alamat harus valid",
     required_error: "Alamat tidak boleh kosong"
   }),

@@ -102,7 +102,7 @@ const EditProduct = ({ product }: { product: ProductState }) => {
                                     name="name"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Nama</FormLabel>
+                                            <FormLabel>Nama Produk</FormLabel>
                                             <FormControl>
                                                 <Input placeholder="Nama produk" {...field} disabled={isLoading} />
                                             </FormControl>
@@ -114,7 +114,7 @@ const EditProduct = ({ product }: { product: ProductState }) => {
                             </div>
                             <div className="p-4 flex items-center justify-end gap-3">
                                 <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
-                                <Button type="submit" className="bg-amber-400 text-white" disabled={isLoading}>
+                                <Button type="submit" className="bg-indigo-500 text-white" disabled={isLoading}>
                                     {isLoading ? <Loader /> : 'Simpan'}
                                 </Button>
                             </div>

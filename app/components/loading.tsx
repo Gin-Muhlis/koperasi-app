@@ -2,8 +2,8 @@ import React from 'react'
 
 const LoadingPage = () => {
     return (
-        <div className="flex items-center justify-center w-screen h-screen">
-            <div className="flex justify-center items-center font-bold text-lg text-amber-500">
+        <div className="flex items-center justify-center height-section">
+            <div className="flex justify-center items-center font-bold text-lg text-indigo-500">
 
                 <svg fill='none' className="w-10 h-10 animate-spin" viewBox="0 0 32 32" xmlns='http://www.w3.org/2000/svg'>
                     <path clipRule='evenodd'

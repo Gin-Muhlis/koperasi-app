@@ -120,7 +120,7 @@ const EditPositionCategory = ({
           }`}
         >
           <div className="p-4 border-b border-b-slate-300 mb-4">
-            <h3 className="font-bold text-lg text-black">Edit Data Produk</h3>
+            <h3 className="font-bold text-lg text-black">Edit Data Golongan</h3>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -130,10 +130,10 @@ const EditPositionCategory = ({
                   name="position"
                   render={({ field }) => (
                     <FormItem className="mb-3">
-                      <FormLabel>Nama Posisi</FormLabel>
+                      <FormLabel>Nama Golongan</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Nama Posisi"
+                          placeholder="Nama Golongan"
                           {...field}
                           disabled={isLoading}
                         />
@@ -213,7 +213,7 @@ const EditPositionCategory = ({
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-amber-400 text-white"
+                  className="bg-indigo-500 text-white"
                   disabled={isLoading}
                 >
                   {isLoading ? <Loader /> : "Simpan"}

@@ -76,10 +76,23 @@
   }
 }
 
-.sidenav::-webkit-scrollbar {
+html::-webkit-scrollbar {
+  width: 5px;
+}
+
+html::-webkit-scrollbar-track {
+  background-color: #ffff;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: rgb(99 102 241);
+  border-radius: 5px;
+}
+
+.hidden-scroll::-webkit-scrollbar {
   display: none;
 }
 
-.hero-section {
-  height: calc(100vh - 3.5rem);
+.height-section {
+  height: calc(100vh - 60px);
 }

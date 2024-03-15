@@ -7,15 +7,28 @@ import React, { SyntheticEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../utils/featuresApi";
 import AlertError from "./alertError";
-import { Button } from "@/components/ui/button";
 import { PositionCategory } from "@/types/interface";
 import Loader from "./loader";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import SweetAlertPopup from "./sweetAlertPopup";
 
 const FormRegister = ({ positionCategories }: { positionCategories: PositionCategory[] }) => {
   const [imageProfile, setImageProfile] = useState(null);
   const [previewImage, setPreviewImage] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | boolean>(false);
+  const [status, setStatus] = useState<number | boolean>(false);
   const dispatch = useDispatch<appDispatch>();
   const selector = useAppSelector((state) => state.registerReducer);
   const { push } = useRouter();
@@ -41,7 +54,12 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
       setPreviewImage(null);
     }
   };
-  
+
+  const resetStateAction = () => {
+    setStatus(false)
+    setError(false)
+  }
+
   const handleRegister = async (event: SyntheticEvent) => {
     event.preventDefault();
     setIsLoading(true);
@@ -57,12 +75,13 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
     };
 
     const response = await register(data);
-
+    setStatus(response.status)
     setIsLoading(false);
+    console.log(response)
 
     if (response.status === 200) {
       push("/login?message=Pendaftaran berhasil");
-    }else if (response.status == 422) {
+    } else if (response.status == 422) {
       const errorsData = response.data.errors;
       const keys = Object.keys(errorsData);
       const firstKey = keys[0];
@@ -75,267 +94,144 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
   };
 
   return (
-    <form
-      onSubmit={handleRegister}
-      className="w-full"
-      encType="multipart/form-data"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-4 mb-4">
-        <div className="mb-3">
-          <label htmlFor="name" className="label text-black text-xs">
-            Nama Lengkap
-          </label>
-          <div className="flex items-start justify-start w-full h-8 mb-1">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <input
-              type="text"
-              value={selector.name}
-              onChange={(e) => handleInput("NAME", e.target.value)}
-              className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-              id="name"
-            />
+    <>
+      <form
+        onSubmit={handleRegister}
+        className="w-full"
+        encType="multipart/form-data"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-4 mb-4">
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Lengkap</Label>
+            <Input type="text" disabled={isLoading} value={selector.name} onChange={(e) => handleInput("NAME", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Nama Lengkap" required />
           </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="label text-black text-xs">
-            Email
-          </label>
-          <div className="flex items-start justify-start w-full h-8">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <input
-              type="email"
-              value={selector.email}
-              onChange={(e) => handleInput("EMAIL", e.target.value)}
-              className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-              id="email"
-            />
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</Label>
+            <Input type="email" disabled={isLoading} value={selector.email}
+              onChange={(e) => handleInput("EMAIL", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Email" required />
           </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="phone" className="label text-black text-xs">
-            No Telepon
-          </label>
-          <div className="flex items-start justify-start w-full h-8">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <input
-              type="number"
-              min={0}
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">No Telepon</Label>
+            <Input type="number" disabled={isLoading} min={0}
               value={selector.phone}
-              onChange={(e) => handleInput("PHONE", e.target.value)}
-              className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-              id="phone"
-            />
+              onChange={(e) => handleInput("PHONE", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="No Telepon" required />
           </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="address" className="label text-black text-xs">
-            Alamat
-          </label>
-          <div className="flex items-start justify-start w-full h-8">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <input
-              type="text"
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Alamat</Label>
+            <Input type="text" disabled={isLoading} min={0}
               value={selector.address}
-              onChange={(e) => handleInput("ADDRESS", e.target.value)}
-              className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-              id="address"
-            />
+              onChange={(e) => handleInput("ADDRESS", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Alamat" required />
           </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="gender" className="label text-black text-xs">
-            Jenis kelamin
-          </label>
-          <div className="flex items-start justify-start w-full h-8">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <select
-              value={selector.gender}
-              onChange={(e) => handleInput("GENDER", e.target.value)}
-              id="gender"
-              className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none "
-            >
-              <option
-                className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                disabled
-                value="pilih"
-              >
-                Silahkan pilih jenis kelamin
-              </option>
-              <option
-                className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                value="L"
-              >
-                Laki-laki
-              </option>
-              <option
-                className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                value="P"
-              >
-                Perempuan
-              </option>
-            </select>
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Jenis Kelamin</Label>
+            <Select value={selector.gender}
+              onValueChange={(e) => handleInput("GENDER", e)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pilih Jenis Kelamin" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                <SelectItem value="pilih" disabled>Pilih Jenis Kelamin</SelectItem>                  
+
+                  <SelectItem value="L">Laki-Laki</SelectItem>
+                  <SelectItem value="P">Perempuan</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="religion" className="label text-black text-xs">
-            Agama
-          </label>
-          <div className="flex items-start justify-start w-full h-8">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <input
-              type="text"
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Agama</Label>
+            <Input type="text" disabled={isLoading} min={0}
               value={selector.religion}
-              onChange={(e) => handleInput("RELIGION", e.target.value)}
-              className="p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none "
-              id="religion"
-            />
+              onChange={(e) => handleInput("RELIGION", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Agama" required />
           </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="role" className="label text-black text-xs">
-            Jabatan/Posisi
-          </label>
-          <div className="flex items-start justify-start w-full h-8">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <select
-              id="role"
-              value={selector.role}
-              onChange={(e) => handleInput("ROLE", e.target.value)}
-              className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none "
-            >
-              <option
-                className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                disabled
-                value="pilih"
-              >
-                Silahkan pilih Jabatan
-              </option>
-              <option
-                className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                value="pns"
-              >
-                PNS
-              </option>
-              <option
-                className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                value="p3k"
-              >
-                P3K
-              </option>
-              <option
-                className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                value="cpns"
-              >
-                CPNS
-              </option>
-            </select>
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Jabatan/Posisi</Label>
+            <Select value={selector.role}
+              onValueChange={(e) => handleInput("ROLE", e)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pilih Jabatan" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="pilih" disabled>Pilih Jabatan</SelectItem>
+                  <SelectItem value="pns">PNS</SelectItem>
+                  <SelectItem value="p3k">P3K</SelectItem>
+                  <SelectItem value="cpns">CPNS</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="role" className="label text-black text-xs">
-            Golongan
-          </label>
-          <div className="flex items-start justify-start w-full h-8">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <select
-              id="role"
-              value={selector.group_id}
-              onChange={(e) => handleInput("POSITION_CATEGORY", e.target.value)}
-              className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none "
-            >
-              <option
-                className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                disabled
-                value="pilih"
-              >
-                Silahkan pilih JGolongan
-              </option>
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Golongan</Label>
+            <Select value={selector.group_id}
+              onValueChange={(e) => handleInput("POSITION_CATEGORY", e)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pilih Golongan" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="pilih" disabled>Pilih Golongan</SelectItem>
+                  {positionCategories.map((data) => (
+                    <SelectItem key={data.id} value={data.id.toString()}>{data.name}</SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</Label>
+            <Input  type="password" disabled={isLoading}
+             value={selector.password}
+             onChange={(e) => handleInput("PASSWORD", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Password" required />
+          </div>
+          <div className="">
+            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Konfirmasi Password</Label>
+            <Input  type="password" disabled={isLoading}
+             value={selector.confirmPassword}
+             onChange={(e) => handleInput("CONFIRM_PASSWORD", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Konfirmasi Password" required />
+             {selector.password != selector.confirmPassword ? (
+              <p className="text-xs text-red-500">Password tidak sama</p>
+            ) : (
+              ""
+            )}
+          </div>
 
-              {positionCategories.map((data) => (
-                <option
-                  className="p-2 bg-slate-200 w-full text-sm opacity-70  text-slate-500 rounded-e-sm focus:outline-none"
-                  value={data.id}
-                >
-                  {data.name}
-                </option>
-              ))}
-            </select>
+
+         
+          <div className="mb-3">
+            <label htmlFor="image" className="label text-black text-xs">
+              Gambar Profile
+            </label>
+
+            {previewImage ? (
+              <img src={previewImage} className="w-14 h-14 mb-1 object-cover" />
+            ) : (
+              <div className="w-14 h-14 bg-indigo-500 opacity-70 mb-1"></div>
+            )}
+            <div className="flex items-start justify-start w-full h-8">
+              <Input
+                type="file"
+                accept=".jpg, .jpeg, .png"
+                onChange={handleImageInput}
+                id="image"
+                className="text-sm"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="password" className="label text-black text-xs">
-            Password
-          </label>
-          <div className="flex items-start justify-start w-full h-8">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <input
-              type="password"
-              value={selector.password}
-              onChange={(e) => handleInput("PASSWORD", e.target.value)}
-              className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`}
-              id="password"
-            />
-          </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="match-password" className="label text-black text-xs">
-            Konfirmasi Password
-          </label>
-          <div className="flex items-start justify-start w-full h-8 mb-2">
-            <div className="w-1 h-full bg-amber-400"></div>
-            <input
-              type="password"
-              value={selector.confirmPassword}
-              onChange={(e) => handleInput("CONFIRM_PASSWORD", e.target.value)}
-              className={`p-2 bg-slate-200 w-full text-sm opacity-70 placeholder-slate-400 text-slate-500 rounded-e-sm focus:outline-none`}
-              id="match-password"
-            />
-          </div>
-          {selector.password != selector.confirmPassword ? (
-            <p className="text-xs text-red-500">Password tidak sama</p>
-          ) : (
-            ""
-          )}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="image" className="label text-black text-xs">
-            Gambar Profile
-          </label>
+        <div className="w-full flex items-center justify-end">
+          <button type="submit" className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" disabled={isLoading}>
+            {isLoading ? <Loader /> : 'Daftar'}
+          </button>
 
-          {previewImage ? (
-            <img src={previewImage} className="w-14 h-14 mb-1 object-cover" />
-          ) : (
-            <div className="w-14 h-14 bg-slate-200 opacity-70 mb-1"></div>
-          )}
-          <div className="flex items-start justify-start w-full h-8">
-            <input
-              type="file"
-              accept=".jpg, .jpeg, .png"
-              onChange={handleImageInput}
-              id="image"
-              className="text-sm"
-            />
-          </div>
         </div>
-      </div>
+        {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
+      </form>
 
-      <div className="w-full flex items-center justify-end">
-        <Button
-          size={"sm"}
-          type="submit"
-          className=" bg-amber-400 text-white "
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <Loader />
-          ) : (
-            "Daftar"
-          )}
-        </Button>
-      </div>
-      {error && <AlertError message={error.toString()} isShow={true} setError={setError} />}
-    </form>
+
+    </>
   );
 };
 

@@ -1,6 +1,5 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import AlertError from '@/app/components/alertError';
-import MainLayout from '@/components/mainLayout'
 import { DashboardMember, IProps, SubCategoryState } from '@/types/interface';
 import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth';
@@ -21,7 +20,7 @@ const Dashboard = async ({ searchParams }: IProps) => {
     const subCategories: SubCategoryState[] = await getSubCategoriesSaving(session?.user.accessToken);
     
     return (
-        <MainLayout>
+        <>
             <div className="w-full">
                 <DataSavingMember data={dashboardData} subCategories={subCategories} />
                 <div className='gap-5 grid grid-cols-1 md:grid-cols-2 mt-10'>
@@ -31,7 +30,7 @@ const Dashboard = async ({ searchParams }: IProps) => {
             </div>
 
             {searchParams?.message && <AlertError message={searchParams.message.toString()} isShow={true} />}
-        </MainLayout>
+        </>
     )
 }
 

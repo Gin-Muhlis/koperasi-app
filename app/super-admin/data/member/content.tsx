@@ -33,8 +33,7 @@ const Content = ({ members, roles, positionCategories }: { members: MemberState[
         setMenu(false)
         setmember(undefined)
     }
-    console.log(menu)
-    console.log(member)
+    
     const columns: ColumnDef<MemberState>[] = [
         {
             accessorKey: "name",

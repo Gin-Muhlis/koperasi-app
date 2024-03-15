@@ -212,7 +212,7 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
                             </div>
                             <div className="p-4 flex items-center justify-end gap-3">
                                 <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
-                                <Button type="submit" className="bg-amber-400 text-white" disabled={isLoading}>
+                                <Button type="submit" className="bg-indigo-500 text-white" disabled={isLoading}>
                                     {isLoading ? <Loader /> : 'Simpan'}
                                 </Button>
                             </div>

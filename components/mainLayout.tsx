@@ -1,20 +1,31 @@
 "use client"
 import React, { ReactNode } from 'react'
 import Sidebar from './sidebar'
-import Header from './header'
-import { SessionProvider } from 'next-auth/react'
-  
+import { SessionProvider, useSession } from 'next-auth/react'
+import { Icon } from '@iconify/react/dist/iconify.js'
+
 const MainLayout = ({ children }: { children: ReactNode }) => {
+  
+
   return (
     <>
       <SessionProvider>
-        <div className='flex min-h-screen items-start justify-between bg-[#F5F5DC]'>
-          <Sidebar />
-          <div className="w-full relative md:ml-72">
-            <Header />
-            <main className='w-full p-5'>
-              {children}
-            </main>
+        <div className="min-h-screen overflow-hidden flex items-start justify-center bg-white 2xl:container 2xl:mx-auto">
+          <div className="w-full h-full">
+              <div className="flex flex-no-wrap">
+                <Sidebar />
+                <div className="md:ml-64 w-full pb-5">
+                  <div className="w-full h-full">
+                    <div className="w-full h-14 px-6 flex items-center justify-start mb-8">
+                      {/* Toggle Menu */}
+                      <Icon icon="ic:round-menu" width={30} height={30} />
+                    </div>
+                    <div className="px-6">
+                      {children}
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
       </SessionProvider>

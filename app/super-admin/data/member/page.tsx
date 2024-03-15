@@ -7,6 +7,7 @@ import { MemberState, PositionCategory, RoleState } from "@/types/interface";
 import { getMembers, getPositionCategories, getRoles } from "@/app/utils/featuresApi";
 import Content from "./content";
 import AddMember from "./addMember";
+import DownloadExcelMembersData from "./downloadExcelMembers";
 
 export const metadata: Metadata = {
   title: "Member",
@@ -20,21 +21,22 @@ const Member = async () => {
   const positionCategories: PositionCategory[] = await getPositionCategories(session?.user.accessToken);
 
   return (
-    <MainLayout>
-      <div className="bg-white rounded p-4 w-full">
-        <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-amber-400">
+    <>
+      <div className="bg-white rounded border p-4 w-full shadow-md">
+        <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-indigo-400">
           Anggota Koperasi
         </h1>
 
-        <div className="mb-5">
+        <div className="mb-5 flex items-center justify-start gap-4">
           <AddMember roles={roles} positionCategories={positionCategories} />
+          <DownloadExcelMembersData />
         </div>
 
         <Content members={members} roles={roles} positionCategories={positionCategories} />
 
       </div>
 
-    </MainLayout>
+    </>
   );
 };
 

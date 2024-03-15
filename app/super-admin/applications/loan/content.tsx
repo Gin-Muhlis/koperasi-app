@@ -29,9 +29,9 @@ const ContentLoan = ({listLoan, subCategories, positionCategories}: {listLoan: L
             <div className="mb-10">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button className='bg-amber-400 text-white'>Tambah Pinjaman</Button>
+                        <Button className='bg-indigo-500 text-white'>Tambah Pinjaman</Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 bg-amber-400 text-white">
+                    <DropdownMenuContent className="w-56 bg-indigo-500 text-white">
                         <DropdownMenuLabel>Sub Kategori</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuRadioGroup value={subCategory?.toString()} onValueChange={(value) => handleDropdownChange(value)}>

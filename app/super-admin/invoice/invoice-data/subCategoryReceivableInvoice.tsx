@@ -134,7 +134,7 @@ const SubCategoryReceivablePopup = ({ listMembers, subCategory, setSubCategory }
         if (!isInputed || !isInputed[subCategoryName] || isInputed[subCategoryName]?.status == "not_added") {
             return (
                 <Button
-                    className="text-white bg-amber-400"
+                    className="text-white bg-indigo-500"
                     onClick={() => handleAddMember(id)}
                 >
                     Tambah

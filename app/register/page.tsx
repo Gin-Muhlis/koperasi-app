@@ -1,28 +1,24 @@
-import DefaultLayout from '@/components/defaultLayout'
+
 import React from 'react'
 import FormRegister from '../components/formRegister'
-import NavHome from '../components/navHome'
 import { PositionCategory } from '@/types/interface'
 import { getRegisterPositioCategories } from '../utils/featuresApi'
+import Header from '@/components/header'
 
 const Register = async () => {
     const positionCategories: PositionCategory[] = await getRegisterPositioCategories();
 
     return (
-        <DefaultLayout>
-            <div className="w-full min-h-screen">
-                <NavHome />
-                <div className="w-full p-5 flex items-center justify-center">
-                    <div className="md:w-[800px] w-[360px] rounded-md bg-white shadow-white p-5 ">
-                        <h1 className='text-lg text-amber-400 font-bold mb-5 pb-2 border-2 border-transparent border-solid border-b-amber-400'>Daftar Akun</h1>
-                        <FormRegister positionCategories={positionCategories} />
-
-                    </div>
+        <>
+        <Header />
+            <div className="h-full flex items-start justify-center w-full py-10 px-5">
+                <div className="bg-white border shadow-lg rounded-lg px-8 py-6 w-full md:w-[720px]">
+                    <h1 className="text-2xl font-bold text-center mb-4 dark:text-gray-200">Daftar Keanggotaan</h1>
+                    <FormRegister positionCategories={positionCategories} />
                 </div>
-            </div>
+            </div >
+        </>
 
-
-        </DefaultLayout>
     )
 }
 

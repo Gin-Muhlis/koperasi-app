@@ -92,7 +92,7 @@ const AddPositionCategory = () => {
 
   return (
     <>
-      <Button className="text-white bg-amber-400" onClick={handleModal}>
+      <Button className="text-white bg-indigo-500" onClick={handleModal}>
         Tambah Data
       </Button>
       <div
@@ -106,7 +106,7 @@ const AddPositionCategory = () => {
           }`}
         >
           <div className="p-4 border-b border-b-slate-300 mb-4">
-            <h3 className="font-bold text-lg text-black">Tambah Data Produk</h3>
+            <h3 className="font-bold text-lg text-black">Tambah Data Golongan</h3>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -116,10 +116,10 @@ const AddPositionCategory = () => {
                   name="position"
                   render={({ field }) => (
                     <FormItem className="mb-3">
-                      <FormLabel>Nama Posisi</FormLabel>
+                      <FormLabel>Nama Golongan</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Nama Posisi"
+                          placeholder="Nama Golongan"
                           {...field}
                           disabled={isLoading}
                         />
@@ -199,7 +199,7 @@ const AddPositionCategory = () => {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-amber-400 text-white"
+                  className="bg-indigo-500 text-white"
                   disabled={isLoading}
                 >
                   {isLoading ? <Loader /> : "Simpan"}

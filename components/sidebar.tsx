@@ -21,9 +21,9 @@ import LogoutDialog from "@/app/components/logoutDialog";
 
 const Sidebar = () => {
   const { data: session } = useSession();
-  const [memberProfile, setMemberProfile] = useState<MemberState>();
+  const [memberProfile, setMemberProfile] = useState<MemberState | undefined>(undefined);
   const [menus, setMenus] = useState<SideNavItem[]>([])
-  
+
   const getDataProfile = async (token: string | undefined) => {
     const response = await getProfile(token);
 
@@ -42,28 +42,37 @@ const Sidebar = () => {
   }, [session]);
 
   return (
-    <div className="w-72 flex-1 h-screen fixed overflow-y-scroll p-4 bg-[#FFB000] sidenav">
-      <div className="w-full bg-white rounded-md p-3 flex items-center justify-start gap-3 mb-8">
-        <img
-          src={memberProfile?.imageProfile?.toString()}
-          alt="user-image"
-          className="w-11 h-11 rounded-full object-cover border border-solid border-amber-400"
-        />
-        <div className="flex flex-col">
-          <span className="text-md text-black font-extrabold">
-            {memberProfile?.username}
-          </span>
-          <span className="text-sm text-black opacity-70 italic font-semibold">
-            {memberProfile?.role}
-          </span>
+    <div className="w-64 h-screen fixed left-0 top-0 z-50 border overflow-y-scroll hidden-scroll shadow-lg bg-white flex-col justify-between flex">
+      {memberProfile ? <div className="px-8 py-5">
+        <div className="h-16 w-full flex items-center justify-start shadow-md p-3 gap-2">
+          <img src={memberProfile?.imageProfile as string} alt="image profile" className="w-10 h-10 rounded-full border border-solid border-indigo-500 object-cover" />
+          <div className="flex flex-col text-sm">
+            <span>{memberProfile?.username}</span>
+            <span className="text-xs italic text-gray-500">{memberProfile?.role}</span>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col space-y-2">
-        {menus.map((item, idx) => {
-          return <MenuItem key={idx} item={item} />;
-        })}
-        <LogoutDialog />
-      </div>
+        <ul className="mt-12">
+          {menus.map((item, idx) => {
+            return <MenuItem key={idx} item={item} />;
+          })}
+          
+          <LogoutDialog />
+        </ul>
+
+      </div> : <div className="flex items-center justify-center h-full">
+        <div className="flex justify-center items-center font-bold text-lg text-indigo-500">
+
+          <svg fill='none' className="w-10 h-10 animate-spin" viewBox="0 0 32 32" xmlns='http://www.w3.org/2000/svg'>
+            <path clipRule='evenodd'
+              d='M15.165 8.53a.5.5 0 01-.404.58A7 7 0 1023 16a.5.5 0 011 0 8 8 0 11-9.416-7.874.5.5 0 01.58.404z'
+              fill='currentColor' fillRule='evenodd' />
+          </svg>
+
+
+          <div>Loading...</div>
+        </div>
+      </div>}
+
     </div>
   );
 };
@@ -93,13 +102,12 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
         <>
           <button
             onClick={toggleSubMenu}
-            className={`flex flex-row items-center p-2 rounded text-black w-full justify-between hover:bg-white ${
-              pathname.includes(item.path) ? "bg-white" : ""
-            }`}
+            className={`flex flex-row items-center p-2 rounded text-gray-400 w-full justify-between text-sm mb-3 ${pathname.includes(item.path) ? "text-gray-500" : ""
+              }`}
           >
             <div className="flex flex-row space-x-4 items-center">
               {item.icon}
-              <span className="font-semibold text-md flex pt-1">
+              <span className="font-semibold text-sm flex pt-1">
                 {item.title}
               </span>
             </div>
@@ -116,14 +124,13 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
                   <Link
                     key={idx}
                     href={subItem.path}
-                    className={`${
-                      subItem.path === pathname
-                        ? "font-bold text-slate-900"
-                        : ""
-                    }`}
+                    className={`${subItem.path === pathname
+                      ? "font-bold text-gray-500"
+                      : ""
+                      }`}
                     onClick={handleResetState}
                   >
-                    <span className="text-slate-800">{subItem.title}</span>
+                    <span className="text-gray-400 text-sm">{subItem.title}</span>
                   </Link>
                 );
               })}
@@ -133,9 +140,8 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
       ) : (
         <Link
           href={item.path}
-          className={`flex flex-row space-x-4 items-center overflow-hidden p-2 rounded text-black hover:bg-white ${
-            item.path === pathname ? "bg-white" : ""
-          }`}
+          className={`flex flex-row space-x-4 items-center overflow-hidden p-2 rounded text-gray-400 text-sm mb-3 ${item.path === pathname ? "text-gray-500" : ""
+            }`}
         >
           {item.icon}
           <span className="font-semibold text-md flex pt-1">{item.title}</span>

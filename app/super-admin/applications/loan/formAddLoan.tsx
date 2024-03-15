@@ -128,7 +128,7 @@ const FormAddLoan = ({ member, subCategory, setSubCategory }: { member: ListLoan
 
     return (
         <>
-            <Button className='bg-amber-400 text-white' onClick={handleModal}>Tambah Simpanan</Button>
+            <Button className='bg-indigo-500 text-white' onClick={handleModal}>Tambah Simpanan</Button>
             <div
                 className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? "block" : "hidden"
                     }`}
@@ -174,7 +174,7 @@ const FormAddLoan = ({ member, subCategory, setSubCategory }: { member: ListLoan
                         </div>
                         <div className="flex items-center justify-end gap-3">
                             <Button onClick={handleModal}>Batal</Button>
-                            <Button className='bg-amber-400 text-white' disabled={isLoading} onClick={saveLoan}>
+                            <Button className='bg-indigo-500 text-white' disabled={isLoading} onClick={saveLoan}>
                                 {isLoading ? <Loader /> : 'Simpan Data'}
                             </Button>
                         </div>

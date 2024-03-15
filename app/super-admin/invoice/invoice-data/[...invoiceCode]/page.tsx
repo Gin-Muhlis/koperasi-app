@@ -12,9 +12,9 @@ const DetailInvoice = async ({ params }: { params: { invoiceCode: string } }) =>
   const subCategories: SubCategoryState[] = await getSubCategoriesInvoice(session?.user.accessToken);
 
   return (
-    <MainLayout>
+    <>
       <Content detailInvoice={detailInvoice} subCategories={subCategories} />
-    </MainLayout>
+    </>
   )
 }
 

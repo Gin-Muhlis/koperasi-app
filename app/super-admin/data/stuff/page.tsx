@@ -19,9 +19,9 @@ const Stuff = async () => {
   const products: ProductState[] = await getProducts(session?.user.accessToken);
 
   return (
-    <MainLayout>
-      <div className="bg-white rounded p-4 w-full">
-        <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-amber-400">
+    <>
+      <div className="bg-white shadow-md border rounded p-4 w-full">
+        <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-indigo-500">
           Barang
         </h1>
 
@@ -33,7 +33,7 @@ const Stuff = async () => {
 
       </div>
 
-    </MainLayout>
+    </>
   );
 };
 
