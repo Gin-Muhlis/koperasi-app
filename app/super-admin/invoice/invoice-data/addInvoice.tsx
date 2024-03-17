@@ -31,7 +31,7 @@ const AddInvoice = ({ subCategories, members, positionCategories }: { subCategor
 
     return (
         <div className='mb-10'>
-            <Button className='text-white bg-indigo-500' onClick={handleModal}>Tambah Invoice</Button>
+            <Button className='text-white bg-blue-400' onClick={handleModal}>Tambah Invoice</Button>
 
             <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
                 <div className="bg-white rounded p-5 w-full md:w-1/2">

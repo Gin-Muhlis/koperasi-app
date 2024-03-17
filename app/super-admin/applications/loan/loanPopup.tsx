@@ -48,7 +48,7 @@ const LoanPopup = ({ members, subCategory, setSubCategory }: { members: ListLoan
 
     return (
         <>
-            <div className='w-full min-h-screen z-50 bg-zinc-200 p-5 md:p-12 fixed inset-0 overflow-y-scroll'>
+            <div className='w-full min-h-screen scroll-element z-50 bg-zinc-200 p-5 md:p-12 fixed inset-0 overflow-y-scroll'>
                 <div className="flex items-center justify-start gap-1 mb-3 text-black cursor-pointer" onClick={() => setSubCategory(undefined)}>
                     <Icon icon="lucide:arrow-left" width={20} height={20} />
                     <span>Kembali</span>

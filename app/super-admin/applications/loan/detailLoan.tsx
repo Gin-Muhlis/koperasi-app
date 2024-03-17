@@ -113,7 +113,7 @@ const DetailLoanMember = ({ data }: { data: ListLoan }) => {
                         {/* <DataTable columns={columns} data={data.detail_loans} /> */}
                         {data.detail_loans.map((data) => (
                             <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 border border-solid shadow px-4 py-6">
-                                <div className="absolute left-5 -top-3 rounded text-white bg-indigo-500 h-6 text-xs p-1 flex items-center justify-center text-center">
+                                <div className="absolute left-5 -top-3 rounded text-white bg-blue-400 h-6 text-xs p-1 flex items-center justify-center text-center">
                                     {data.code}
                                 </div>
                                 <div>

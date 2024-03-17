@@ -213,7 +213,7 @@ const EditPositionCategory = ({
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-indigo-500 text-white"
+                  className="bg-blue-400 text-white"
                   disabled={isLoading}
                 >
                   {isLoading ? <Loader /> : "Simpan"}

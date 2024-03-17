@@ -324,7 +324,7 @@ const EditMember = ({ isModal, resetModal, member, roles, positionCategories }: 
                                             <FormControl>
                                                 <div className="w-full flex items-center justify-center relative">
                                                     <Input type={passwordShow ? 'text' : 'password'} placeholder="password" {...field} disabled={isLoading} />
-                                                    <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-indigo-500 text-md' />
+                                                    <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-blue-400 text-md' />
                                                 </div>
                                             </FormControl>
                                             <FormMessage />
@@ -389,7 +389,7 @@ const EditMember = ({ isModal, resetModal, member, roles, positionCategories }: 
                             </div>
                             <div className="p-4 flex items-center justify-end gap-3">
                                 <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
-                                <Button type="submit" className="bg-indigo-500 text-white" disabled={isLoading}>
+                                <Button type="submit" className="bg-blue-400 text-white" disabled={isLoading}>
                                     {isLoading ? <Loader /> : 'Simpan'}
                                 </Button>
                             </div>

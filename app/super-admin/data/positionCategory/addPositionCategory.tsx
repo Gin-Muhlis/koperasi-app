@@ -92,7 +92,7 @@ const AddPositionCategory = () => {
 
   return (
     <>
-      <Button className="text-white bg-indigo-500" onClick={handleModal}>
+      <Button className="text-white bg-blue-400" onClick={handleModal}>
         Tambah Data
       </Button>
       <div
@@ -199,7 +199,7 @@ const AddPositionCategory = () => {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-indigo-500 text-white"
+                  className="bg-blue-400 text-white"
                   disabled={isLoading}
                 >
                   {isLoading ? <Loader /> : "Simpan"}

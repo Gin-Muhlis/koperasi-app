@@ -57,7 +57,7 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
     }
 
     return (
-        <div className='w-full min-h-screen z-50 bg-zinc-200 p-5 md:p-12 fixed inset-0 overflow-y-scroll'>
+        <div className='w-full min-h-screen z-50 scroll-element bg-zinc-200 p-5 md:p-12 fixed inset-0 overflow-y-scroll'>
             <div className="w-full rounded bg-white p-5">
                 <h1 className='text-2xl font-bold text-black mb-7'>Detail Invoice</h1>
                 {/* detail invoice */}
@@ -167,9 +167,9 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
                 <div className="mb-7">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button className='bg-indigo-500 text-white'>Tambah Data Invoice</Button>
+                            <Button className='bg-blue-400 text-white'>Tambah Data Invoice</Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56 bg-indigo-500 text-white">
+                        <DropdownMenuContent className="w-56 bg-blue-400 text-white">
                             <DropdownMenuLabel>Sub Kategori</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuRadioGroup value={subCategory?.toString()} onValueChange={(value) => handleDropdownChange(value)}>

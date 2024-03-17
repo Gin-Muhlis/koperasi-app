@@ -64,7 +64,7 @@ const DownloadPdfReportmember = ({ name, id }: { name: string, id: number }) => 
 
     return (
         <>
-            <Button onClick={handleDownloadPdf} className='bg-indigo-500 text-white p-1 outline-none rounded text-xs cursor-pointer' disabled={isLoading}>
+            <Button onClick={handleDownloadPdf} className='bg-blue-400 text-white p-1 outline-none rounded text-xs cursor-pointer' disabled={isLoading}>
                 {isLoading ? <Loader /> : <>
                     <Icon icon="lucide:file" width={16} height={16}></Icon>
                 </>}

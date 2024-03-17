@@ -89,6 +89,19 @@ html::-webkit-scrollbar-thumb {
   border-radius: 5px;
 }
 
+.scroll-element::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scroll-element::-webkit-scrollbar-track {
+  background-color: #ffff;
+}
+
+.scroll-element::-webkit-scrollbar-thumb {
+  background-color: rgb(99 102 241);
+  border-radius: 5px;
+}
+
 .hidden-scroll::-webkit-scrollbar {
   display: none;
 }

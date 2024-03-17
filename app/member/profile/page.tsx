@@ -16,7 +16,7 @@ const MemberProfile = async () => {
       <div className="w-full flex items-start justify-start gap-5 flex-wrap">
         <div className="w-full md:basis-80 bg-white rounded p-4 border border-solid shadow">
           <div className="w-full flex justify-center text-center mb-8">
-            <img className='w-24 h-24 rounded-full object-cover border border-solid border-indigo-500' src={`${profile.imageProfile}`} alt="image profile" />
+            <img className='w-24 h-24 rounded-full object-cover border border-solid border-blue-400' src={`${profile.imageProfile}`} alt="image profile" />
           </div>
           <div className="w-full flex flex-col items-start justify-start gap-4 mb-5">
             <div className="flex flex-col text-sm gap-1 w-full">

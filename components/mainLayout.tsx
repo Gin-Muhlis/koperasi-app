@@ -14,7 +14,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <SessionProvider>
-        <div className="min-h-screen overflow-hidden flex items-start justify-center bg-white 2xl:container 2xl:mx-auto">
+        <div className="min-h-screen overflow-hidden flex items-start justify-center bg-gray-100 2xl:container 2xl:mx-auto">
           <div className="w-full h-full">
             <div className="flex flex-no-wrap">
               <Sidebar isOpen={isOpen} handleIsOpen={handleIsOpen} />

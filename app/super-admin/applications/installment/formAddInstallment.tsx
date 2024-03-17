@@ -35,7 +35,7 @@ const FormAddInstallment = ({ member }: { member: MemberInstallment }) => {
     const [monthPayment, setMonthPayment] = useState(1)
     const [remainDurationPayment, setRemainDurationPayment] = useState(0)
     const [payment, setPayment] = useState(member.monthly)
-    const [remainPayment, setRemainPayment] = useState(member.remain_payment)
+    const [remainPayment, setRemainPayment] = useState(member.remain_payment - member.monthly)
     const [estimate, setEstimate] = useState("")
 
     useEffect(() => {
@@ -132,7 +132,7 @@ const FormAddInstallment = ({ member }: { member: MemberInstallment }) => {
 
     return (
         <div>
-            <Button className='bg-indigo-500 text-white' onClick={handleModal}>Tambah Angsuran</Button>
+            <Button className='bg-blue-400 text-white' onClick={handleModal}>Tambah Angsuran</Button>
             <div
                 className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? "block" : "hidden"
                     }`}
@@ -179,7 +179,7 @@ const FormAddInstallment = ({ member }: { member: MemberInstallment }) => {
                         </p>
                         <div className="flex items-center justify-end gap-3">
                             <Button onClick={handleModal}>Batal</Button>
-                            <Button className='bg-indigo-500 text-white' disabled={isLoading} onClick={saveInsallment}>
+                            <Button className='bg-green-500 text-white' disabled={isLoading} onClick={saveInsallment}>
                                 {isLoading ? <Loader /> : 'Simpan Data'}
                             </Button>
                         </div>

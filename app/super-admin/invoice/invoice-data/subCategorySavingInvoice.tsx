@@ -134,7 +134,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         if (!isInputed || !isInputed[subCategoryName] || isInputed[subCategoryName]?.status == "not_added") {
             return (
                 <Button
-                    className="text-white bg-indigo-500"
+                    className="text-white bg-blue-400"
                     onClick={() => handleAddMember(id)}
                 >
                     Tambah

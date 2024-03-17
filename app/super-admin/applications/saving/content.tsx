@@ -29,9 +29,9 @@ const ContentSaving = ({listSavings, subCategories, listMembers, positionCategor
             <div className="mb-10">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button className='bg-indigo-500 text-white'>Tambah Simpanan</Button>
+                        <Button className='bg-blue-400 text-white'>Tambah Simpanan</Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 bg-indigo-500 text-white">
+                    <DropdownMenuContent className="w-56 bg-blue-400 text-white">
                         <DropdownMenuLabel>Sub Kategori</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuRadioGroup value={subCategory?.toString()} onValueChange={(value) => handleDropdownChange(value)}>

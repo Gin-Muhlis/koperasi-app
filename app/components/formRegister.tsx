@@ -102,31 +102,31 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
       >
         <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-4 mb-4">
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Lengkap</Label>
+            <Label className="block text-sm font-medium text-white">Nama Lengkap</Label>
             <Input type="text" disabled={isLoading} value={selector.name} onChange={(e) => handleInput("NAME", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Nama Lengkap" required />
           </div>
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</Label>
+            <Label className="block text-sm font-medium text-white">Email</Label>
             <Input type="email" disabled={isLoading} value={selector.email}
               onChange={(e) => handleInput("EMAIL", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Email" required />
           </div>
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">No Telepon</Label>
+            <Label className="block text-sm font-medium text-white">No Telepon</Label>
             <Input type="number" disabled={isLoading} min={0}
               value={selector.phone}
               onChange={(e) => handleInput("PHONE", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="No Telepon" required />
           </div>
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Alamat</Label>
+            <Label className="block text-sm font-medium text-white">Alamat</Label>
             <Input type="text" disabled={isLoading} min={0}
               value={selector.address}
               onChange={(e) => handleInput("ADDRESS", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Alamat" required />
           </div>
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Jenis Kelamin</Label>
+            <Label className="block text-sm font-medium text-white">Jenis Kelamin</Label>
             <Select value={selector.gender}
               onValueChange={(e) => handleInput("GENDER", e)}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-white">
                 <SelectValue placeholder="Pilih Jenis Kelamin" />
               </SelectTrigger>
               <SelectContent>
@@ -140,16 +140,16 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
             </Select>
           </div>
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Agama</Label>
+            <Label className="block text-sm font-medium text-white">Agama</Label>
             <Input type="text" disabled={isLoading} min={0}
               value={selector.religion}
               onChange={(e) => handleInput("RELIGION", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Agama" required />
           </div>
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Jabatan/Posisi</Label>
+            <Label className="block text-sm font-medium text-white">Jabatan/Posisi</Label>
             <Select value={selector.role}
               onValueChange={(e) => handleInput("ROLE", e)}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-white">
                 <SelectValue placeholder="Pilih Jabatan" />
               </SelectTrigger>
               <SelectContent>
@@ -163,10 +163,10 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
             </Select>
           </div>
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Golongan</Label>
+            <Label className="block text-sm font-medium text-white">Golongan</Label>
             <Select value={selector.group_id}
               onValueChange={(e) => handleInput("POSITION_CATEGORY", e)}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-white">
                 <SelectValue placeholder="Pilih Golongan" />
               </SelectTrigger>
               <SelectContent>
@@ -180,13 +180,13 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
             </Select>
           </div>
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</Label>
+            <Label className="block text-sm font-medium text-white">Password</Label>
             <Input  type="password" disabled={isLoading}
              value={selector.password}
              onChange={(e) => handleInput("PASSWORD", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Password" required />
           </div>
           <div className="">
-            <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Konfirmasi Password</Label>
+            <Label className="block text-sm font-medium text-white">Konfirmasi Password</Label>
             <Input  type="password" disabled={isLoading}
              value={selector.confirmPassword}
              onChange={(e) => handleInput("CONFIRM_PASSWORD", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Konfirmasi Password" required />
@@ -207,7 +207,7 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
             {previewImage ? (
               <img src={previewImage} className="w-14 h-14 mb-1 object-cover" />
             ) : (
-              <div className="w-14 h-14 bg-indigo-500 opacity-70 mb-1"></div>
+              <div className="w-14 h-14 bg-white mb-1"></div>
             )}
             <div className="flex items-start justify-start w-full h-8">
               <Input
@@ -222,7 +222,7 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
         </div>
 
         <div className="w-full flex items-center justify-end">
-          <button type="submit" className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" disabled={isLoading}>
+          <button type="submit" className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" disabled={isLoading}>
             {isLoading ? <Loader /> : 'Daftar'}
           </button>
 

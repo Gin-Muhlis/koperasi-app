@@ -9,11 +9,11 @@ const Header = () => {
   const { data: session, status } = useSession()
   return (
     <div>
-      <div className="bg-white shadow-lg py-3 px-7">
+      <div className="bg-blue-400 shadow-lg py-3 px-7">
         <nav className="flex justify-between">
           <div className="flex items-center space-x-3 lg:pr-16 pr-6">
             <Link href={'/'}>
-              <h2 className="text-2xl font-bold leading-6 text-gray-800">Zie Koperasi</h2>
+              <h2 className="text-2xl font-bold leading-6 text-white">Zie Koperasi</h2>
             </Link>
 
           </div>
@@ -24,7 +24,7 @@ const Header = () => {
             <Link href={'/login'} className='text-black font-bold text-sm'>
               Masuk
             </Link>
-            <Link href={'/register'} className='text-white font-bold text-sm bg-indigo-500 rounded px-5 py-2'>
+            <Link href={'/register'} className='text-black font-bold text-sm bg-white rounded px-5 py-2'>
               Daftar
             </Link>
           </div>)}

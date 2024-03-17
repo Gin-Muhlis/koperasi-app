@@ -126,7 +126,7 @@ const ChangePassword = ({ isModal, resetModal, member }: { isModal: boolean, res
                                 <Label>Password baru</Label>
                                 <div className="relative">
                                     <Input type={passwordShow ? 'text' : 'password'} placeholder='Password Baru' value={password} onChange={(e) => setPassword(e.target.value)} />
-                                    <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-indigo-500 text-md' />
+                                    <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-blue-400 text-md' />
                                 </div>
                                 {errorPassword && password.length < 8 ? <p className='text-sm text-red-500'>Password minimal 8 karakter!</p> : null}
                             </div>
@@ -134,7 +134,7 @@ const ChangePassword = ({ isModal, resetModal, member }: { isModal: boolean, res
                                 <Label>Konfirmasi Password</Label>
                                 <div className="relative">
                                     <Input value={confirmPassword} type={confirmPasswordShow ? 'text' : 'password'} placeholder='Konfirmasi Password Baru' onChange={(e) => setConfirmPassword(e.target.value)} />
-                                    <Icon icon={confirmPasswordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowConfirmPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-indigo-500 text-md' />
+                                    <Icon icon={confirmPasswordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowConfirmPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-blue-400 text-md' />
                                 </div>
                                 {password != confirmPassword && <p className='text-sm text-red-500'>Password tidak sama!</p>}
                             </div>
@@ -148,7 +148,7 @@ const ChangePassword = ({ isModal, resetModal, member }: { isModal: boolean, res
                         </div>
                         <div className="p-4 flex items-center justify-end gap-3">
                             <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
-                            <Button type="submit" className="bg-indigo-500 text-white" disabled={isLoading}>
+                            <Button type="submit" className="bg-blue-400 text-white" disabled={isLoading}>
                                 {isLoading ? <Loader /> : 'Simpan'}
                             </Button>
                         </div>

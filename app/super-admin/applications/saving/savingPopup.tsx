@@ -116,7 +116,7 @@ const SavingPopup = ({ listMembers, positionCategories, subCategory, setSubCateg
 
     return (
         <>
-            <div className='w-full min-h-screen z-50 bg-zinc-200 p-5 md:p-12 fixed inset-0 overflow-y-scroll'>
+            <div className='w-full min-h-screen z-50 scroll-element bg-zinc-200 p-5 md:p-12 fixed inset-0 overflow-y-scroll'>
                 <div className="flex items-center justify-start gap-1 mb-3 text-black cursor-pointer" onClick={() => setSubCategory(undefined)}>
                     <Icon icon="lucide:arrow-left" width={20} height={20}/>
                     <span>Kembali</span>
@@ -136,7 +136,7 @@ const SavingPopup = ({ listMembers, positionCategories, subCategory, setSubCateg
                             </div>
                             <ListMembers members={listMembers} subCategory={subCategory} positionCategories={positionCategories} />
                             <div className="w-full flex items-center justify-end">
-                                <Button className='text-white bg-indigo-500' disabled={isLoading} onClick={saveSaving}>
+                                <Button className='text-white bg-blue-400' disabled={isLoading} onClick={saveSaving}>
                                     {isLoading ? <Loader /> : 'Simpan Data'}
                                 </Button>
                             </div>

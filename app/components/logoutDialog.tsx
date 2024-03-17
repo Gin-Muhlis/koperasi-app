@@ -38,7 +38,7 @@ const LogoutDialog = () => {
             <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <div
-                        className={`flex flex-row space-x-4 cursor-pointer items-center overflow-hidden p-2 rounded text-gray-400 text-sm mb-3`}
+                        className={`flex flex-row space-x-4 cursor-pointer items-center overflow-hidden p-2 rounded text-gray-100 text-sm mb-3`}
                     >
                         <Icon icon="lucide:log-out" width="24" height="24" />
             <span className="font-semibold text-md flex pt-1">Keluar</span>

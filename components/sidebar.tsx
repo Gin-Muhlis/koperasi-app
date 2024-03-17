@@ -42,20 +42,20 @@ const Sidebar = ({ isOpen, handleIsOpen }: { isOpen: boolean, handleIsOpen: () =
   }, [session]);
 
   return (
-    <div className={`w-64 h-screen fixed ${isOpen ? 'left-0' : '-left-64'} md:${isOpen ? 'left-0' : '-left-64'} transition-all duration-1000 top-0 z-50 border overflow-y-scroll hidden-scroll shadow-lg bg-white flex-col justify-between flex`}>
+    <div className={`w-64 h-screen fixed ${isOpen ? 'left-0' : '-left-64'} md:${isOpen ? 'left-0' : '-left-64'} transition-all duration-1000 top-0 z-50 overflow-y-scroll hidden-scroll shadow-lg bg-blue-400 flex-col justify-between flex`}>
       {memberProfile ? <div className="px-5 py-5 relative">
-        <div className="w-full flex items-center justify-start mb-5 gap-1 text-indigo-400 md:hidden">
+        <div className="w-full flex items-center justify-start mb-5 gap-1 text-white md:hidden">
           <div onClick={handleIsOpen} className="cursor-pointer flex items-center">
             <Icon icon="mingcute:arrow-left-line" width={20} height={20} className='cursor-pointer' />
             <span className="text-sm">Tutup</span>
           </div>
 
         </div>
-        <div className="h-16 w-full flex items-center justify-start shadow-md p-3 gap-2">
-          <img src={memberProfile?.imageProfile as string} alt="image profile" className="w-10 h-10 rounded-full border border-solid border-indigo-500 object-cover" />
+        <div className="h-16 w-full flex items-center justify-start bg-white rounded shadow-md p-3 gap-2">
+          <img src={memberProfile?.imageProfile as string} alt="image profile" className="w-10 h-10 rounded-full border border-solid border-blue-400 object-cover" />
           <div className="flex flex-col text-sm">
-            <span>{memberProfile?.username}</span>
-            <span className="text-xs italic text-gray-500">{memberProfile?.role}</span>
+            <span className="text-black">{memberProfile?.username}</span>
+            <span className="text-xs italic text-blue-500">{memberProfile?.role}</span>
           </div>
         </div>
         <ul className="mt-12">
@@ -67,7 +67,7 @@ const Sidebar = ({ isOpen, handleIsOpen }: { isOpen: boolean, handleIsOpen: () =
         </ul>
 
       </div> : <div className="flex items-center justify-center h-full">
-        <div className="flex justify-center items-center font-bold text-lg text-indigo-500">
+        <div className="flex justify-center items-center font-bold text-lg text-white">
 
           <svg fill='none' className="w-10 h-10 animate-spin" viewBox="0 0 32 32" xmlns='http://www.w3.org/2000/svg'>
             <path clipRule='evenodd'
@@ -109,7 +109,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
         <>
           <button
             onClick={toggleSubMenu}
-            className={`flex flex-row items-center p-2 rounded text-gray-400 w-full justify-between text-sm mb-3 ${pathname.includes(item.path) ? "text-gray-500" : ""
+            className={`flex flex-row items-center p-2 rounded text-gray-100 w-full justify-between text-sm mb-3 ${pathname.includes(item.path) ? "text-white font-bold" : ""
               }`}
           >
             <div className="flex flex-row space-x-4 items-center">
@@ -132,12 +132,12 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
                     key={idx}
                     href={subItem.path}
                     className={`${subItem.path === pathname
-                      ? "font-bold text-gray-500"
+                      ? "font-bold"
                       : ""
                       }`}
                     onClick={handleResetState}
                   >
-                    <span className="text-gray-400 text-sm">{subItem.title}</span>
+                    <span className="text-gray-100 text-sm">{subItem.title}</span>
                   </Link>
                 );
               })}
@@ -147,7 +147,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
       ) : (
         <Link
           href={item.path}
-          className={`flex flex-row space-x-4 items-center overflow-hidden p-2 rounded text-gray-400 text-sm mb-3 ${item.path === pathname ? "text-gray-500" : ""
+          className={`flex flex-row space-x-4 items-center overflow-hidden p-2 rounded text-gray-100 text-sm mb-3 ${item.path === pathname ? "text-white font-bold" : ""
             }`}
         >
           {item.icon}
