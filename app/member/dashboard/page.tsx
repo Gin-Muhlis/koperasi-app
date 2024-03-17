@@ -19,6 +19,7 @@ const Dashboard = async ({ searchParams }: IProps) => {
     const dashboardData: DashboardMember = await getDashboardMember(session?.user.accessToken);
     const subCategories: SubCategoryState[] = await getSubCategoriesSaving(session?.user.accessToken);
     
+    console.log(dashboardData)
     return (
         <>
             <div className="w-full">

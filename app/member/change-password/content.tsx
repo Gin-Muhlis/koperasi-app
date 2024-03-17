@@ -126,7 +126,7 @@ const Content = () => {
 
     return (
         <>
-            <div className={`w-full bg-white rounded transition-transform`}>
+            <div className={`w-full bg-white rounded shadow-lg border transition-transform`}>
                 <div className="p-4 border-b border-b-slate-300 mb-4">
                     <h3 className="font-bold text-lg text-black">Ganti Password</h3>
                 </div>
@@ -134,8 +134,8 @@ const Content = () => {
                     <div className='w-full md:w-1/2 pl-4 pr-4 md:pr-2'>
                         <Label>Password Saat Ini</Label>
                         <div className="relative">
-                            <Input type={passwordShow ? 'text' : 'password'} placeholder='Password Saat Ini' value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
-                            <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowCurrentPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-indigo-500 text-md' />
+                            <Input type={currentPassword ? 'text' : 'password'} placeholder='Password Saat Ini' value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+                            <Icon icon={currentPassword ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowCurrentPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-indigo-500 text-md' />
                         </div>
                         {errorCurrentPassword && currentPassword.length < 1 ? <p className='text-sm text-red-500'>{errorCurrentPassword}</p> : null}
                     </div>

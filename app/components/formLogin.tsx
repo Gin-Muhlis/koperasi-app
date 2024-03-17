@@ -40,7 +40,6 @@ const FormLogin = ({message}: {message: string | string[] | undefined}) => {
 
 
             if (res.ok && res.status === 200) {
-                setIsLoading(false)
 
                 const updatedSession = await getSession();
                 push(`${updatedSession?.user?.role}/dashboard`)

@@ -19,7 +19,7 @@ import { resetState as resetReceivable } from "@/redux/features/receivable-slice
 import { resetState as resetSaving } from "@/redux/features/saving-slice";
 import LogoutDialog from "@/app/components/logoutDialog";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, handleIsOpen }: { isOpen: boolean, handleIsOpen: () => void }) => {
   const { data: session } = useSession();
   const [memberProfile, setMemberProfile] = useState<MemberState | undefined>(undefined);
   const [menus, setMenus] = useState<SideNavItem[]>([])
@@ -42,8 +42,15 @@ const Sidebar = () => {
   }, [session]);
 
   return (
-    <div className="w-64 h-screen fixed left-0 top-0 z-50 border overflow-y-scroll hidden-scroll shadow-lg bg-white flex-col justify-between flex">
-      {memberProfile ? <div className="px-8 py-5">
+    <div className={`w-64 h-screen fixed ${isOpen ? 'left-0' : '-left-64'} md:${isOpen ? 'left-0' : '-left-64'} transition-all duration-1000 top-0 z-50 border overflow-y-scroll hidden-scroll shadow-lg bg-white flex-col justify-between flex`}>
+      {memberProfile ? <div className="px-5 py-5 relative">
+        <div className="w-full flex items-center justify-start mb-5 gap-1 text-indigo-400 md:hidden">
+          <div onClick={handleIsOpen} className="cursor-pointer flex items-center">
+            <Icon icon="mingcute:arrow-left-line" width={20} height={20} className='cursor-pointer' />
+            <span className="text-sm">Tutup</span>
+          </div>
+
+        </div>
         <div className="h-16 w-full flex items-center justify-start shadow-md p-3 gap-2">
           <img src={memberProfile?.imageProfile as string} alt="image profile" className="w-10 h-10 rounded-full border border-solid border-indigo-500 object-cover" />
           <div className="flex flex-col text-sm">
@@ -55,7 +62,7 @@ const Sidebar = () => {
           {menus.map((item, idx) => {
             return <MenuItem key={idx} item={item} />;
           })}
-          
+
           <LogoutDialog />
         </ul>
 
