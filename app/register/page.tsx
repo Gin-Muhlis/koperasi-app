@@ -11,12 +11,12 @@ const Register = async () => {
     return (
         <>
         <Header />
-            <div className="h-full flex items-start justify-center w-full py-10 px-5">
-                <div className="bg-blue-400 border shadow-lg rounded-lg px-8 py-6 w-full md:w-[720px]">
+            <div className="h-full flex items-start justify-center w-full py-10 height-section">
+                <div className="bg-blue-400 border shadow-lg rounded-lg px-8 py-6 w-11/12 md:w-[720px]">
                     <h1 className="text-2xl font-bold text-center mb-4 text-white">Daftar Keanggotaan</h1>
                     <FormRegister positionCategories={positionCategories} />
                 </div>
-            </div >
+            </div>
         </>
 
     )

@@ -131,7 +131,7 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                <SelectItem value="pilih" disabled>Pilih Jenis Kelamin</SelectItem>                  
+                  <SelectItem value="pilih" disabled>Pilih Jenis Kelamin</SelectItem>
 
                   <SelectItem value="L">Laki-Laki</SelectItem>
                   <SelectItem value="P">Perempuan</SelectItem>
@@ -181,16 +181,16 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
           </div>
           <div className="">
             <Label className="block text-sm font-medium text-white">Password</Label>
-            <Input  type="password" disabled={isLoading}
-             value={selector.password}
-             onChange={(e) => handleInput("PASSWORD", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Password" required />
+            <Input type="password" disabled={isLoading}
+              value={selector.password}
+              onChange={(e) => handleInput("PASSWORD", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Password" required />
           </div>
           <div className="">
             <Label className="block text-sm font-medium text-white">Konfirmasi Password</Label>
-            <Input  type="password" disabled={isLoading}
-             value={selector.confirmPassword}
-             onChange={(e) => handleInput("CONFIRM_PASSWORD", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Konfirmasi Password" required />
-             {selector.password != selector.confirmPassword ? (
+            <Input type="password" disabled={isLoading}
+              value={selector.confirmPassword}
+              onChange={(e) => handleInput("CONFIRM_PASSWORD", e.target.value)} className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Konfirmasi Password" required />
+            {selector.password != selector.confirmPassword ? (
               <p className="text-xs text-red-500">Password tidak sama</p>
             ) : (
               ""
@@ -198,7 +198,7 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
           </div>
 
 
-         
+
           <div className="mb-3">
             <label htmlFor="image" className="label text-black text-xs">
               Gambar Profile
@@ -227,8 +227,8 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
           </button>
 
         </div>
-        {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
       </form>
+      {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
 
 
     </>

@@ -10,7 +10,7 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
 
         <div className="2xl:container 2xl:mx-auto min-h-screen bg-white">
             <SessionProvider>
-                <div className="height-section">
+                <div>
                     {children}
                 </div>
             </SessionProvider>

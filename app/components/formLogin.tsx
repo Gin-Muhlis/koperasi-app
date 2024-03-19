@@ -83,7 +83,7 @@ const FormLogin = ({message}: {message: string | string[] | undefined}) => {
                         className="text-xs text-white hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">Belum punya akun? <span className='underline'>
                             Daftar</span></a>
                 </div>
-                <button type="submit" className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-offset-2" disabled={isLoading}>
+                <button type="submit" className={`w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black focus:outline-none focus:ring-2 focus:ring-offset-2 ${isLoading ? 'bg-black opacity-80' : 'bg-white'}`} disabled={isLoading}>
                     {isLoading ? <Loader /> : 'Masuk'}
                 </button>
             </form>
