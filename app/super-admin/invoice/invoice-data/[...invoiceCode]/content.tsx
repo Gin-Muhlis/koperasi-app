@@ -40,14 +40,15 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
 
     return handleFormat(total)
   }
+
   return (
     <div className="bg-white rounded border shadow-lg p-4 w-full">
       <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-amber-400">
         Detail Invoice
       </h1>
       {/* data invoice */}
-      <div className="w-full flex justify-start items-start gap-5 text-sm mb-10">
-        <div className="basis-2/5">
+      <div className="w-full flex justify-start flex-wrap items-start gap-5 text-sm mb-10">
+        <div className="w-full md:w-2/5">
           <div className="w-full mb-3 flex items-center">
             <span className="basis-1/3">
               Kode Invoice
@@ -73,7 +74,7 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
             </span>
           </div>
         </div>
-        <div className="basis-2/5">
+        <div className="w-full md:w-2/5">
           <div className="w-full mb-3 flex items-center">
             <span className="basis-1/3">
               Tanggal Dibuat
@@ -102,15 +103,15 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
       </div>
 
       {/* button aksi */}
-      <div className="w-full flex items-center justify-start gap-2 mb-5">
+      <div className="w-full flex items-center justify-start gap-2 mb-5 flex-wrap">
         <ConfirmInvoiceButton statusInvoice={detailInvoice.status} invoiceId={detailInvoice.id} totalPayment={handleTotalData()} />
         <DownloadPdfInvoiceButton invoiceCode={detailInvoice.invoice_code} timeInvoice={convertDateFormat(detailInvoice.due_date)} />
         <DownloadExcelInvoiceButton invoiceCode={detailInvoice.invoice_code} timeInvoice={convertDateFormat(detailInvoice.due_date)} />
       </div>
 
       {/* detail data invoice */}
-      <div className="w-full">
-        <table className="text-sm w-full border border-solid mb-5">
+      <div className="position-relative overflow-auto border border-solid">
+        <table className="text-sm w-full mb-5">
           <thead>
             <tr className="border border-solid">
               <th className="text-center p-3 border border-solid">No</th>

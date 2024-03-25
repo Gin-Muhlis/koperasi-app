@@ -27,7 +27,7 @@ const ListReportMember = ({ data, subCategories }: { data: ReportMember[], subCa
 
     return (
         <>
-            <div className="w-full">
+            <div  className="position-relative overflow-auto border border-solid">
                 <table className="text-sm w-full border border-solid mb-5">
                     <thead>
                         <tr className="border border-solid">

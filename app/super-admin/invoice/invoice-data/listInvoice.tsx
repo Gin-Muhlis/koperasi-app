@@ -21,8 +21,8 @@ const ListInvoice = ({ invoices }: { invoices: InvoiceState[] }) => {
       cell: ({ row }) => {
         const value: 'dibayar' | 'belum bayar' = row.getValue('status')
         const style = {
-          'dibayar': 'px-2 py-1text-xs border border-solid border-green-400 bg-green-400 rounded text-white inline',
-          'belum bayar': 'px-2 py-1text-xs border border-solid border-red-400 bg-red-400 rounded text-white inline',
+          'dibayar': 'px-2 py-1 text-xs border border-solid border-green-400 bg-green-400 rounded text-white text-center inline-block',
+          'belum bayar': 'px-2 py-1 text-xs border border-solid border-red-400 bg-red-400 rounded text-white text-center inline-block',
         }
 
         return <div className={`${style[value]}`}>{value}</div>
@@ -89,9 +89,9 @@ const ListInvoice = ({ invoices }: { invoices: InvoiceState[] }) => {
   ]
 
   return (
-    <div>
+    <>
       <DataTable data={invoices} columns={columns} />
-    </div>
+    </>
   )
 }
 

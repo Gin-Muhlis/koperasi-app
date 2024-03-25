@@ -179,7 +179,7 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
                     }`}
             >
                 <div
-                    className={`w-11/12 max-w-4xl bg-white rounded transition-transform max-h-[90vh] overflow-y-scroll ${modal ? "scale-100" : "scale-0"
+                    className={`w-11/12 max-w-4xl bg-white rounded transition-transform max-h-[90vh] ${modal ? "scale-100" : "scale-0"
                         }`}
                 >
                     <div className="p-4 border-b border-b-slate-300 mb-4">

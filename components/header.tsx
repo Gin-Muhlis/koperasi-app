@@ -13,7 +13,7 @@ const Header = () => {
         <nav className="flex justify-between">
           <div className="flex items-center space-x-3 lg:pr-16 pr-6">
             <Link href={'/'}>
-              <h2 className="text-2xl font-bold leading-6 text-white">Zie Koperasi</h2>
+              <h2 className="text-xl md:text-2xl font-bold leading-6 text-white">Zie Koperasi</h2>
             </Link>
 
           </div>

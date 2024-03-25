@@ -101,7 +101,7 @@ const AddProduct = () => {
                     <FormItem>
                       <FormLabel>Nama produk</FormLabel>
                       <FormControl>
-                        <Input placeholder="Nama Lengkap" {...field} disabled={isLoading} />
+                        <Input placeholder="Nama Produk" {...field} disabled={isLoading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
