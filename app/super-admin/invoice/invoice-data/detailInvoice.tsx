@@ -30,7 +30,7 @@ import { months, numberMonths } from '@/constants/CONSTS';
 import SubCategorySavingInvoicePopup from './subCategorySavingInvoice';
 import SubCategoryReceivablePopup from './subCategoryReceivableInvoice';
 import { Badge } from '@/components/ui/badge';
-import { capitalizeString } from '@/app/utils/helper';
+import { capitalizeString, convertDateFormat } from '@/app/utils/helper';
 
 const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice, resetState }: { subCategories: SubCategoryState[], members: MemberState[], positionCategories: PositionCategory[], dataInvoice: InvoiceState, resetState: () => void }) => {
     const dispatch = useDispatch<appDispatch>()
@@ -61,11 +61,10 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
             <div className="w-full rounded bg-white p-5">
                 <h1 className='text-2xl font-bold text-black mb-7'>Detail Invoice</h1>
                 {/* detail invoice */}
-                <div className="w-full flex justify-start items-start gap-5 text-sm mb-7">
-
-                    <div className="basis-2/5">
+                <div className="w-full block md:flex justify-start items-start gap-5 text-sm mb-7">
+                    <div className="w-full">
                         <div className="w-full mb-3 flex items-center">
-                            <span className="basis-1/3">
+                            <span className="basis-2/5 md:basis-1/3">
                                 Kode Invoice
                             </span>
                             <span className='flex-1 font-semibold'>
@@ -73,7 +72,7 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
                             </span>
                         </div>
                         <div className="w-full mb-3 flex items-center">
-                            <span className="basis-1/3">
+                            <span className="basis-2/5 md:basis-1/3">
                                 Nama Invoice
                             </span>
                             <span className='flex-1 font-semibold'>
@@ -81,7 +80,7 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
                             </span>
                         </div>
                         <div className="w-full mb-3 flex items-center">
-                            <span className="basis-1/3">
+                            <span className="basis-2/5 md:basis-1/3">
                                 Sumber Pembayaran
                             </span>
                             <span className='flex-1 font-semibold'>
@@ -89,25 +88,25 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
                             </span>
                         </div>
                     </div>
-                    <div className="basis-2/5">
+                    <div className="w-full">
                         <div className="w-full mb-3 flex items-center">
-                            <span className="basis-1/3">
+                            <span className="basis-2/5 md:basis-1/3">
                                 Tanggal Dibuat
                             </span>
                             <span className='flex-1 font-semibold'>
-                                : {dataInvoice.date}
+                                : {convertDateFormat(dataInvoice.date)}
                             </span>
                         </div>
                         <div className="w-full mb-3 flex items-center">
-                            <span className="basis-1/3">
+                            <span className="basis-2/5 md:basis-1/3">
                                 Tenggat Pembayaran
                             </span>
                             <span className='flex-1 font-semibold'>
-                                : {dataInvoice.due_date}
+                                : {convertDateFormat(dataInvoice.due_date)}
                             </span>
                         </div>
                         <div className="w-full mb-3 flex items-center">
-                            <span className="basis-1/3">
+                            <span className="basis-2/5 md:basis-1/3">
                                 Status
                             </span>
                             <span className='flex-1 font-semibold'>
@@ -121,7 +120,7 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
                 <div className="w-full mb-7 grid grid-cols-1 md:grid-cols-2 items-start justify-between gap-4">
                     <div className="flex items-center justify-start gap-4 w-full">
                         <div className='w-full'>
-                            <Label className="mb-2 font-bold">Waktu Invoice (Bulan)</Label>
+                            <Label className="font-bold leading-1">Waktu Invoice (Bulan)</Label>
                             <Select
                                 value={selector.month.toString()}
                                 onValueChange={(value) => handleTimeChange("MONTH", Number(value))}
@@ -141,7 +140,7 @@ const DetailInvoice = ({ subCategories, members, positionCategories, dataInvoice
                             </Select>
                         </div>
                         <div className='w-full'>
-                            <Label className="mb-2 font-bold">Waktu Invoice (Tahun)</Label>
+                            <Label className="font-bold leading-1">Waktu Invoice (Tahun)</Label>
                             <Select
                                 value={selector.year.toString()}
                                 onValueChange={(value) => handleTimeChange("YEAR", Number(value))}

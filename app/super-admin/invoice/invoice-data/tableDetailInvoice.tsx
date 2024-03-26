@@ -120,7 +120,7 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
 
     return (
         <div>
-            <div className="w-full mb-2">
+            <div className="w-full mb-2 relative overflow-auto">
                 <table className="text-sm w-full border border-solid mb-5">
                     <thead>
                         <tr className="border border-solid">

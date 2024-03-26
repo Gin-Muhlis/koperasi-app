@@ -47,10 +47,10 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
         Detail Invoice
       </h1>
       {/* data invoice */}
-      <div className="w-full flex justify-start flex-wrap items-start gap-5 text-sm mb-10">
-        <div className="w-full md:w-2/5">
+      <div className="w-full block md:flex justify-start items-start gap-5 text-sm mb-7">
+        <div className="w-full">
           <div className="w-full mb-3 flex items-center">
-            <span className="basis-1/3">
+            <span className="basis-2/5 md:basis-1/3">
               Kode Invoice
             </span>
             <span className='flex-1 font-semibold'>
@@ -58,7 +58,7 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
             </span>
           </div>
           <div className="w-full mb-3 flex items-center">
-            <span className="basis-1/3">
+            <span className="basis-2/5 md:basis-1/3">
               Nama Invoice
             </span>
             <span className='flex-1 font-semibold'>
@@ -66,33 +66,33 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
             </span>
           </div>
           <div className="w-full mb-3 flex items-center">
-            <span className="basis-1/3">
+            <span className="basis-2/5 md:basis-1/3">
               Sumber Pembayaran
             </span>
-            <span className='flex-1 font-semibold capitalize'>
+            <span className='flex-1 font-semibold'>
               : {detailInvoice.payment_source}
             </span>
           </div>
         </div>
-        <div className="w-full md:w-2/5">
+        <div className="w-full">
           <div className="w-full mb-3 flex items-center">
-            <span className="basis-1/3">
+            <span className="basis-2/5 md:basis-1/3">
               Tanggal Dibuat
             </span>
             <span className='flex-1 font-semibold'>
-              : {convertDateFormat(detailInvoice.date)}
+              : {detailInvoice.date}
             </span>
           </div>
           <div className="w-full mb-3 flex items-center">
-            <span className="basis-1/3">
+            <span className="basis-2/5 md:basis-1/3">
               Tenggat Pembayaran
             </span>
             <span className='flex-1 font-semibold'>
-              : {convertDateFormat(detailInvoice.due_date)}
+              : {detailInvoice.due_date}
             </span>
           </div>
           <div className="w-full mb-3 flex items-center">
-            <span className="basis-1/3">
+            <span className="basis-2/5 md:basis-1/3">
               Status
             </span>
             <span className='flex-1 font-semibold'>
@@ -101,7 +101,6 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
           </div>
         </div>
       </div>
-
       {/* button aksi */}
       <div className="w-full flex items-center justify-start gap-2 mb-5 flex-wrap">
         <ConfirmInvoiceButton statusInvoice={detailInvoice.status} invoiceId={detailInvoice.id} totalPayment={handleTotalData()} />
@@ -110,7 +109,7 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
       </div>
 
       {/* detail data invoice */}
-      <div className="position-relative overflow-auto border border-solid">
+      <div className="position-relative overflow-auto border">
         <table className="text-sm w-full mb-5">
           <thead>
             <tr className="border border-solid">

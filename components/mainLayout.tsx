@@ -18,8 +18,8 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           <div className="w-full h-full">
             <div className="flex flex-no-wrap">
               <Sidebar isOpen={isOpen} handleIsOpen={handleIsOpen} />
-              <div className={`${isOpen ? 'md:ml-64' : ''} transition-all duration-1000 w-full pb-5`}>
-                <div className="w-full h-full">
+              <div className={`${isOpen ? 'open-section' : ''} w-full transition-all duration-1000 pb-5`}>
+                <div className="w-full">
                   <div className={`w-full h-14 px-6 flex items-center justify-start mb-8`}>
                     <Icon icon="ri:menu-4-line" width={30} height={30} onClick={handleIsOpen} className='cursor-pointer' />
                   </div>

@@ -13,8 +13,8 @@ const MemberProfile = async () => {
 
   return (
     <>
-      <div className="w-full flex items-start justify-start gap-5 flex-wrap">
-        <div className="w-full md:basis-80 bg-white rounded p-4 border border-solid shadow">
+      <div className="w-full block md:flex items-start justify-start gap-5 flex-wrap">
+        <div className="w-full md:w-80 bg-white rounded p-4 border border-solid shadow mb-5 md:mb-0">
           <div className="w-full flex justify-center text-center mb-8">
             <img className='w-24 h-24 rounded-full object-cover border border-solid border-blue-400' src={`${profile.imageProfile}`} alt="image profile" />
           </div>

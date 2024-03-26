@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CategoryState, SubCategoryState } from "@/types/interface";
 import EditSubCategory from "./editSubCategory";
 import DeleteSubCategory from "./deleteSubCategory";
+import { capitalizeString } from "@/app/utils/helper";
 
 const Content = ({
   subCategories,
@@ -18,6 +19,11 @@ const Content = ({
     {
       accessorKey: "name",
       header: "Nama",
+      cell: ({row}) => {
+        const value: string = row.getValue("name");
+
+        return <div>{capitalizeString(value)}</div>
+      }
     },
     {
       accessorKey: "code",
@@ -26,10 +32,20 @@ const Content = ({
     {
       accessorKey: "type",
       header: "Tipe",
+      cell: ({row}) => {
+        const value: string = row.getValue("type");
+
+        return <div>{capitalizeString(value)}</div>
+      }
     },
     {
       accessorKey: "category",
       header: "Kategori",
+      cell: ({row}) => {
+        const value: string = row.getValue("category");
+
+        return <div>{capitalizeString(value)}</div>
+      }
     },
     {
       id: "actions",

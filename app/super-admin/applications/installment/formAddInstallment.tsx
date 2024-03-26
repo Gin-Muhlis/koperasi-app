@@ -132,7 +132,7 @@ const FormAddInstallment = ({ member }: { member: MemberInstallment }) => {
 
     return (
         <div>
-            <Button className='bg-blue-400 text-white' onClick={handleModal}>Tambah Angsuran</Button>
+            <Button size={'sm'} className='bg-blue-400 text-white' onClick={handleModal}>Tambah Angsuran</Button>
             <div
                 className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? "block" : "hidden"
                     }`}
