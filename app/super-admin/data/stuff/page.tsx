@@ -7,6 +7,8 @@ import { ProductState, StuffState } from "@/types/interface";
 import { getProducts, getStuffs } from "@/app/utils/featuresApi";
 import Content from "./content";
 import AddStuff from "./addStuff";
+import ExportPdf from "./exportPdf";
+import ImportExcel from "./importExcel";
 
 export const metadata: Metadata = {
   title: "Barang",
@@ -25,8 +27,10 @@ const Stuff = async () => {
           Barang
         </h1>
 
-        <div className="mb-5">
+        <div className="w-full flex items-center justify-start gap-3 mb-5">
             <AddStuff products={products} />
+            <ExportPdf />
+            <ImportExcel />
         </div>
 
         <Content stuffs={stuffs} products={products} />

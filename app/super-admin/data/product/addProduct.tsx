@@ -1,14 +1,11 @@
 "use client";
 
-import AlertError from "@/app/components/alertError";
-import AlertSuccess from "@/app/components/alertSuccess";
-import { createCategory, createProduct } from "@/app/utils/featuresApi";
+import { createProduct } from "@/app/utils/featuresApi";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Loader from "@/app/components/loader";
-
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -23,12 +20,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { productSchema } from "@/app/utils/formSchema";
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const formSchema = productSchema;
 
 const AddProduct = () => {
   const { data: session } = useSession();
-  
+
   const [modal, setModal] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | boolean>(false);
@@ -85,7 +83,10 @@ const AddProduct = () => {
 
   return (
     <>
-      <Button className="text-white bg-blue-400" onClick={handleModal}>Tambah Data</Button>
+      <Button className="text-white bg-blue-400 flex items-center gap-1 justify-start" onClick={handleModal}>
+        <Icon icon="lucide:plus" width={"16"} height={"16"}></Icon>
+        <span>Tambah Data</span>
+      </Button>
       <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
         <div className={`w-11/12 max-w-lg bg-white rounded transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
           <div className="p-4 border-b border-b-slate-300 mb-4">
@@ -107,7 +108,7 @@ const AddProduct = () => {
                     </FormItem>
                   )}
                 />
-                
+
               </div>
               <div className="p-4 flex items-center justify-end gap-3">
                 <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
@@ -121,7 +122,7 @@ const AddProduct = () => {
 
       </div>
       {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
-      {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction}  />}
+      {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
     </>
   );
 };

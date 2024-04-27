@@ -24,7 +24,6 @@ const DownloadExcelMembersData = () => {
         const response = await downloadMembersData(
             session?.user.accessToken
         );
-        console.log(response)
 
         setStatus(response.status);
         

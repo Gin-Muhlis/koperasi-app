@@ -1,8 +1,4 @@
 import {
-  Invoice,
-  Member,
-  MemberState,
-  PaymentState,
   ReceivableData,
   RegisterState,
   installmentData,
@@ -40,7 +36,7 @@ export async function register(data: RegisterState) {
   }
 }
 
-// API GET Golongan untuk daftar
+// API GET Golongan untuk daftar 
 export async function getRegisterPositioCategories() {
   try {
     const response = await axiosInstance.get('/register/position-categories');
@@ -51,7 +47,7 @@ export async function getRegisterPositioCategories() {
   }
 }
 
-// PAI Logout
+// API Logout 
 export async function logout(token: string | undefined) {
   try {
     const response = await axiosInstance.post(
@@ -70,7 +66,7 @@ export async function logout(token: string | undefined) {
   }
 }
 
-// API GET Member
+// API GET Member 
 export async function getMembers(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/member`, {
@@ -85,7 +81,7 @@ export async function getMembers(token: string | undefined) {
   }
 }
 
-// API CREATE Member
+// API CREATE Member 
 export async function createMember(data: FormData, token: string | undefined) {
   try {
     const response = await axiosInstance.post(`/member`, data, {
@@ -101,7 +97,7 @@ export async function createMember(data: FormData, token: string | undefined) {
   }
 }
 
-// API CREATE Member
+// API CREATE Member 
 export async function deleteMember(id: number, token: string | undefined) {
   try {
     const response = await axiosInstance.delete(`/member/${id}`, {
@@ -116,7 +112,7 @@ export async function deleteMember(id: number, token: string | undefined) {
   }
 }
 
-// API CREATE Member
+// API UPDATE Member 
 export async function updateMember(
   id: number,
   data: FormData,
@@ -136,7 +132,7 @@ export async function updateMember(
   }
 }
 
-// API GET Role
+// API GET Role 
 export async function getRoles(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/role`, {
@@ -151,7 +147,7 @@ export async function getRoles(token: string | undefined) {
   }
 }
 
-// API GET Profile
+// API GET Profile 
 export async function getProfile(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/profile`, {
@@ -166,7 +162,7 @@ export async function getProfile(token: string | undefined) {
   }
 }
 
-// API UPDATE PROFILE
+// API UPDATE PROFILE 
 export async function updateProfile(
   id: number,
   data: FormData,
@@ -189,7 +185,7 @@ export async function updateProfile(
 
 
 
-// API GET Category
+// API GET Category 
 export async function getCategories(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/category`, {
@@ -204,59 +200,8 @@ export async function getCategories(token: string | undefined) {
   }
 }
 
-// API CREATE Category
-export async function createCategory(
-  data: FormData,
-  token: string | undefined
-) {
-  try {
-    const response = await axiosInstance.post(`/category/`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    return response;
-  } catch (error: any) {
-    return error.response;
-  }
-}
-
-// API UPDATE Category
-export async function updateCategory(
-  id: number,
-  data: FormData,
-  token: string | undefined
-) {
-  try {
-    const response = await axiosInstance.post(`/category/${id}`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return response;
-  } catch (error: any) {
-    return error.response;
-  }
-}
-
-// API UPDATE Category
-export async function deleteCategory(id: number, token: string | undefined) {
-  try {
-    const response = await axiosInstance.delete(`/category/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return response;
-  } catch (error: any) {
-    return error.response;
-  }
-}
-
-// API GET Sub-Category
+// API GET Sub-Category 
 export async function getSubCategories(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/sub-category`, {
@@ -271,7 +216,7 @@ export async function getSubCategories(token: string | undefined) {
   }
 }
 
-// API CREATE Sub-Category
+// API CREATE Sub-Category 
 export async function createSubCategory(
   data: FormData,
   token: string | undefined
@@ -289,7 +234,7 @@ export async function createSubCategory(
   }
 }
 
-// API UPDATE Sub-Category
+// API UPDATE Sub-Category 
 export async function updateSubCategory(
   id: number,
   data: FormData,
@@ -308,7 +253,7 @@ export async function updateSubCategory(
   }
 }
 
-// API DELETE Sub-Category
+// API DELETE Sub-Category 
 export async function deleteSubCategory(id: number, token: string | undefined) {
   try {
     const response = await axiosInstance.delete(`/sub-category/${id}`, {
@@ -323,7 +268,7 @@ export async function deleteSubCategory(id: number, token: string | undefined) {
   }
 }
 
-// API GET Product
+// API GET Product 
 export async function getProducts(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/product`, {
@@ -338,7 +283,7 @@ export async function getProducts(token: string | undefined) {
   }
 }
 
-// API CREATE Product
+// API CREATE Product 
 export async function createProduct(data: FormData, token: string | undefined) {
   try {
     const response = await axiosInstance.post(`/product/`, data, {
@@ -353,7 +298,7 @@ export async function createProduct(data: FormData, token: string | undefined) {
   }
 }
 
-// API DELETE Product
+// API DELETE Product 
 export async function deleteProduct(id: number, token: string | undefined) {
   try {
     const response = await axiosInstance.delete(`/product/${id}`, {
@@ -368,7 +313,7 @@ export async function deleteProduct(id: number, token: string | undefined) {
   }
 }
 
-// API UPDATE Product
+// API UPDATE Product 
 export async function updateProduct(
   id: number,
   data: FormData,
@@ -387,7 +332,7 @@ export async function updateProduct(
   }
 }
 
-// API GET Stuff
+// API GET Stuff 
 export async function getStuffs(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/stuff`, {
@@ -402,7 +347,7 @@ export async function getStuffs(token: string | undefined) {
   }
 }
 
-// API CREATE Stuff
+// API CREATE Stuff 
 export async function createStuff(data: FormData, token: string | undefined) {
   try {
     const response = await axiosInstance.post(`/stuff/`, data, {
@@ -417,7 +362,7 @@ export async function createStuff(data: FormData, token: string | undefined) {
   }
 }
 
-// API UPDATE Stuff
+// API UPDATE Stuff 
 export async function updateStuff(
   id: number,
   data: FormData,
@@ -436,7 +381,7 @@ export async function updateStuff(
   }
 }
 
-// API DELETE Stuff
+// API DELETE Stuff 
 export async function deleteStuff(id: number, token: string | undefined) {
   try {
     const response = await axiosInstance.delete(`/stuff/${id}`, {
@@ -451,7 +396,7 @@ export async function deleteStuff(id: number, token: string | undefined) {
   }
 }
 
-// API CREATE SAVING
+// API CREATE SAVING 
 export async function createSavingMembers(
   data: any,
   token: string | undefined
@@ -469,22 +414,7 @@ export async function createSavingMembers(
   }
 }
 
-// API GET Payment Principal Member
-export async function getPrincivalSavings(token: string | undefined) {
-  try {
-    const response = await axiosInstance.get(`/tab/principal-saving`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return response.data.data;
-  } catch (error: any) {
-    return error.response;
-  }
-}
-
-// API GET Position Category
+// API GET Position Category 
 export async function getPositionCategories(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/group-member`, {
@@ -499,7 +429,7 @@ export async function getPositionCategories(token: string | undefined) {
   }
 }
 
-// API CREATE Position Category
+// API CREATE Position Category 
 export async function createPositionCategory(
   data: FormData,
   token: string | undefined
@@ -517,7 +447,7 @@ export async function createPositionCategory(
   }
 }
 
-// API UPDATE Position Category
+// API UPDATE Position Category 
 export async function updatePositionCategory(
   id: number,
   data: FormData,
@@ -540,7 +470,7 @@ export async function updatePositionCategory(
   }
 }
 
-// API DELETE Position Category
+// API DELETE Position Category 
 export async function deletePositionCategory(
   id: number,
   token: string | undefined
@@ -558,35 +488,7 @@ export async function deletePositionCategory(
   }
 }
 
-// API GET Piutang S/P
-export async function getReceivables(token: string | undefined) {
-  try {
-    const response = await axiosInstance.get(`/tab/receivable`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data.data;
-  } catch (error: any) {
-    return error.response;
-  }
-}
-
-// API GET Piutang Dagang
-export async function getAccountsReceivable(token: string | undefined) {
-  try {
-    const response = await axiosInstance.get(`/tab/accounts-receivable`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data.data;
-  } catch (error: any) {
-    return error.response;
-  }
-}
-
-// API CREATE Invoice
+// API CREATE Invoice 
 export async function createInvoice(
   data: {
     invoice_name: string;
@@ -608,7 +510,7 @@ export async function createInvoice(
   }
 }
 
-// CREATE API Detail Invoice
+// CREATE API Detail Invoice 
 export async function createDetailInvoice(
   members: any[],
   monthYear: string,
@@ -636,7 +538,7 @@ export async function createDetailInvoice(
   }
 }
 
-// GET API Invoice
+// GET API Invoice 
 export async function getInvoices(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/invoice`, {
@@ -651,7 +553,7 @@ export async function getInvoices(token: string | undefined) {
   }
 }
 
-// GET API Detail Invoice
+// GET API Detail Invoice 
 export async function getDetailInvoice(
   token: string | undefined,
   code: string
@@ -669,13 +571,13 @@ export async function getDetailInvoice(
   }
 }
 
-// CREATE API Payment
+// CREATE API Payment 
 export async function createPaymentInvoice(
   data: FormData,
   token: string | undefined
 ) {
   try {
-    const response = await axiosInstance.post(`payment`, data, {
+    const response = await axiosInstance.post(`/payment`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -688,7 +590,7 @@ export async function createPaymentInvoice(
   }
 }
 
-// DOWNLOAD API Detail Invoice Excel
+// DOWNLOAD API Detail Invoice Excel 
 export async function downloadExcelInvoice(
   invoiceCode: string,
   token: string | undefined
@@ -696,7 +598,7 @@ export async function downloadExcelInvoice(
   try {
 
     const response: any = await axiosInstance.get(
-      `export/invoice-excel/${invoiceCode}`,
+      `/export/invoice-excel/${invoiceCode}`,
       {
          responseType: "blob",
         headers: {
@@ -713,7 +615,7 @@ export async function downloadExcelInvoice(
   }
 }
 
-// DOWNLOAD API Detail Invoice PDF
+// DOWNLOAD API Detail Invoice PDF used
 export async function downloadPdfInvoice(
   invoiceCode: string,
   token: string | undefined
@@ -721,7 +623,7 @@ export async function downloadPdfInvoice(
   try {
 
     const response: any = await axiosInstance.get(
-      `export/invoice-pdf/${invoiceCode}`,
+      `/export/invoice-pdf/${invoiceCode}`,
       {
         responseType: "blob",
         headers: {
@@ -737,7 +639,7 @@ export async function downloadPdfInvoice(
   }
 }
 
-// DOWNLOAD API Detail Invoice member PDF
+// DOWNLOAD API Detail Invoice member PDF 
 export async function downloadPdfInvoiceMember(
   memberId: number,
   invoiceCode: string,
@@ -767,7 +669,7 @@ export async function downloadPdfInvoiceMember(
   }
 }
 
-// API GET Dashboard Member
+// API GET Dashboard Member 
 export async function getDashboardMember(
   token: string | undefined
 ) {
@@ -784,7 +686,7 @@ export async function getDashboardMember(
   }
 }
 
-// API GET Dashboard Admin
+// API GET Dashboard Admin 
 export async function getDashboardAdmin(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/dashboard/admin`, {
@@ -799,7 +701,7 @@ export async function getDashboardAdmin(token: string | undefined) {
   } 
 }
 
-// API CREATE Pinjaman
+// API CREATE Pinjaman 
 export async function createLoanMember(data: ReceivableData, token: string | undefined) {
   try {
       const response = await axiosInstance.post('/receivable', data, {
@@ -815,7 +717,7 @@ export async function createLoanMember(data: ReceivableData, token: string | und
 
 }
 
-// API GET Laporan Anggota
+// API GET Laporan Anggota 
 export async function getReportMembers(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/report/members`, {
@@ -830,23 +732,8 @@ export async function getReportMembers(token: string | undefined) {
   } 
 }
 
-// API GET Laporan Per orang
-export async function getReportMember(token: string | undefined) {
-  try {
-    const response = await axiosInstance.get(`/report/nasabah`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    return response.data.data;
-  } catch (error: any) {
-    return error.response;
-  } 
-}
-
-
-// API CREATE Angsuran
+// API CREATE Angsuran 
 export async function createInstallmentMember(data: installmentData, token: string | undefined) {
   try {
       const response = await axiosInstance.post('/installment', data, {
@@ -862,7 +749,7 @@ export async function createInstallmentMember(data: installmentData, token: stri
 
 }
 
-// API GET MEMBERS INVOICES
+// API GET MEMBERS INVOICES 
 export async function getMembersInvoice(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/members-invoice`, {
@@ -877,7 +764,7 @@ export async function getMembersInvoice(token: string | undefined) {
   }   
 }
 
-// API GET Sub Category Invoices
+// API GET Sub Category Invoices 
 export async function getSubCategoriesInvoice(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/sub-categories-invoice`, {
@@ -892,10 +779,10 @@ export async function getSubCategoriesInvoice(token: string | undefined) {
   }
 }
 
-// API UPDATE Password User
+// API UPDATE Password User 
 export async function changePassword(data: FormData, id: number, token: string | undefined) {
   try {
-    const response = await axiosInstance.post(`change-password/${id}`, data, {
+    const response = await axiosInstance.post(`/change-password/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -907,10 +794,10 @@ export async function changePassword(data: FormData, id: number, token: string |
   }
 }
 
-// API GET Profil App
+// API GET Profil App 
 export async function getProfilApp(token: string | undefined) {
   try {
-    const response = await axiosInstance.get(`profile-app`, {
+    const response = await axiosInstance.get(`/profile-app`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -922,14 +809,14 @@ export async function getProfilApp(token: string | undefined) {
   }
 }
 
-// API Update Profile App
+// API Update Profile App 
 export async function updateProfileApp(
   id: number,
   data: FormData,
   token: string | undefined
 ) {
   try {
-    const response = await axiosInstance.post(`profile-app/${id}`, data, {
+    const response = await axiosInstance.post(`/profile-app/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -942,10 +829,10 @@ export async function updateProfileApp(
   }
 }
 
-// API GET Saving Sub Categories
+// API GET Saving Sub Categories 
 export async function getSubCategoriesSaving(token: string | undefined) {
   try {
-    const response = await axiosInstance.get(`sub-categories-saving`, {
+    const response = await axiosInstance.get(`/sub-categories-saving`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -957,10 +844,10 @@ export async function getSubCategoriesSaving(token: string | undefined) {
   }
 }
 
-// API GET Savings Member
+// API GET Savings Member 
 export async function getSavingsMember(token: string | undefined) {
   try {
-    const response = await axiosInstance.get(`saving`, {
+    const response = await axiosInstance.get(`/saving`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -972,10 +859,10 @@ export async function getSavingsMember(token: string | undefined) {
   }
 }
 
-// API GET Member Saving
+// API GET Member Saving 
 export async function getMemberSaving(token: string | undefined) {
   try {
-    const response = await axiosInstance.get(`member-saving`, {
+    const response = await axiosInstance.get(`/member-saving`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -987,25 +874,10 @@ export async function getMemberSaving(token: string | undefined) {
   }
 }
 
-// API GET Loan Sub Categories
-export async function getSubCategoriesLoan(token: string | undefined) {
-  try {
-    const response = await axiosInstance.get(`sub-categories-receivable`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return response.data.data;
-  } catch (error: any) {
-    return error.response;
-  }
-}
-
-// API GET Loan Sub Categories
+// API GET Pinjaman Member 
 export async function getLoansMember(token: string | undefined) {
   try {
-    const response = await axiosInstance.get(`receivable`, {
+    const response = await axiosInstance.get(`/receivable`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -1017,10 +889,10 @@ export async function getLoansMember(token: string | undefined) {
   }
 }
 
-// API GET Member Have Loan
+// API GET Member yang Mempunyai Pinjaman 
 export async function getInstallmentMembers(token: string | undefined) {
   try {
-    const response = await axiosInstance.get(`installment`, {
+    const response = await axiosInstance.get(`/installment`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -1032,7 +904,7 @@ export async function getInstallmentMembers(token: string | undefined) {
   }
 }
 
-// DOWNLOAD API Laporan Anggota
+// DOWNLOAD API Laporan Anggota 
 export async function downloadExcelReportMembers(
   token: string | undefined
 ) {
@@ -1057,7 +929,7 @@ export async function downloadExcelReportMembers(
 }
 
 
-// DOWNLOAD API Report member
+// DOWNLOAD API Report member 
 export async function downloadPdfReportMember(
   id: number,
   token: string | undefined
@@ -1081,10 +953,10 @@ export async function downloadPdfReportMember(
   }
 }
 
-// API GET Sub Kategori SImpanan
+// API GET Laporan Simpanan Anggota 
 export async function getReportSavingMembers(token: string | undefined) {
   try {
-    const response = await axiosInstance.get(`report/saving-members`, {
+    const response = await axiosInstance.get(`/report/saving-members`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -1097,14 +969,14 @@ export async function getReportSavingMembers(token: string | undefined) {
 }
 
 
-// DOWNLOAD API Laporan Simpanan Anggota
+// DOWNLOAD API Laporan Simpanan Anggota 
 export async function downloadExcelReportSavingMembers(
   token: string | undefined
 ) {
   try {
 
     const response: any = await axiosInstance.get(
-      `report/export/report-saving-members`,
+      `/report/export/report-saving-members`,
       {
          responseType: "blob",
         headers: {
@@ -1121,7 +993,7 @@ export async function downloadExcelReportSavingMembers(
   }
 }
 
-// DOWNLOAD API Laporan Simpanan Anggota Per Member
+// DOWNLOAD API Laporan Simpanan Anggota Per Member 
 export async function downloadPdfReportSavingMember(
   id: number,
   token: string | undefined
@@ -1129,7 +1001,7 @@ export async function downloadPdfReportSavingMember(
   try {
 
     const response: any = await axiosInstance.get(
-      `report/export/report-saving-member/${id}`,
+      `/report/export/report-saving-member/${id}`,
       {
         responseType: "blob",
         headers: {
@@ -1145,7 +1017,7 @@ export async function downloadPdfReportSavingMember(
   }
 }
 
-// API GET Laporan Pinjaman Member
+// API GET Laporan Pinjaman Member 
 export async function getReportLoanMembers(token: string | undefined) {
   try {
     const response = await axiosInstance.get(`/report/loan-members`, {
@@ -1161,7 +1033,7 @@ export async function getReportLoanMembers(token: string | undefined) {
 }
 
 
-// DOWNLOAD API Laporan Pinjaman Anggota
+// DOWNLOAD API Laporan Pinjaman Anggota 
 export async function downloadExcelReportLoanMembers(
   token: string | undefined
 ) {
@@ -1185,7 +1057,7 @@ export async function downloadExcelReportLoanMembers(
   }
 }
 
-// DOWNLOAD API Laporan Pinjaman Anggota Per Member
+// DOWNLOAD API Laporan Pinjaman Anggota Per Member 
 export async function downloadPdfReportLoanMember(
   id: number,
   token: string | undefined
@@ -1209,10 +1081,10 @@ export async function downloadPdfReportLoanMember(
   }
 }
 
-// API UPDATE Password Member
+// API UPDATE Password Member 
 export async function changePasswordMember(data: FormData, token: string | undefined) {
   try {
-    const response = await axiosInstance.post(`change-password-member`, data, {
+    const response = await axiosInstance.post(`/change-password-member`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -1224,14 +1096,14 @@ export async function changePasswordMember(data: FormData, token: string | undef
   }
 }
 
-// API GET Download Daftar Anggota
+// API GET Download Daftar Anggota 
 export async function downloadMembersData(
   token: string | undefined
 ) {
   try {
 
     const response: any = await axiosInstance.get(
-      `export/members`,
+      `/export/members`,
       {
          responseType: "blob",
         headers: {
@@ -1243,6 +1115,173 @@ export async function downloadMembersData(
     );
 
     return response;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Download Data Kategori
+export async function downloadCategoriesDataPdf(
+  token: string | undefined
+) {
+  try {
+    const response: any = await axiosInstance.get("/export/categories/pdf", {
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/pdf"
+      }
+    })
+
+    return response
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Download Data Sub Kategori
+export async function downloadSubCategoriesDataPdf(
+  token: string | undefined
+) {
+  try {
+    const response: any = await axiosInstance.get("/export/sub-categories/pdf", {
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/pdf"
+      }
+    })
+
+    return response
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API POST Import Sub Kategori
+export async function importSubCategories(
+  token: string | undefined,
+  data: FormData
+) {
+  try {
+    const response: any = await axiosInstance.post("/import/sub-categories", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+
+    return response
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Download Data Produk
+export async function downloadProductDataPdf(
+  token: string | undefined
+) {
+  try {
+    const response: any = await axiosInstance.get("/export/products/pdf", {
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/pdf"
+      }
+    })
+
+    return response
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API POST Import Produk
+export async function importProducts(
+  token: string | undefined,
+  data: FormData
+) {
+  try {
+    const response: any = await axiosInstance.post("/import/products", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+
+    return response
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Download Data Barang
+export async function downloadStuffsDataPdf(
+  token: string | undefined
+) {
+  try {
+    const response: any = await axiosInstance.get("/export/stuffs/pdf", {
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/pdf"
+      }
+    })
+
+    return response
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API POST Import Barang
+export async function importStuffs(
+  token: string | undefined,
+  data: FormData
+) {
+  try {
+    const response: any = await axiosInstance.post("/import/stuffs", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+
+    return response
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Download Data Golongan
+export async function downloadPositionCategoriesDataPdf(
+  token: string | undefined
+) {
+  try {
+    const response: any = await axiosInstance.get("/export/position-categories/pdf", {
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/pdf"
+      }
+    })
+
+    return response
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API POST Import Golongan
+export async function importPositionCategories(
+  token: string | undefined,
+  data: FormData
+) {
+  try {
+    const response: any = await axiosInstance.post("/import/position-categories", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+
+    return response
   } catch (error: any) {
     return error.response;
   }

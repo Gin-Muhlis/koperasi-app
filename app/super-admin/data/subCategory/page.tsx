@@ -7,9 +7,11 @@ import { CategoryState, SubCategoryState } from "@/types/interface";
 import { getCategories, getSubCategories } from "@/app/utils/featuresApi";
 import Content from "./content";
 import AddSubCategory from "./addSubCategory";
+import ExportPdf from "./exportPdf";
+import ImportExcel from "./importExcel";
 
 export const metadata: Metadata = {
-  title: "Kategori",
+  title: "Sub Kategori",
   description: "Data sub kategori dari Zie Koperasi",
 };
 
@@ -25,8 +27,10 @@ const SubCategory = async () => {
           Sub Kategori
         </h1>
 
-        <div className="mb-5">
+        <div className="w-full flex items-center justify-start gap-3 mb-5">
           <AddSubCategory categories={categories} />
+          <ExportPdf />
+          <ImportExcel />
         </div>
 
         <Content subCategories={subCategories} categories={categories} />

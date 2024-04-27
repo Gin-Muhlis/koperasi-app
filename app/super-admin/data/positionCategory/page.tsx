@@ -7,6 +7,8 @@ import { PositionCategory } from "@/types/interface";
 import { getPositionCategories } from "@/app/utils/featuresApi";
 import Content from "./content";
 import AddPositionCategory from "./addPositionCategory";
+import ExportPdf from "./exportPdf";
+import ImportExcel from "./importExcel";
 
 export const metadata: Metadata = {
   title: "Golongan",
@@ -26,8 +28,10 @@ const PositionCategoryMember = async () => {
           Golongan Anggota
         </h1>
 
-        <div className="mb-5">
+        <div className="w-full flex items-center justify-start gap-3 mb-5">
           <AddPositionCategory />
+          <ExportPdf />
+          <ImportExcel />
         </div>
 
         <Content positionCategories={positionCategories} />

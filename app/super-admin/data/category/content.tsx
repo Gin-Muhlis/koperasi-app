@@ -3,7 +3,8 @@
 import React from 'react'
 import { DataTable } from "@/components/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { CategoryState, MemberState, RoleState } from '@/types/interface';
+import { CategoryState } from '@/types/interface';
+import ExportPdf from './exportPdf';
 const Content = ({ categories }: { categories: CategoryState[] }) => {
 
     const columns: ColumnDef<CategoryState>[] = [
@@ -12,8 +13,12 @@ const Content = ({ categories }: { categories: CategoryState[] }) => {
             header: "Nama Kategori",
         }
     ]
+
     return (
         <>
+        <div className="w-full flex items-center justify-start gap-3">
+            <ExportPdf />
+        </div>
             <DataTable columns={columns} data={categories} />
         </>
     )
