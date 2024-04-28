@@ -20,6 +20,7 @@ const PositionCategoryMember = async () => {
   const positionCategories: PositionCategory[] = await getPositionCategories(
     session?.user.accessToken
   );
+  console.log(positionCategories)
 
   return (
     <>

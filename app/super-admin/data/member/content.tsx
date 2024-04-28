@@ -63,21 +63,6 @@ const Content = ({ members, roles, positionCategories }: { members: MemberState[
             accessorKey: "religion",
             header: "Agama",
         },
-        // {
-        //     id: "actions",
-        //     header: "Aksi",
-        //     cell: ({ row }: { row: any }) => {
-        //         const member = row.original;
-
-        //         return (
-        //             <div className="flex items-center justify-center gap-1">
-        //                 <EditMember member={member} roles={roles} positionCategories={positionCategories} />
-        //                 <DetailMember member={member} />
-        //                 <DeleteMember member={member} />
-        //             </div>
-        //         );
-        //     },
-        // },
         {
             id: "actions",
             cell: ({ row }: { row: any }) => {

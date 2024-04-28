@@ -148,6 +148,7 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
         if (response.status == 200) {
             setModal(!modal)
             setSuccess(response.data.message);
+            router.refresh()
         } else if (response.stsatus == 422) {
             const errorsData = response.data.errors;
             const keys = Object.keys(errorsData);

@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ProductState } from '@/types/interface';
 import EditProduct from './editProduct';
 import DeleteProduct from './deleteProduct';
+import { capitalizeString } from '@/app/utils/helper';
 
 const Content = ({ products }: { products: ProductState[] }) => {
 
@@ -13,6 +14,11 @@ const Content = ({ products }: { products: ProductState[] }) => {
         {
             accessorKey: "name",
             header: "Nama",
+            cell: ({row}) => {
+                const value: string = row.getValue("name");
+
+                return capitalizeString(value)
+            },
         },
         {
             id: "actions",

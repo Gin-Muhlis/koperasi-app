@@ -91,6 +91,7 @@ const SavingPopup = ({ listMembers, positionCategories, subCategory, setSubCateg
         if (response.status == 200) {
             setSuccess(response.data.message);
             dispatch(resetState());
+            router.refresh()
         } else if (response.stsatus == 422) {
             const errorsData = response.data.errors;
             const keys = Object.keys(errorsData);

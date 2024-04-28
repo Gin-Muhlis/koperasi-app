@@ -30,6 +30,7 @@ import { CategoryState } from "@/types/interface";
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 import { createSubCategory } from "@/app/utils/featuresApi";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { capitalizeString } from "@/app/utils/helper";
 
 const formSchema = createSubCategorySchema;
 
@@ -153,7 +154,7 @@ const AddSubCategory = ({categories}: {categories: CategoryState[]}) => {
                         </FormControl>
                         <SelectContent>
                             {categories.map((item) => (
-                                <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
+                                <SelectItem key={item.id} value={item.id.toString()}>{capitalizeString(item.name)}</SelectItem>
                             ))}
                         </SelectContent>
                       </Select>

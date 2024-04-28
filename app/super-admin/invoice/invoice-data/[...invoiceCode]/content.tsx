@@ -104,8 +104,8 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
       {/* button aksi */}
       <div className="w-full flex items-center justify-start gap-2 mb-5 flex-wrap">
         <ConfirmInvoiceButton statusInvoice={detailInvoice.status} invoiceId={detailInvoice.id} totalPayment={handleTotalData()} />
-        <DownloadPdfInvoiceButton invoiceCode={detailInvoice.invoice_code} timeInvoice={convertDateFormat(detailInvoice.due_date)} />
-        <DownloadExcelInvoiceButton invoiceCode={detailInvoice.invoice_code} timeInvoice={convertDateFormat(detailInvoice.due_date)} />
+        <DownloadPdfInvoiceButton invoiceCode={detailInvoice.invoice_code} timeInvoice={convertDateFormat(detailInvoice.date)} />
+        <DownloadExcelInvoiceButton invoiceCode={detailInvoice.invoice_code} timeInvoice={convertDateFormat(detailInvoice.date)} />
       </div>
 
       {/* detail data invoice */}

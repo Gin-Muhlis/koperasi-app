@@ -393,10 +393,10 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
                             </tbody>
                         </table>
                         <div className="flex justify-end gap-3">
-                            <Button size={"sm"} onClick={cancelAllMember}>
+                            <Button onClick={cancelAllMember}>
                                 Batalkan Semua ({handleCountCancel()})
                             </Button>
-                            <Button size={"sm"} onClick={handleAddAllMember}>
+                            <Button onClick={handleAddAllMember}>
                                 Tambah Semua ({handleLengthAvailableMember()})
                             </Button>
                         </div>
@@ -410,8 +410,8 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-end gap-3">
-                    <Button size={"sm"} onClick={handleModal}>Batal</Button>
-                        <Button size={"sm"} className='bg-green-400' onClick={handleModal}>Konfirmasi</Button>
+                    <Button onClick={handleModal}>Batal</Button>
+                        <Button className='bg-green-400' onClick={handleModal}>Konfirmasi</Button>
                     </div>
                 </div>
 

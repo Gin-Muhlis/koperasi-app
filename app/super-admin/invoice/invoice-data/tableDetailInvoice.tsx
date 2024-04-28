@@ -178,7 +178,6 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
             <div className="px-4 flex items-center justify-end gap-3">
                 <Button
                     type="button"
-                    size={"sm"}
                     className="text-white bg-green-400"
                     disabled={isLoading}
                     onClick={handleSaveDetailInvoice}

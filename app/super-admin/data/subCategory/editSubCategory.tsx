@@ -34,6 +34,7 @@ import { updateSubCategorySchema } from "@/app/utils/formSchema";
 import { CategoryState, SubCategoryState } from "@/types/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
+import { capitalizeString } from "@/app/utils/helper";
 
 const formSchema = updateSubCategorySchema;
 
@@ -158,7 +159,7 @@ const EditSubCategory = ({ subCategory, categories }: { subCategory: SubCategory
                                                 </FormControl>
                                                 <SelectContent>
                                                     {categories.map((item) => (
-                                                        <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
+                                                        <SelectItem key={item.id} value={item.id.toString()}>{capitalizeString(item.name)}</SelectItem>
                                                     ))}
                                                 </SelectContent>
                                             </Select>

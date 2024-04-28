@@ -11,8 +11,8 @@ import DefaultLayout from '@/components/defaultLayout'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Koperasi Ap',
-  description: 'Aplikasi untuk pendataan di koperasi',
+  title: 'Koperasi App',
+  description: 'Aplikasi untuk pendataan simpanan dan pinjaman di koperasi',
 }
 
 export default function RootLayout({

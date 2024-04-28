@@ -35,7 +35,7 @@ const ImportExcel = () => {
         data.append("file", file as Blob)
 
         const response = await importStuffs(session?.user.accessToken, data)
-        
+        console.log(response)
         setStatus(response.status)
         setIsLoading(false)
 
