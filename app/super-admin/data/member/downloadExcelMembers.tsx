@@ -64,7 +64,7 @@ const DownloadExcelMembersData = () => {
             <Button onClick={handleDownloadExcel} className='text-white bg-green-600 flex items-center justify-center gap-1' disabled={isLoading}>
                 {isLoading ? <Loader /> : <>
                     <Icon icon="lucide:file" width={16} height={16}></Icon>
-                    <span>Download Excel</span>
+                    <span>Download Data</span>
                 </>}
             </Button>
             {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}

@@ -107,9 +107,8 @@ html::-webkit-scrollbar-thumb {
 }
 
 .height-section {
-  min-height: calc(100vh - 60px);  
+  min-height: calc(100vh - 60px);
 }
-
 
 
 @media screen and (min-width: 768px) {

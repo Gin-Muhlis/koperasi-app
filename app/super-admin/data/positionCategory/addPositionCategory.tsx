@@ -23,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { positionCategorySchema } from "@/app/utils/formSchema";
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const formSchema = positionCategorySchema;
 
@@ -92,8 +93,9 @@ const AddPositionCategory = () => {
 
   return (
     <>
-      <Button className="text-white bg-blue-400" onClick={handleModal}>
-        Tambah Data
+       <Button className="text-white bg-blue-400 flex items-center gap-1 justify-start" onClick={handleModal}>
+        <Icon icon="lucide:plus" width={"16"} height={"16"}></Icon>
+        <span>Tambah Data</span>
       </Button>
       <div
         className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${

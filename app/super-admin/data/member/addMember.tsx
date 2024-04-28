@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Loader from "@/app/components/loader";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,7 +16,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -25,11 +25,11 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { createMemberSchema } from "@/app/utils/formSchema";
 import { PositionCategory, RoleState } from "@/types/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -37,7 +37,13 @@ import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 
 const formSchema = createMemberSchema;
 
-const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefined, positionCategories: PositionCategory[] }) => {
+const AddMember = ({
+  roles,
+  positionCategories,
+}: {
+  roles: RoleState[] | undefined;
+  positionCategories: PositionCategory[];
+}) => {
   const { data: session } = useSession();
   const [imageProfile, setImageProfile] = useState<
     File | string | Blob | undefined
@@ -51,7 +57,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
   const [error, setError] = useState<string | boolean>(false);
   const [status, setStatus] = useState<number | boolean>(false);
 
-  const [passwordShow, setPasswordShow] = useState<boolean>(false)
+  const [passwordShow, setPasswordShow] = useState<boolean>(false);
   const router = useRouter();
 
   const handleModal = () => {
@@ -60,7 +66,7 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
 
   const handleShowPassword = () => {
     setPasswordShow(!passwordShow);
-  }
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,23 +74,26 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
       gender: "L",
       position: "pns",
       role: "member",
-      position_category: positionCategories.length > 0 ? positionCategories[0].name : ''
+      position_category:
+        positionCategories.length > 0 ? positionCategories[0].name : "",
     },
-  })
+  });
 
   const resetStateAction = () => {
     setSuccess(false);
     setStatus(false);
-    setError(false)
-    setImageProfile(undefined)
-      setPreviewImage(undefined)
+    setError(false);
+    setImageProfile(undefined);
+    setPreviewImage(undefined);
     router.refresh();
-  }
+  };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true)
+    setIsLoading(true);
     const formData = new FormData();
-    const positionCategory = positionCategories.find((position) => position.name == values.position_category);
+    const positionCategory = positionCategories.find(
+      (position) => position.name == values.position_category
+    );
 
     formData.append("username", values.username);
     formData.append("password", values.password);
@@ -96,35 +105,35 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
     formData.append("gender", values.gender);
     formData.append("religion", values.religion);
     formData.append("role", values.role);
-    formData.append("group_id", positionCategory?.id.toString() as string)
+    formData.append("group_id", positionCategory?.id.toString() as string);
 
     if (imageProfile) {
       formData.append("image", imageProfile);
     }
 
-    const response = await createMember(formData, session?.user.accessToken)
-    setStatus(Number(response.status))
-    setIsLoading(false)
+    const response = await createMember(formData, session?.user.accessToken);
+    setStatus(Number(response.status));
+    setIsLoading(false);
 
     if (response.status === 200) {
-      setModal(!modal)
+      setModal(!modal);
       form.reset();
-      setSuccess(response.data.message)
+      setSuccess(response.data.message);
     } else if (response.status === 422) {
-      const errorsData = response.data.errors
-      const keys = Object.keys(errorsData)
-      const firstKey = keys[0]
-      const message = errorsData[firstKey][0]
+      const errorsData = response.data.errors;
+      const keys = Object.keys(errorsData);
+      const firstKey = keys[0];
+      const message = errorsData[firstKey][0];
 
-      setError(message)
+      setError(message);
     } else if (response.status === 400) {
       const message = response.data.message;
 
-      setError(message)
+      setError(message);
     } else {
-      setError('Terjadi kesalahan dengan sistem!')
+      setError("Terjadi kesalahan dengan sistem!");
     }
-  }
+  };
 
   const handleImageInput = (event: any) => {
     const file = event.target.files[0];
@@ -146,11 +155,27 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
 
   return (
     <>
-      <Button className="text-white bg-blue-400" onClick={handleModal}>Tambah Data</Button>
-      <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
-        <div className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? 'scale-100' : 'scale-0'}`}>
+      <Button
+        className="text-white bg-blue-400 flex items-center gap-1 justify-start"
+        onClick={handleModal}
+      >
+        <Icon icon="lucide:plus" width={"16"} height={"16"}></Icon>
+        <span>Tambah Data</span>
+      </Button>
+      <div
+        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${
+          modal ? "block" : "hidden"
+        }`}
+      >
+        <div
+          className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${
+            modal ? "scale-100" : "scale-0"
+          }`}
+        >
           <div className="p-4 border-b border-b-slate-300 mb-4">
-            <h3 className="font-bold text-lg text-black">Tambah Data Anggota</h3>
+            <h3 className="font-bold text-lg text-black">
+              Tambah Data Anggota
+            </h3>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -162,7 +187,11 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     <FormItem>
                       <FormLabel>Nama Lengkap</FormLabel>
                       <FormControl>
-                        <Input placeholder="Nama Lengkap" {...field} disabled={isLoading} />
+                        <Input
+                          placeholder="Nama Lengkap"
+                          {...field}
+                          disabled={isLoading}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -175,7 +204,12 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="Email" {...field} disabled={isLoading} />
+                        <Input
+                          type="email"
+                          placeholder="Email"
+                          {...field}
+                          disabled={isLoading}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -189,7 +223,11 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     <FormItem>
                       <FormLabel>Alamat</FormLabel>
                       <FormControl>
-                        <Input placeholder="Alamat" {...field} disabled={isLoading} />
+                        <Input
+                          placeholder="Alamat"
+                          {...field}
+                          disabled={isLoading}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -203,7 +241,12 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     <FormItem>
                       <FormLabel>No Telp</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="No Telepon" {...field} disabled={isLoading} />
+                        <Input
+                          type="number"
+                          placeholder="No Telepon"
+                          {...field}
+                          disabled={isLoading}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -217,7 +260,11 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     <FormItem>
                       <FormLabel>Agama</FormLabel>
                       <FormControl>
-                        <Input placeholder="Agama" {...field} disabled={isLoading} />
+                        <Input
+                          placeholder="Agama"
+                          {...field}
+                          disabled={isLoading}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -230,7 +277,11 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Jenis Kelamin</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={isLoading}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Pilih jenis kelamin" />
@@ -252,7 +303,11 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Jabatan</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={isLoading}
+                      >
                         <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Silahkan pilih jabatan" />
@@ -274,7 +329,11 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Golongan</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={isLoading}
+                      >
                         <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Silahkan pilih Golongan" />
@@ -284,7 +343,12 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                           <SelectGroup>
                             <SelectLabel>Golongan</SelectLabel>
                             {positionCategories.map((position) => (
-                              <SelectItem key={position.id} value={position.name}>{position.name}</SelectItem>
+                              <SelectItem
+                                key={position.id}
+                                value={position.name}
+                              >
+                                {position.name}
+                              </SelectItem>
                             ))}
                           </SelectGroup>
                         </SelectContent>
@@ -300,7 +364,11 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                     <FormItem>
                       <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <Input placeholder="Username" {...field} disabled={isLoading} />
+                        <Input
+                          placeholder="Username"
+                          {...field}
+                          disabled={isLoading}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -314,8 +382,23 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                       <FormLabel>password</FormLabel>
                       <FormControl>
                         <div className="w-full flex items-center justify-center relative">
-                          <Input type={passwordShow ? 'text' : 'password'} placeholder="password" {...field} disabled={isLoading} />
-                          <Icon icon={passwordShow ? "mingcute:eye-close-fill" : "solar:eye-bold"} width={22} height={22} onClick={handleShowPassword} className='cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-blue-400 text-md' />
+                          <Input
+                            type={passwordShow ? "text" : "password"}
+                            placeholder="password"
+                            {...field}
+                            disabled={isLoading}
+                          />
+                          <Icon
+                            icon={
+                              passwordShow
+                                ? "mingcute:eye-close-fill"
+                                : "solar:eye-bold"
+                            }
+                            width={22}
+                            height={22}
+                            onClick={handleShowPassword}
+                            className="cursor-pointer absolute right-1 top-1/2 -translate-y-1/2 text-blue-400 text-md"
+                          />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -328,7 +411,11 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Role</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={isLoading}
+                      >
                         <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Silahkan pilih jabatan" />
@@ -337,9 +424,12 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                         <SelectContent>
                           <SelectGroup>
                             <SelectLabel>Jabatan/Posisi</SelectLabel>
-                            {roles && roles.map((role) => (
-                              <SelectItem key={role.id} value={role.name}>{role.name}</SelectItem>
-                            ))}
+                            {roles &&
+                              roles.map((role) => (
+                                <SelectItem key={role.id} value={role.name}>
+                                  {role.name}
+                                </SelectItem>
+                              ))}
                           </SelectGroup>
                         </SelectContent>
                       </Select>
@@ -353,9 +443,23 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Gambar</FormLabel>
-                      {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <div className="w-14 h-14 bg-slate-300 rounded mb-2"></div>}
+                      {previewImage ? (
+                        <img
+                          src={previewImage.toString()}
+                          alt="Gambar member"
+                          className="w-14 h-14 object-cover rounded mb-2"
+                        />
+                      ) : (
+                        <div className="w-14 h-14 bg-slate-300 rounded mb-2"></div>
+                      )}
                       <FormControl>
-                        <Input type="file" {...field} accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
+                        <Input
+                          type="file"
+                          {...field}
+                          accept=".jpg, .jpeg, .png"
+                          onChange={handleImageInput}
+                          disabled={isLoading}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -363,18 +467,39 @@ const AddMember = ({ roles, positionCategories }: { roles: RoleState[] | undefin
                 />
               </div>
               <div className="p-4 flex items-center justify-end gap-3">
-                <Button type="button" className="text-white" onClick={handleModal}>Batal</Button>
-                <Button type="submit" className="bg-blue-400 text-white" disabled={isLoading}>
-                  {isLoading ? <Loader /> : 'Simpan'}
+                <Button
+                  type="button"
+                  className="text-white"
+                  onClick={handleModal}
+                >
+                  Batal
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-blue-400 text-white"
+                  disabled={isLoading}
+                >
+                  {isLoading ? <Loader /> : "Simpan"}
                 </Button>
               </div>
             </form>
           </Form>
         </div>
-
       </div>
-      {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
-      {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
+      {success && (
+        <SweetAlertPopup
+          message={success.toString()}
+          status={status}
+          resetState={resetStateAction}
+        />
+      )}
+      {error && (
+        <SweetAlertPopup
+          message={error.toString()}
+          status={status}
+          resetState={resetStateAction}
+        />
+      )}
     </>
   );
 };

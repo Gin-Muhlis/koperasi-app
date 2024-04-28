@@ -8,6 +8,7 @@ import { getMembers, getPositionCategories, getRoles } from "@/app/utils/feature
 import Content from "./content";
 import AddMember from "./addMember";
 import DownloadExcelMembersData from "./downloadExcelMembers";
+import ImportExcel from "./importExcel";
 
 export const metadata: Metadata = {
   title: "Member",
@@ -27,8 +28,9 @@ const Member = async () => {
           Anggota Koperasi
         </h1>
 
-        <div className="mb-5 flex items-center justify-start gap-4">
+        <div className="mb-5 flex items-center justify-start gap-3">
           <AddMember roles={roles} positionCategories={positionCategories} />
+          <ImportExcel />
           <DownloadExcelMembersData />
         </div>
 

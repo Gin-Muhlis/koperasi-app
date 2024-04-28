@@ -889,6 +889,20 @@ export async function getLoansMember(token: string | undefined) {
   }
 }
 
+export async function getSubCategoriesLoan(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`sub-categories-receivable`, {
+    
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
 // API GET Member yang Mempunyai Pinjaman 
 export async function getInstallmentMembers(token: string | undefined) {
   try {
@@ -999,7 +1013,6 @@ export async function downloadPdfReportSavingMember(
   token: string | undefined
 ) {
   try {
-
     const response: any = await axiosInstance.get(
       `/report/export/report-saving-member/${id}`,
       {
@@ -1276,6 +1289,24 @@ export async function importPositionCategories(
 ) {
   try {
     const response: any = await axiosInstance.post("/import/position-categories", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+
+    return response
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API POST Import Anggota
+export async function importMembers(
+  token: string | undefined,
+  data: FormData
+) {
+  try {
+    const response: any = await axiosInstance.post("/import/members", data, {
       headers: {
         Authorization: `Bearer ${token}`,
       }

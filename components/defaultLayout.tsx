@@ -8,7 +8,7 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
 
     return (
 
-        <div className="2xl:container 2xl:mx-auto min-h-screen bg-white">
+        <div className="min-h-screen bg-white">
             <SessionProvider>
                 <div>
                     {children}

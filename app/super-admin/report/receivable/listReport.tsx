@@ -3,7 +3,6 @@
 import PaginationSection from '@/app/components/paginationSection';
 import { capitalizeString, handleFormat } from '@/app/utils/helper';
 import { ReportMember, SubCategoryState } from '@/types/interface'
-import { Icon } from '@iconify/react/dist/iconify.js';
 import React, { useState } from 'react'
 import DownloadPdfReportmember from './downloadPdfReportMember';
 

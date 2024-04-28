@@ -1,11 +1,10 @@
 "use client"
 import Loader from '@/app/components/loader';
 import SweetAlertPopup from '@/app/components/sweetAlertPopup';
-import { downloadPdfInvoice, downloadPdfReportLoanMember, downloadPdfReportMember, downloadPdfReportSavingMember } from '@/app/utils/featuresApi';
+import { downloadPdfReportLoanMember } from '@/app/utils/featuresApi';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
 const DownloadPdfReportmember = ({ name, id }: { name: string, id: number }) => {
@@ -14,7 +13,6 @@ const DownloadPdfReportmember = ({ name, id }: { name: string, id: number }) => 
     const [error, setError] = useState<string | boolean>(false)
     const [status, setStatus] = useState<number | boolean>(false)
 
-    const router = useRouter()
     const { data: session } = useSession()
 
     const handleDownloadPdf = async () => {
