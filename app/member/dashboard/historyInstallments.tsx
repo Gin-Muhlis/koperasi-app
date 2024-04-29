@@ -9,12 +9,12 @@ const HistoryInstallments = ({ data }: { data: DashboardMember }) => {
         <div>
             <h2 className='text-md font-bold mb-5 text-gray-700'>Catatan Angsuran</h2>
             <div className="flex flex-col items-start justify-start gap-4">
-                {data.history_installments.length > 0 ? data.history_installments.map((saving) => (
-                    <div key={saving.code} className="rounded shadow-md p-2 w-full bg-white">
+                {data.history_installments.length > 0 ? data.history_installments.map((saving, index) => (
+                    <div key={index} className="rounded shadow-md p-2 w-full bg-white">
                         <div className="flex justify-between items-center">
                             <div>
-                                <h5 className='text-sm font-bold italic'>{saving.code}</h5>
-                                <span className="text-xs text-gray-600 opacity-80">{convertDateFormat(saving.date)}</span>
+                                <h5 className='text-sm font-bold italic'>{saving.sub_category}</h5>
+                                <span className="text-xs text-gray-600 opacity-80">{convertDateFormat(saving.date)} {saving.time}</span>
                             </div>
                             <div className='text-sm font-bold'>
                                 Rp. {handleFormat(saving.amount)}

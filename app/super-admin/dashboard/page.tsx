@@ -24,11 +24,11 @@ const Dashboard = async ({ searchParams }: IProps) => {
     <>
       <div className="w-full grid grid-cols-1 gap-5">
         <DataDetail data={dashboardData} />
+        <ChartLoan data={dashboardData.loan_grafik} />
         <div className="block md:flex md:gap-4">
           <HistoryInvoices historyInvoices={dashboardData.history_invoices} />
           <TopPositionCategories listPosition={dashboardData.top_position_categories_loan} />
         </div>
-        <ChartLoan data={dashboardData.loan_grafik} />
       </div>
 
       {searchParams?.message && <AlertError message={searchParams.message.toString()} isShow={true} />}

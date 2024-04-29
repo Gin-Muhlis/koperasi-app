@@ -29,7 +29,7 @@ const AlertPayment = ({ dataAlerts }: { dataAlerts: NotPayed[] }) => {
 
     return (
         <div className='absolute right-6 top-4 flex flex-col gap-3'>
-            {dataAlerts.length > 0 && !showAlert && today.getDate() == lastDayOfMonth ? <div className='bg-red-500  cursor-pointer rounded text-sm text-white relative shadow-md shadow-red-500 p-2' onClick={handleShowAlert}>Terdapat simpanan yang yang belum dibayar
+            {dataAlerts.length > 0 && !showAlert ? <div className='bg-red-500  cursor-pointer rounded text-sm text-white relative shadow-md shadow-red-500 p-2' onClick={handleShowAlert}>Terdapat simpanan yang yang belum dibayar
                 <span className="absolute flex h-4 w-4 -top-2 -right-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>

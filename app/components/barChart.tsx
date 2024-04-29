@@ -77,9 +77,9 @@ const ChartLoan = ({ data }: { data: GrafikLoan }) => {
     ]
   }
 
-  return <>
+  return <div className="bg-white p-4 rounded border shadow-md w-full md:flex-1">
     <Bar data={dataGrafik} options={options} width={600} />
-  </>
+  </div>
 }
 
 export default ChartLoan;

@@ -27,7 +27,7 @@ const TopPositionCategories = ({ listPosition }: { listPosition: TopPositionCate
         },
     ]
     return (
-        <div className='w-full md:basis-2/5 bg-white rounded border p-4 shadow-md'>
+        <div className='w-full md:basis-1/3 bg-white rounded border p-4 shadow-md'>
             <h2 className='text-lg mb-3 text-gray-600 font-bold'>Top Melakukan Pinjaman</h2>
 
             <DataTable columns={columns} data={listPosition} />

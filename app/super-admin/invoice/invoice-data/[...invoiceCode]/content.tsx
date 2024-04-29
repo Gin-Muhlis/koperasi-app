@@ -80,7 +80,7 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
               Tanggal Dibuat
             </span>
             <span className='flex-1 font-semibold'>
-              : {detailInvoice.date}
+              : {convertDateFormat(detailInvoice.date)}
             </span>
           </div>
           <div className="w-full mb-3 flex items-center">
@@ -88,7 +88,7 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
               Tenggat Pembayaran
             </span>
             <span className='flex-1 font-semibold'>
-              : {detailInvoice.due_date}
+              : {convertDateFormat(detailInvoice.due_date)}
             </span>
           </div>
           <div className="w-full mb-3 flex items-center">

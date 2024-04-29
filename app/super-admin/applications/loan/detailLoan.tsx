@@ -141,12 +141,8 @@ const DetailLoanMember = ({ data }: { data: ListLoan }) => {
                                     <Input value={convertDateFormat(data.deadline)} />
                                 </div>
                                 <div>
-                                    <Label>Durasi Pinjaman</Label>
-                                    <Input value={data.duration} />
-                                </div>
-                                <div>
                                     <Label>Tanggal Pelunasan</Label>
-                                    <Input value={data.date_completion ?? 'Masih Berjalan'} />
+                                    <Input value={data.date_completion ? convertDateFormat(data.date_completion) : 'Masih Berjalan'} />
                                 </div>
                                 <div>
                                     <Label>Status</Label>

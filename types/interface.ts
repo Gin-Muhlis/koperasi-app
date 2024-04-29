@@ -211,7 +211,8 @@ export type PaymentState = {
 export type History = {
   date: string;
   amount: number;
-  code: number;
+  time: string;
+  sub_category: string;
 };
 
 export type DataSaving = {
