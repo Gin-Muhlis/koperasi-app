@@ -27,6 +27,15 @@ const HistoryInvoices = ({ historyInvoices }: { historyInvoices: HistoryInvoice[
             }
         },
         {
+            accessorKey: "due_date",
+            header: () => <div className="text-center text-xs md:text-sm lg:text-md">Tenggat Bayar</div>,
+            cell: ({ row }) => {
+                const value: string = row.getValue('due_date');
+
+                return <div className="text-xs md:text-sm lg:text-md">{convertDateFormat(value)}</div>
+            }
+        },
+        {
             accessorKey: "payment_source",
             header: () => <div className="text-center text-xs md:text-sm lg:text-md">Sumber Bayar</div>,
             cell: ({ row }) => {
@@ -42,20 +51,20 @@ const HistoryInvoices = ({ historyInvoices }: { historyInvoices: HistoryInvoice[
                 const value: string = row.getValue('status');
 
                 return <div className="text-xs md:text-sm lg:text-md text-center">
-                    <Badge className={`text-white ${value == 'dibayar' ? 'bg-green-400' : 'bg-red-400'}`}>{capitalizeString(value)}</Badge>
+                    <Badge className={`text-white ${value == 'dibayar' ? 'bg-green-400' : 'bg-red-500'}`}>{capitalizeString(value)}</Badge>
                 </div>
             }
         },
     ]
-    
+
 
     return (
-        <>
+        <div className=' bg-white rounded border p-4 w-full shadow-md md:flex-1'>
             <h2 className='text-lg mb-3 text-gray-600 font-bold'>Catatan Invoice</h2>
 
             <DataTable columns={columns} data={historyInvoices} />
 
-        </>
+        </div>
     )
 }
 

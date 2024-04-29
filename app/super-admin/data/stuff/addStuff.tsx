@@ -32,6 +32,8 @@ import { addStuffSchema } from "@/app/utils/formSchema";
 import { ProductState } from "@/types/interface";
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Label } from "@/components/ui/label";
+import { handleFormat } from "@/app/utils/helper";
 
 const formSchema = addStuffSchema;
 
@@ -45,6 +47,7 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
         undefined
     );
     const [modal, setModal] = useState(false);
+    const [price, setPrice] = useState("0")
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
@@ -59,7 +62,6 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            price: "0",
         },
     })
 
@@ -77,7 +79,7 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
         const formData = new FormData();
 
         formData.append("name", values.name);
-        formData.append("price", values.price.toString());
+        formData.append("price", price.toString());
         formData.append("product_id", values.product_id);
 
         if (image) {
@@ -102,6 +104,13 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
         } else {
             setError(response.data.message)
         }
+    }
+
+    const handlePrice = (amount: string) => {
+        const numericValue = amount.replace(/\D/g, '');
+
+        setPrice(numericValue)
+
     }
 
     const handleImageInput = (event: any) => {
@@ -152,19 +161,10 @@ const AddStuff = ({ products }: { products: ProductState[] }) => {
                                     )}
                                 />
 
-                                <FormField
-                                    control={form.control}
-                                    name="price"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Harga Barang</FormLabel>
-                                            <FormControl>
-                                                <Input type="number" placeholder="Harga barang" {...field} disabled={isLoading} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                <div className="mb-5">
+                                    <Label>Harga</Label>
+                                    <Input className="w-full" value={handleFormat(Number(price))} onChange={(event) => handlePrice(event.target.value)} disabled={isLoading} />
+                                </div>
 
                                 <FormField
                                     control={form.control}

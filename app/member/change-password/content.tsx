@@ -2,11 +2,10 @@
 
 import Loader from '@/app/components/loader';
 import SweetAlertPopup from '@/app/components/sweetAlertPopup';
-import { changePassword, changePasswordMember, logout } from '@/app/utils/featuresApi';
+import { changePasswordMember, logout } from '@/app/utils/featuresApi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MemberState } from '@/types/interface';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { randomBytes } from 'crypto';
 import { signOut, useSession } from 'next-auth/react';

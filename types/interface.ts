@@ -216,20 +216,40 @@ export type History = {
 
 export type DataSaving = {
   [key: string]: number;
-}
+};
+
+export type NotPayed = {
+  id: number;
+  category: string;
+  amount: number;
+};
 
 export type DashboardMember = {
   history_savings: History[];
   history_installments: History[];
-  data_saving: DataSaving
+  data_saving: DataSaving;
+  not_payed: NotPayed[];
 };
 
 export type HistoryInvoice = {
   invoice_name: number;
   date: string;
+  due_date: string;
   status: string;
   payment_source: string;
   payment_method: string;
+};
+
+export type TopPositionCategoriesLoan = {
+  id: number;
+  position: string;
+  count: number;
+  total: number;
+};
+
+export type GrafikLoan = {
+  paid: number[];
+  not_paid: number[];
 };
 
 export type DashboardAdmin = {
@@ -239,6 +259,8 @@ export type DashboardAdmin = {
   total_savings: number;
   total_loans: number;
   history_invoices: HistoryInvoice[];
+  top_position_categories_loan: TopPositionCategoriesLoan[];
+  loan_grafik: GrafikLoan;
 };
 
 export type MemberReceivable = {
@@ -262,15 +284,14 @@ export type ReceivableData = {
   description: string;
 };
 
-
 export type SubCategory = {
-  [key: string]: number
-}
+  [key: string]: number;
+};
 
 export type ReportMember = {
   id: number;
   name: string;
-  list: SubCategory
+  list: SubCategory;
 };
 
 export type DataNasabah = {
@@ -291,7 +312,6 @@ export type ReportLoanmember = {
   paid: number;
   remain_payment: number;
 };
-
 
 export type ProfileApp = {
   id: number;
@@ -328,7 +348,7 @@ export type DetailLoan = {
   paid: number;
   remain_payment: number;
   deadline: string;
-  date_completion: string |  null;
+  date_completion: string | null;
   status: string;
   sub_category: string;
   duration: string;
@@ -355,12 +375,12 @@ export type MemberInstallment = {
   paid: number;
   remain_payment: number;
   monthly: number;
-  months_status: Status[]
+  months_status: Status[];
 };
 
-export type installmentData ={
-  member_id: number,
-  amount: number,
-  loan_id: number,
-  sub_category_id: number,
+export type installmentData = {
+  member_id: number;
+  amount: number;
+  loan_id: number;
+  sub_category_id: number;
 };

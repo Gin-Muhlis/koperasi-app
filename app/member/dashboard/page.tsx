@@ -8,6 +8,7 @@ import DataSavingMember from './dataSavingMember';
 import HistoryInstallments from './historyInstallments';
 import HistorySavings from './historySavings';
 import { getDashboardMember, getSubCategoriesSaving } from '@/app/utils/featuresApi';
+import AlertPayment from './alertPayment';
 
 export const metadata: Metadata = {
     title: 'Dashboard',
@@ -15,16 +16,17 @@ export const metadata: Metadata = {
 }
 
 const Dashboard = async ({ searchParams }: IProps) => {
+    
     const session = await getServerSession(authOptions)
     const dashboardData: DashboardMember = await getDashboardMember(session?.user.accessToken);
     const subCategories: SubCategoryState[] = await getSubCategoriesSaving(session?.user.accessToken);
-    
-    console.log(dashboardData)
+
     return (
         <>
             <div className="w-full">
+                <AlertPayment dataAlerts={dashboardData.not_payed} />
                 <DataSavingMember data={dashboardData} subCategories={subCategories} />
-                <div className='gap-5 grid grid-cols-1 md:grid-cols-2 mt-10'>
+                <div className='gap-5 grid grid-cols-1 md:grid-cols-2 mt-10 mb-10'>
                     <HistorySavings data={dashboardData} />
                     <HistoryInstallments data={dashboardData} />
                 </div>

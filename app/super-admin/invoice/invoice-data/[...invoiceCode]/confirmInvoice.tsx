@@ -1,13 +1,10 @@
 "use client"
 
-import AlertError from '@/app/components/alertError'
-import AlertSuccess from '@/app/components/alertSuccess'
 import Loader from '@/app/components/loader'
 import SweetAlertPopup from '@/app/components/sweetAlertPopup'
 import { createPaymentInvoice } from '@/app/utils/featuresApi'
 import { handleFormat } from '@/app/utils/helper'
 import { Button } from '@/components/ui/button'
-import { FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Icon } from '@iconify/react/dist/iconify.js'
@@ -25,7 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-
 const ConfirmInvoiceButton = ({ invoiceId, totalPayment, statusInvoice }: { invoiceId: number, totalPayment: string, statusInvoice: string }) => {
   const [modal, setModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -40,7 +36,6 @@ const ConfirmInvoiceButton = ({ invoiceId, totalPayment, statusInvoice }: { invo
   const router = useRouter()
   const { data: session } = useSession()
 
-  // handle muncul modal
   const handleModal = () => {
     setModal(!modal);
   }
@@ -157,11 +152,11 @@ const ConfirmInvoiceButton = ({ invoiceId, totalPayment, statusInvoice }: { invo
             </div>
             <div className="w-full mb-3">
               <Label>Nama Pembayar</Label>
-              <Input placeholder="Nama Pembayar" onChange={handlePayer} value={payer} />
+              <Input placeholder="Nama Pembayar" onChange={handlePayer} value={payer} disabled={isLoading} />
             </div>
             <div className="w-full mb-3">
               <Label>Metode Pembayaran</Label>
-              <Select onValueChange={(value) => setPaymentMethod(value)}>
+              <Select onValueChange={(value) => setPaymentMethod(value)} disabled={isLoading}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Pilih Metode Pembayaran" />
                 </SelectTrigger>
@@ -177,7 +172,7 @@ const ConfirmInvoiceButton = ({ invoiceId, totalPayment, statusInvoice }: { invo
             {paymentMethod == "transfer" && <>
               <div className="w-full mb-3">
                 <Label>No Rekening</Label>
-                <Input placeholder="No Rekening" onChange={handleChangeNoRek} value={noRek} />
+                <Input placeholder="No Rekening" onChange={handleChangeNoRek} value={noRek} disabled={isLoading} />
               </div>
             </>}
             <div className="w-full flex items-center justify-end gap-3">

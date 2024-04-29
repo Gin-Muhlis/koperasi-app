@@ -1,8 +1,6 @@
 "use client";
 
-import AlertError from "@/app/components/alertError";
-import AlertSuccess from "@/app/components/alertSuccess";
-import { createCategory, createProduct, createStuff, updateStuff } from "@/app/utils/featuresApi";
+import { updateStuff } from "@/app/utils/featuresApi";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -34,6 +32,8 @@ import { addStuffSchema, editStuffSchema } from "@/app/utils/formSchema";
 import { ProductState, StuffState } from "@/types/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
+import { handleFormat } from "@/app/utils/helper";
+import { Label } from "@/components/ui/label";
 
 const formSchema = editStuffSchema;
 
@@ -47,6 +47,7 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
         undefined
     );
     const [modal, setModal] = useState(false);
+    const [price, setPrice] = useState(stuff.price.toString())
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string | boolean>(false);
     const [error, setError] = useState<string | boolean>(false);
@@ -61,7 +62,6 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: stuff.name,
-            price: stuff.price.toString(),
             product_id: stuff.product_id.toString()
         },
     })
@@ -75,13 +75,20 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
         router.refresh();
     }
 
+    const handlePrice = (amount: string) => {
+        const numericValue = amount.replace(/\D/g, '');
+
+        setPrice(numericValue)
+
+    }
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setIsLoading(true)
         const formData = new FormData();
 
         formData.append("_method", "PUT");
         formData.append("name", values.name);
-        formData.append("price", values.price.toString());
+        formData.append("price", price.toString());
         formData.append("product_id", values.product_id as string);
 
         if (previewImage) {
@@ -89,7 +96,7 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
         }
 
         const response = await updateStuff(stuff.id, formData, session?.user.accessToken)
-    
+
         setStatus(response.status)
         setIsLoading(false)
 
@@ -132,7 +139,7 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
 
     return (
         <>
-           <span className="w-5 h-5 rounded bg-green-500 text-white flex items-center justify-center cursor-pointer" onClick={handleModal}>
+            <span className="w-5 h-5 rounded bg-green-500 text-white flex items-center justify-center cursor-pointer" onClick={handleModal}>
                 <Icon icon="lucide:square-pen" width="16" height="16" />
             </span>
             <div className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? 'block' : 'hidden'}`}>
@@ -156,20 +163,10 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
                                         </FormItem>
                                     )}
                                 />
-
-                                <FormField
-                                    control={form.control}
-                                    name="price"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Harga Barang</FormLabel>
-                                            <FormControl>
-                                                <Input type="number" placeholder="Harga barang" {...field} disabled={isLoading} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                <div className="mb-5">
+                                    <Label>Harga</Label>
+                                    <Input className="w-full" value={handleFormat(Number(price))} onChange={(event) => handlePrice(event.target.value)} disabled={isLoading} />
+                                </div>
 
                                 <FormField
                                     control={form.control}

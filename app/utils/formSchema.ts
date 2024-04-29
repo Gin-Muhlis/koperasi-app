@@ -255,10 +255,6 @@ export const addStuffSchema = z.object({
     .max(255, {
       message: "Nama barang tidak boleh lebih dari 255 karakter",
     }),
-  price: z.string({
-    invalid_type_error: "Harga barang harus valid",
-    required_error: "Harga barang tidak boleh kosong",
-  }),
   image: z.any(),
   product_id: z.string({
     required_error: "Kategori tidak boleh kosong",
@@ -306,20 +302,7 @@ export const positionCategorySchema = z.object({
   position: z.string({
     invalid_type_error: "Nama posisi tidak valid",
     required_error: "Nama posisi tidak boleh kosong",
-  }),
-  pokok: z.string({
-    required_error: "Jumlah Pembayaran Simpanan Pokok tidak boleh kosong",
-    invalid_type_error: "Jumlah Pembayaran Simpanan Pokok tidak valid",
-  }),
-  wajib: z.string({
-    required_error: "Jumlah Pembayaran Simpanan Wajib tidak boleh kosong",
-    invalid_type_error: "Jumlah Pembayaran Simpanan Wajib tidak valid",
-  }),
-  wajib_khusus: z.string({
-    required_error:
-      "Jumlah Pembayaran Simpanan Wajib Khusus tidak boleh kosong",
-    invalid_type_error: "Jumlah Pembayaran Simpanan Wajib Khusus tidak valid",
-  }),
+  })
 });
 
 export const profileSchema = z.object({

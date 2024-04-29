@@ -17,7 +17,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     role: "super-admin",
     subMenuItems: [
       { role: "super-admin", title: "Anggota", path: "/super-admin/data/member" },
-      { role: "super-admin", title: "Kategori", path: "/super-admin/data/category" },
+      // { role: "super-admin", title: "Kategori", path: "/super-admin/data/category" },
       { role: "super-admin", title: "Sub Kategori", path: "/super-admin/data/subCategory" },
       { role: "super-admin", title: "Produk", path: "/super-admin/data/product" },
       { role: "super-admin", title: "Barang", path: "/super-admin/data/stuff" },

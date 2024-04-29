@@ -24,6 +24,8 @@ import { useForm } from "react-hook-form";
 import { positionCategorySchema } from "@/app/utils/formSchema";
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { handleFormat } from "@/app/utils/helper";
+import { Label } from "@/components/ui/label";
 
 const formSchema = positionCategorySchema;
 
@@ -31,6 +33,9 @@ const AddPositionCategory = () => {
   const { data: session } = useSession();
 
   const [modal, setModal] = useState(false);
+  const [pokok, setPokok] = useState("0")
+  const [wajib, setWajib] = useState("0")
+  const [wajibKhusus, setWajibKhusus] = useState("0")
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | boolean>(false);
   const [error, setError] = useState<string | boolean>(false);
@@ -44,10 +49,7 @@ const AddPositionCategory = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      position: "",
-      pokok: "0",
-      wajib: "0",
-      wajib_khusus: "0",
+      position: ""
     },
   });
 
@@ -58,14 +60,35 @@ const AddPositionCategory = () => {
     router.refresh();
   }
 
+  const handlePokok = (amount: string) => {
+    const numericValue = amount.replace(/\D/g, '');
+
+    setPokok(numericValue)
+
+  }
+
+  const handleWajib = (amount: string) => {
+    const numericValue = amount.replace(/\D/g, '');
+
+    setWajib(numericValue)
+
+  }
+
+  const handleWajibKhusus = (amount: string) => {
+    const numericValue = amount.replace(/\D/g, '');
+
+    setWajibKhusus(numericValue)
+
+  }
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     const formData = new FormData();
 
     formData.append("position", values.position);
-    formData.append("pokok", values.pokok.toString());
-    formData.append("wajib", values.wajib.toString());
-    formData.append("wajib_khusus", values.wajib_khusus.toString());
+    formData.append("pokok", pokok.toString());
+    formData.append("wajib", wajib.toString());
+    formData.append("wajib_khusus", wajibKhusus.toString());
 
     const response = await createPositionCategory(
       formData,
@@ -93,19 +116,17 @@ const AddPositionCategory = () => {
 
   return (
     <>
-       <Button className="text-white bg-blue-400 flex items-center gap-1 justify-start" onClick={handleModal}>
+      <Button className="text-white bg-blue-400 flex items-center gap-1 justify-start" onClick={handleModal}>
         <Icon icon="lucide:plus" width={"16"} height={"16"}></Icon>
         <span>Tambah Data</span>
       </Button>
       <div
-        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${
-          modal ? "block" : "hidden"
-        }`}
+        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? "block" : "hidden"
+          }`}
       >
         <div
-          className={`w-11/12 max-w-lg bg-white rounded transition-transform max-h-[90vh] overflow-y-scroll ${
-            modal ? "scale-100" : "scale-0"
-          }`}
+          className={`w-11/12 max-w-lg bg-white rounded transition-transform max-h-[90vh] overflow-y-scroll ${modal ? "scale-100" : "scale-0"
+            }`}
         >
           <div className="p-4 border-b border-b-slate-300 mb-4">
             <h3 className="font-bold text-lg text-black">Tambah Data Golongan</h3>
@@ -131,65 +152,20 @@ const AddPositionCategory = () => {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="pokok"
-                  render={({ field }) => (
-                    <FormItem className="mb-3">
-                      <FormLabel>Jumlah Pokok</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Jumlah Pokok"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="mb-5">
+                  <Label>Jumlah Pokok</Label>
+                  <Input className="w-full" value={handleFormat(Number(pokok))} onChange={(event) => handlePokok(event.target.value)} disabled={isLoading} />
+                </div>
 
-                <FormField
-                  control={form.control}
-                  name="wajib"
-                  render={({ field }) => (
-                    <FormItem className="mb-3">
-                      <FormLabel>Jumlah Wajib</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Jumlah Wajib"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="mb-5">
+                  <Label>Jumlah Wajib</Label>
+                  <Input className="w-full" value={handleFormat(Number(wajib))} onChange={(event) => handleWajib(event.target.value)} disabled={isLoading} />
+                </div>
 
-                <FormField
-                  control={form.control}
-                  name="wajib_khusus"
-                  render={({ field }) => (
-                    <FormItem className="mb-3">
-                      <FormLabel>Jumlah Wajib Khusus</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Jumlah Wajib Khusus"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="mb-5">
+                  <Label>Jumlah Wajib Khusus</Label>
+                  <Input className="w-full" value={handleFormat(Number(wajibKhusus))} onChange={(event) => handleWajibKhusus(event.target.value)} disabled={isLoading} />
+                </div>
               </div>
               <div className="p-4 flex items-center justify-end gap-3">
                 <Button
