@@ -714,7 +714,6 @@ export async function createLoanMember(data: ReceivableData, token: string | und
   } catch (error: any) {
     return error.response;
   } 
-
 }
 
 // API GET Laporan Anggota 
