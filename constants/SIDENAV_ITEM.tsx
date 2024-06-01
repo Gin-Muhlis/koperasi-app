@@ -73,6 +73,18 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     role: "member",
   },
   {
+    title: "Simpanan",
+    path: "/member/saving",
+    icon: <Icon icon="lucide:file-text" width="22" height="22" />,
+    role: "member",
+  },
+  {
+    title: "Pinjaman",
+    path: "/member/loan",
+    icon: <Icon icon="lucide:file-text" width="22" height="22" />,
+    role: "member",
+  },
+  {
     title: "Ganti Password",
     path: "/member/change-password",
     icon: <Icon icon="lucide:key-round" width="22" height="22" />,

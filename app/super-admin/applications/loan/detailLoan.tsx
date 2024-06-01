@@ -2,11 +2,10 @@
 
 import React, { useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { DetailLoan, HistorySaving, ListLoan, ListSaving, SubCategoryState } from "@/types/interface";
+import { ListLoan } from "@/types/interface";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { convertDateFormat, handleFormat } from "@/app/utils/helper";
-import { ColumnDef } from "@tanstack/react-table";
+import { capitalizeString, convertDateFormat, handleFormat } from "@/app/utils/helper";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -16,82 +15,6 @@ const DetailLoanMember = ({ data }: { data: ListLoan }) => {
     const handleModal = () => {
         setModal(!modal);
     };
-
-    const columns: ColumnDef<DetailLoan>[] = [
-        {
-            accessorKey: "sub_category",
-            header: "Jenis Pinjaman",
-            cell: ({ row }) => {
-                const value: string = row.getValue('sub_category');
-
-                return <div className='text-sm'>{value}</div>
-            }
-        },
-        {
-            accessorKey: "total_loan",
-            header: "Total Pinjaman",
-            cell: ({ row }) => {
-                const value: number = row.getValue('total_loan');
-
-                return <div className='text-sm'>Rp. {handleFormat(value)}</div>
-            }
-        },
-        {
-            accessorKey: "paid",
-            header: "Dibayar",
-            cell: ({ row }) => {
-                const value: number = row.getValue('paid');
-
-                return <div className='text-sm'>Rp. {handleFormat(value)}</div>
-            }
-        },
-        {
-            accessorKey: "payment_remain",
-            header: "Sisa Pembayaran",
-            cell: ({ row }) => {
-                const value: number = row.getValue('payment_remain');
-
-                return <div className='text-sm'>Rp. {handleFormat(value)}</div>
-            }
-        },
-        {
-            accessorKey: "duration",
-            header: "Durasi Pinjaman",
-            cell: ({ row }) => {
-                const value: number = row.getValue('duration');
-
-                return <div className='text-sm'>{value} Bulan</div>
-            }
-        },
-        {
-            accessorKey: "deadline",
-            header: "Tenggat Pembayaran",
-            cell: ({ row }) => {
-                const value: string = row.getValue('deadline');
-
-                return <div className='text-sm'>{convertDateFormat(value)}</div>
-            }
-        },
-        {
-            accessorKey: "date_completion",
-            header: "Tenggat Pembayaran",
-            cell: ({ row }) => {
-                const value: string | null = row.getValue('date_completion');
-
-                return <div className='text-sm'>{value ? convertDateFormat(value) : ''}</div>
-            }
-        },
-        {
-            accessorKey: "status",
-            header: () => <div className='text-center'>Status</div>,
-            cell: ({ row }) => {
-                const value: string = row.getValue('status');
-
-                return <div className="text-center"><Badge className={`${value == 'lunas' ? 'bg-green-400' : 'bg-red-400'}`}>{value}</Badge></div>
-            }
-        },
-    ]
-
 
     return (
         <>
@@ -114,27 +37,23 @@ const DetailLoanMember = ({ data }: { data: ListLoan }) => {
                         {data.detail_loans.map((data) => (
                             <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 border border-solid shadow px-4 py-6">
                                 <div className="absolute left-5 -top-3 rounded text-white bg-blue-400 h-6 text-xs p-1 flex items-center justify-center text-center">
-                                    {data.code}
-                                </div>
-                                <div>
-                                    <Label>Jenis Pinjaman</Label>
-                                    <Input value={data.sub_category} />
+                                    {data.sub_category}
                                 </div>
                                 <div>
                                     <Label>Total Pinjaman</Label>
-                                    <Input value={handleFormat(data.total_loan)} />
+                                    <Input value={`Rp. ${handleFormat(data.total_loan)}`} />
                                 </div>
                                 <div>
                                     <Label>Dibayar</Label>
-                                    <Input value={handleFormat(data.paid)} />
-                                </div>
-                                <div>
-                                    <Label>Sisa Pembayaran</Label>
-                                    <Input value={handleFormat(data.remain_payment)} />
+                                    <Input value={`Rp. ${handleFormat(data.paid)}`} />
                                 </div>
                                 <div>
                                     <Label>Durasi Pinjaman</Label>
                                     <Input value={data.duration} />
+                                </div>
+                                <div>
+                                    <Label>Sisa Pembayaran</Label>
+                                    <Input value={handleFormat(data.remain_payment)} />
                                 </div>
                                 <div>
                                     <Label>Tenggat Pembayaran</Label>
@@ -146,7 +65,7 @@ const DetailLoanMember = ({ data }: { data: ListLoan }) => {
                                 </div>
                                 <div>
                                     <Label>Status</Label>
-                                    <Badge className={`${data.status == 'lunas' ? 'bg-green-400' : 'bg-red-400'}`}>{data.status}</Badge>
+                                    <Badge className={`${data.status == 'lunas' ? 'bg-green-400' : 'bg-red-400'}`}>{capitalizeString(data.status)}</Badge>
                                 </div>
                             </div>
                         ))}

@@ -13,7 +13,7 @@ import AlertPayment from './alertPayment';
 export const metadata: Metadata = {
     title: 'Dashboard',
     description: 'Aplikasi untuk pendataan di koperasi',
-}
+} 
 
 const Dashboard = async ({ searchParams }: IProps) => {
     
@@ -24,7 +24,7 @@ const Dashboard = async ({ searchParams }: IProps) => {
     return (
         <>
             <div className="w-full">
-                <AlertPayment dataAlerts={dashboardData.not_payed} />
+                {/* <AlertPayment dataAlerts={dashboardData.not_payed} /> */}
                 <DataSavingMember data={dashboardData} subCategories={subCategories} />
                 <div className='gap-5 grid grid-cols-1 md:grid-cols-2 mt-10 mb-10'>
                     <HistorySavings data={dashboardData} />

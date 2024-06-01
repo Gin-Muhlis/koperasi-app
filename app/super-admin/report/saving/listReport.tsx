@@ -50,7 +50,7 @@ const ListReportMember = ({ data, subCategories }: { data: ReportMember[], subCa
                                     <td className="border border-solid p-3">{member.name}</td>
                                     {subCategories.map((item) => (
                                         <td key={item.id} className="text-center border border-solid p-3">
-                                            {handleTotalData(member.id, item.name)}
+                                            Rp. {handleTotalData(member.id, item.name)}
                                         </td>
                                     ))}
                                     <td className="text-center border border-solid p-3">

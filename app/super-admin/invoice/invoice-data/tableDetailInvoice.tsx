@@ -46,7 +46,7 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
         const monthYear = `${selector.month < 10 ? `0${selector.month}` : selector.month}-${selector.year}`
 
         const response = await createDetailInvoice(selectedMembers, monthYear, selector.description, dataInvoice.id, session?.user.accessToken)
-        
+        console.log(response)
         setIsLoading(false);
         if (response.status == 200) {
             resetStateAction()
@@ -60,7 +60,9 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
             const message = errorData[firstKey][0]
 
             setError(message)
-        } else {
+        } else if (response.status == 400) {
+            setError(response.data.message)
+        }  else {
             setStatus(response.status)
             setError("Terjadi kesalahan dengan sistem")
         }
@@ -147,11 +149,11 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
                                     <td className="border border-solid p-3">{member.name}</td>
                                     {subCategories.map((item) => (
                                         <td key={item.id} className="text-center border border-solid p-3">
-                                            {handleValueCol(member, item.name)}
+                                            Rp. {handleValueCol(member, item.name)}
                                         </td>
                                     ))}
                                      <td className="text-center border border-solid p-3">
-                                        {handleValueRow(member, subCategories)}
+                                        Rp. {handleValueRow(member, subCategories)}
                                     </td>
                                 </tr>
                             ))}
@@ -164,11 +166,11 @@ const TableDetailInvoice = ({ subCategories, dataInvoice, resetStateAction }: { 
                                 </td>
                                 {subCategories.map((item) => (
                                     <td key={item.id} className="text-center border border-solid p-3">
-                                        {handleFormat(handleTotalCol(item.name))}
+                                        Rp. {handleFormat(handleTotalCol(item.name))}
                                     </td>
                                 ))}
                                 <td className="text-center border border-solid p-3">
-                                    {handleFormat(handleTotalData())}
+                                    Rp. {handleFormat(handleTotalData())}
                                 </td>
                             </tr>
                         </> : <tr><td className="text-center border border-solid p-3" colSpan={subCategories.length + 3}>Tidak ada data</td></tr>}

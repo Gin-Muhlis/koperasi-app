@@ -99,7 +99,6 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
             return lastPayment;
         }
         
-
         const defaultAmount: any = positionCategories.find((data) => data.id == positionCategoryId);
 
         const payment = defaultAmount[subCategoryName] ?? 0

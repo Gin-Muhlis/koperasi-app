@@ -81,7 +81,7 @@ const DetailSavingMember = ({ data, subCategories }: { data: ListSaving, subCate
                         {subCategories.map((item) => (
                             <div key={item.id}>
                                 <Label>{item.name}</Label>
-                                <Input readOnly value={handleFormat(data.detail_savings[item.name])} className="w-full" />
+                                <Input readOnly value={`Rp. ${handleFormat(data.detail_savings[item.name])}`} className="w-full" />
                             </div>
                         ))}
 

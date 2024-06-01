@@ -1,6 +1,6 @@
 "use client";
 
-import { convertDateFormat, handleFormat } from '@/app/utils/helper';
+import { capitalizeString, convertDateFormat, handleFormat } from '@/app/utils/helper';
 import { Invoice, InvoiceState, SubCategoryState } from '@/types/interface';
 import React from 'react'
 import ConfirmInvoiceButton from './confirmInvoice';
@@ -41,13 +41,19 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
     return handleFormat(total)
   }
 
+  const handleTimePayment = (time: string) => {
+    const timeSplit = time.split(' ')
+
+    return `${convertDateFormat(timeSplit[0])} ${timeSplit[1]}`
+  }
+
   return (
     <div className="bg-white rounded border shadow-lg p-4 w-full">
       <h1 className="text-3xl font-bold mb-10 inline-block text-black pb-1 border-b-4 border-b-solid border-b-amber-400">
         Detail Invoice
       </h1>
       {/* data invoice */}
-      <div className="w-full block md:flex justify-start items-start gap-5 text-sm mb-7">
+      <div className="w-full block md:flex justify-start items-start gap-5 text-sm mb-7 pb-3 border-b-2 border-b-solid border-b-black">
         <div className="w-full">
           <div className="w-full mb-3 flex items-center">
             <span className="basis-2/5 md:basis-1/3">
@@ -70,11 +76,9 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
               Sumber Pembayaran
             </span>
             <span className='flex-1 font-semibold'>
-              : {detailInvoice.payment_source}
+              : {capitalizeString(detailInvoice.payment_source)}
             </span>
           </div>
-        </div>
-        <div className="w-full">
           <div className="w-full mb-3 flex items-center">
             <span className="basis-2/5 md:basis-1/3">
               Tanggal Dibuat
@@ -91,12 +95,46 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
               : {convertDateFormat(detailInvoice.due_date)}
             </span>
           </div>
+        </div>
+        <div className="w-full">
           <div className="w-full mb-3 flex items-center">
             <span className="basis-2/5 md:basis-1/3">
               Status
             </span>
             <span className='flex-1 font-semibold'>
               : {detailInvoice.status != 'dibayar' ? <Badge className='bg-red-500'>{detailInvoice.status}</Badge> : <Badge className='bg-green-500'>{detailInvoice.status}</Badge>}
+            </span>
+          </div>
+          <div className="w-full mb-3 flex items-center">
+            <span className="basis-2/5 md:basis-1/3">
+              Waktu Pembayaran
+            </span>
+            <span className='flex-1 font-semibold'>
+              : {detailInvoice.payment_data.time ? handleTimePayment(detailInvoice.payment_data.time) : '-'}
+            </span>
+          </div>
+          <div className="w-full mb-3 flex items-center">
+            <span className="basis-2/5 md:basis-1/3">
+              Nama Pembayar
+            </span>
+            <span className='flex-1 font-semibold'>
+              : {detailInvoice.payment_data.payer ?? '-'}
+            </span>
+          </div>
+          <div className="w-full mb-3 flex items-center">
+            <span className="basis-2/5 md:basis-1/3">
+              Jenis Pembayaran
+            </span>
+            <span className='flex-1 font-semibold'>
+              : {detailInvoice.payment_data.payment_method ? capitalizeString(detailInvoice.payment_data.payment_method) : '-'}
+            </span>
+          </div>
+          <div className="w-full mb-3 flex items-center">
+            <span className="basis-2/5 md:basis-1/3">
+              No Rekening
+            </span>
+            <span className='flex-1 font-semibold'>
+              : {detailInvoice.payment_data.norek ?? '-'}
             </span>
           </div>
         </div>
@@ -137,12 +175,12 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
                 <td className="border border-solid p-3">{data.member_name}</td>
                 {subCategories.map(item => (
                   <td key={item.id} className="text-center border border-solid p-3">
-                    {handleFormat(data[item.name])}
+                    Rp. {handleFormat(data[item.name])}
                   </td>
                 ))}
 
                 <td className="text-center border border-solid p-3">
-                  {handleFormat(handleValueTotalRow(data))}
+                  Rp. {handleFormat(handleValueTotalRow(data))}
                 </td>
                 <td className="text-center border border-solid p-3">
                   <PrintButton memberName={data.member_name} memberId={data.member_id} invoiceCode={detailInvoice.invoice_code} />
@@ -158,11 +196,11 @@ const Content = ({ detailInvoice, subCategories }: { detailInvoice: InvoiceState
               </td>
               {subCategories.map((item) => (
                 <td key={item.id} className="text-center border border-solid p-3">
-                  {handleTotalCol(item.name)}
+                  Rp. {handleTotalCol(item.name)}
                 </td>
               ))}
               <td className="text-center border border-solid p-3">
-                {handleTotalData()}
+                Rp. {handleTotalData()}
               </td>
             </tr>
           </tbody>

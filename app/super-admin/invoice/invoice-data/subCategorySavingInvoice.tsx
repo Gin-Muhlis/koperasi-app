@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { useDispatch } from 'react-redux'
 import { appDispatch, useAppSelector } from '@/redux/store'
-import { Member, PositionCategory, Status, SubCategoryInvoice, SubCategoryState } from '@/types/interface'
+import { PositionCategory, Status, SubCategoryInvoice, SubCategoryState } from '@/types/interface'
 import { capitalizeString, handleFormat } from '@/app/utils/helper'
 import { setInvoice } from '@/redux/features/invoice-slice'
 import { Badge } from '@/components/ui/badge'
@@ -28,7 +28,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
     const [selectedMembers, setSelectedMembers] = useState<any[]>([])
     const [typePayment, setTypePayment] = useState<string>(subCategory.type_payment)
     const [subCategoryName, setSubCategoryName] = useState<string>(subCategory.name)
-    
+
     useEffect(() => {
         if (selector) {
             const data = JSON.parse(selector.selectedMembers)
@@ -36,11 +36,11 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
             setSelectedMembers(data)
         }
     }, [selector, selector.selectedMembers])
-    
+
     useEffect(() => {
         if (listMembers && subCategory.type_payment == 'once') {
-            const dataMembers = listMembers.filter((member) =>  member.data[subCategory.name].length  == 0)
-            
+            const dataMembers = listMembers.filter((member) => member.data[subCategory.name].length == 0)
+
             setMembers(dataMembers)
         }
     }, [listMembers, subCategory])
@@ -79,7 +79,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         );
 
         const member = members.find((member) => member.id == id);
-        
+
         if (existingItemIndex >= 0) {
             const data = selectedMembers[existingItemIndex];
             const updatedItems: any[] = [...selectedMembers];
@@ -93,10 +93,10 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
             setStateData(updatedItems)
         } else {
             const subData = {
-                amount: Number(handleValueAmount(member.position_category_id, member.id).replaceAll(".", "")), 
+                amount: Number(handleValueAmount(member.position_category_id, member.id).replaceAll(".", "")),
                 status: 'added',
             }
-            
+
             const newMembers: any[] = [
                 ...selectedMembers,
                 { id, name: member.name, [subCategoryName]: subData },
@@ -104,7 +104,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
             setStateData(newMembers)
         }
     };
-    
+
 
     //  hapus member dari state data
     const handleDeleteMember = (id: number) => {
@@ -114,7 +114,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         delete updatedMembers[indexMember][subCategoryName]
 
         const keysMember = Object.getOwnPropertyNames(updatedMembers[indexMember]);
-        
+
         if (keysMember.length <= 2) {
             console.log('cuma dua')
             const filterMembers = updatedMembers.filter((data) => data.id != id)
@@ -122,7 +122,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         } else {
             setStateData(updatedMembers)
         }
-        
+
     };
 
     //handle tampilan button tabel   
@@ -157,7 +157,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         if (typePayment != 'monthly') {
             return false
         }
-        
+
         const month = selector.month < 10 ? `0${selector.month}` : selector.month;
         const year = selector.year;
         let status: string | boolean = false
@@ -178,17 +178,17 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         }
         const isAdded = selectedMembers.find(data => data.id == id);
         const isPayed = handlePayedMember(dataPayments) ? true : false;
-        
+
 
         if (isAdded != undefined && isAdded.hasOwnProperty(subCategoryName) && isAdded[subCategoryName].status == "added") {
             return true
         }
-        
+
 
         if (isAdded == undefined && isPayed) {
             return true
         }
-      
+
         return false
     }
 
@@ -201,7 +201,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
                 amount: Number(handleValueAmount(item.position_category_id, item.id).replaceAll(".", "")),
                 status: "added"
             }
-            
+
             const indexAdded = updatedList.findIndex((data) => data.id == item.id);
             const amountMember = Number(handleValueAmount(item.position_category_id, item.id).replaceAll(".", ""));
 
@@ -210,7 +210,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
 
                 if ((!data.hasOwnProperty(subCategoryName) || (data.hasOwnProperty(subCategoryName) && data[subCategoryName].status == 'not_added')) && !handlePayedMember(item.data[subCategoryName].months_status) && amountMember != 0) {
                     const newData = { ...data, [subCategoryName]: subData }
-                    
+
                     updatedList[indexAdded] = newData
                 }
             }
@@ -260,7 +260,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
             const updatedItems = [...selectedMembers];
             const data = updatedItems[existingItemIndex];
 
-            updatedItems[existingItemIndex] = { ...data, [subCategoryName]: subData};
+            updatedItems[existingItemIndex] = { ...data, [subCategoryName]: subData };
             setStateData(updatedItems)
         } else {
             const newMembers = [
@@ -270,7 +270,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
             setStateData(newMembers)
         }
     }
-    
+
     // handle value oembayaran
     const handleValueAmount = (positionCategoryId: number, id: number) => {
         const isInputed = selectedMembers.find((data) => data.id == id)
@@ -280,15 +280,15 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         }
 
         const member = members.find((member) => member.id == id)
-        
+
         if (member.data[subCategoryName].amount) {
             const lastPayment = member.data[subCategoryName].amount;
-            
+
             return handleFormat(lastPayment);
         }
 
         const defaultAmount: any = positionCategories.find((data) => data.id == positionCategoryId);
-        
+
         const payment = defaultAmount[subCategoryName] ?? 0
 
         return handleFormat(Number(payment))
@@ -306,7 +306,7 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
 
         return <Badge className='bg-green-400 text-white'>{textStatus}</Badge>
     }
-    
+
     // handle length available member
     const handleLengthAvailableMember = () => {
         const availables: SubCategoryInvoice[] = []
@@ -314,16 +314,16 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
         members.map((member) => {
             const isAdded = selectedMembers.find((data) => data.id == member.id);
             const amountMember = Number(handleValueAmount(member.position_category_id, member.id).replaceAll(".", ""));
-            
+
             if (isAdded != undefined) {
                 if ((!isAdded.hasOwnProperty(subCategoryName) || (isAdded.hasOwnProperty(subCategoryName) && isAdded[subCategoryName].status == 'not_added')) && !handlePayedMember(member.data[subCategoryName].months_status) && amountMember != 0) {
-                    availables.push(member) 
-                }   
+                    availables.push(member)
+                }
             }
 
             if (isAdded == undefined && !handlePayedMember(member.data[subCategoryName].months_status) && amountMember != 0) {
                 availables.push(member)
-            } 
+            }
         })
 
         return availables.length;
@@ -410,7 +410,6 @@ const SubCategorySavingInvoicePopup = ({ listMembers, positionCategories, subCat
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-end gap-3">
-                    <Button onClick={handleModal}>Batal</Button>
                         <Button className='bg-green-400' onClick={handleModal}>Konfirmasi</Button>
                     </div>
                 </div>

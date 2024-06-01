@@ -858,6 +858,36 @@ export async function getSavingsMember(token: string | undefined) {
   }
 }
 
+// API GET Data Member Saving
+export async function getDataSavingMember(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/saving-member`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
+// API GET Data Member Loan
+export async function getDataLoanMember(token: string | undefined) {
+  try {
+    const response = await axiosInstance.get(`/loan-member`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error: any) {
+    return error.response;
+  }
+}
+
 // API GET Member Saving 
 export async function getMemberSaving(token: string | undefined) {
   try {

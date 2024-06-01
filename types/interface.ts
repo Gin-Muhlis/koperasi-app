@@ -175,6 +175,13 @@ export type Invoice = {
   memberName?: string;
 };
 
+export type PaymentData = {
+  time: string;
+  payer: string;
+  payment_method: string;
+  norek: number;
+}
+
 export type InvoiceState = {
   id: number;
   invoice_code: string;
@@ -186,6 +193,7 @@ export type InvoiceState = {
   payment_method: string;
   payment_date: string;
   user: string;
+  payment_data: PaymentData;
   details: any[];
 };
 
@@ -248,10 +256,6 @@ export type TopPositionCategoriesLoan = {
   total: number;
 };
 
-export type GrafikLoan = {
-  paid: number[];
-  not_paid: number[];
-};
 
 export type DashboardAdmin = {
   count_member: number;
@@ -261,7 +265,6 @@ export type DashboardAdmin = {
   total_loans: number;
   history_invoices: HistoryInvoice[];
   top_position_categories_loan: TopPositionCategoriesLoan[];
-  loan_grafik: GrafikLoan;
 };
 
 export type MemberReceivable = {
@@ -384,4 +387,5 @@ export type installmentData = {
   amount: number;
   loan_id: number;
   sub_category_id: number;
+  month_payment?: number
 };

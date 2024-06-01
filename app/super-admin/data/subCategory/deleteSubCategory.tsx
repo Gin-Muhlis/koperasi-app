@@ -48,10 +48,11 @@ const DeleteSubCategory = ({ subCategory }: { subCategory: SubCategoryState }) =
             setIsLoading(false)
             router.refresh();
             setSuccess(response.data.message)
-        } else {
-            setIsLoading(false)
-            setError('Data member gagal dihapus')
-        }
+        }  else if (response.status === 400) {
+            setError(response.data.message)
+          } else {
+            setError(response.data.message)
+          }
     }
 
     return (

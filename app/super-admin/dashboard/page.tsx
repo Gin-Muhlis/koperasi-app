@@ -1,4 +1,3 @@
-import MainLayout from '@/components/mainLayout'
 import type { Metadata } from 'next'
 import React from 'react'
 import { DashboardAdmin, IProps } from '@/types/interface'
@@ -9,7 +8,6 @@ import { getDashboardAdmin } from '@/app/utils/featuresApi'
 import DataDetail from './dataDetail'
 import HistoryInvoices from './historyInvoice'
 import TopPositionCategories from './topPositionCategories'
-import ChartLoan from '@/app/components/barChart'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -24,7 +22,6 @@ const Dashboard = async ({ searchParams }: IProps) => {
     <>
       <div className="w-full grid grid-cols-1 gap-5">
         <DataDetail data={dashboardData} />
-        <ChartLoan data={dashboardData.loan_grafik} />
         <div className="block md:flex md:gap-4">
           <HistoryInvoices historyInvoices={dashboardData.history_invoices} />
           <TopPositionCategories listPosition={dashboardData.top_position_categories_loan} />

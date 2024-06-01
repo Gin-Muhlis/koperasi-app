@@ -20,8 +20,6 @@ const PositionCategoryMember = async () => {
   const positionCategories: PositionCategory[] = await getPositionCategories(
     session?.user.accessToken
   );
-  console.log(positionCategories)
-
   return (
     <>
       <div className="bg-white shadow-md border rounded p-4 w-full">

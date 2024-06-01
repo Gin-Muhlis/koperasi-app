@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { useDispatch } from 'react-redux'
 import { appDispatch, useAppSelector } from '@/redux/store'
-import { Member, Receivable, Status, SubCategoryInvoice, SubCategoryState } from '@/types/interface'
+import { Status, SubCategoryInvoice, SubCategoryState } from '@/types/interface'
 import { capitalizeString, handleFormat } from '@/app/utils/helper'
 import { setInvoice } from '@/redux/features/invoice-slice'
 import { Badge } from '@/components/ui/badge'
@@ -339,7 +339,6 @@ const SubCategoryReceivablePopup = ({ listMembers, subCategory, setSubCategory }
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-end gap-3">
-                        <Button onClick={handleModal}>Batal</Button>
                         <Button className='bg-green-400' onClick={handleModal}>Konfirmasi</Button>
                     </div>
                 </div>

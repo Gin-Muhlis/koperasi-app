@@ -57,9 +57,8 @@ const FormAddInstallment = ({ member }: { member: MemberInstallment }) => {
         }
     }, [member])
 
+
     const router = useRouter()
-
-
 
     const handleModal = () => {
         setModal(!modal);
@@ -87,7 +86,7 @@ const FormAddInstallment = ({ member }: { member: MemberInstallment }) => {
     const handleEstimate = () => {
         const estimateDate = convertDateFormat(estimate);
         const splitDate = estimateDate.split(' ')
-        return `${splitDate[1]} ${splitDate[2]}`
+        return Number(remainDuration) > 0 ? `${splitDate[1]} ${splitDate[2]}` : 'Lunas'
     }
 
     const saveInsallment = async () => {
@@ -97,13 +96,13 @@ const FormAddInstallment = ({ member }: { member: MemberInstallment }) => {
             member_id: member.id,
             amount: payment,
             loan_id: member.loan_id,
-            sub_category_id: member.sub_category_id
+            sub_category_id: member.sub_category_id,
+            month_payment: monthPayment
         };
 
         const response = await createInstallmentMember(installmentData, session?.user.accessToken);
         setIsLoading(false)
         setStatus(response.status)
-        console.log(response)
 
         if (response.status == 200) {
             setModal(!modal)

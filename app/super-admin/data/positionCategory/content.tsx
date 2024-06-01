@@ -24,7 +24,7 @@ const Content = ({
       cell: ({ row }) => {
         const value = parseFloat(row.getValue("simpanan pokok"));
 
-        return <div className="text-center">{handleFormat(value)}</div>;
+        return <div className="text-center">Rp. {handleFormat(value)}</div>;
       },
     },
     {
@@ -33,7 +33,7 @@ const Content = ({
       cell: ({ row }) => {
         const value = parseFloat(row.getValue("simpanan wajib"));
 
-        return <div className="text-center">{handleFormat(value)}</div>;
+        return <div className="text-center">Rp. {handleFormat(value)}</div>;
       },
     },
     {
@@ -42,7 +42,7 @@ const Content = ({
       cell: ({ row }) => {
         const value = parseFloat(row.getValue("simpanan wajib khusus"));
 
-        return <div className="text-center">{handleFormat(value)}</div>;
+        return <div className="text-center">Rp. {handleFormat(value)}</div>;
       },
     },
     {
@@ -55,7 +55,7 @@ const Content = ({
           <div className="flex items-center justify-center gap-1">
             <EditPositionCategory positionCategory={positionCategory} />
             <DeletePositionCategory positionCategory={positionCategory} />
-          </div>
+          </div>  
         );
       },
     },

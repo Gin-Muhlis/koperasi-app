@@ -86,6 +86,8 @@ const AddSubCategory = ({categories}: {categories: CategoryState[]}) => {
       const message = errorsData[firstKey][0]
 
       setError(message)
+    } else if (response.status === 400) {
+      setError(response.data.message)
     } else {
       setError(response.data.message)
     }
