@@ -32,7 +32,7 @@ const DownloadPdfInvoiceButton = ({invoiceCode, timeInvoice}: {invoiceCode: stri
         );
         setStatus(response.status)
         setIsLoading(false);
-
+        console.log(response)
 
         if (response.status == 200) {
             const blob = await response.data;

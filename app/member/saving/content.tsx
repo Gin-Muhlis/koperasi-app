@@ -51,7 +51,7 @@ const Content = ({ data, subCategories }: { data: ListSaving, subCategories: Sub
     return (
         <>
             <div
-                className={`w-full bg-white rounded transition-transform max-h-[90vh]`}
+                className={`w-full bg-white rounded transition-transform`}
             >
                 <div className="mb-5 px-4 text-md">
                     Total Simpanan: <span className="font-bold">Rp. {handleFormat(data.total_saving)}</span>

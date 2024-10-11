@@ -216,7 +216,6 @@ const EditStuff = ({ stuff, products }: { stuff: StuffState, products: ProductSt
                         </form>
                     </Form>
                 </div>
-
             </div>
             {success && <SweetAlertPopup message={success.toString()} status={status} resetState={resetStateAction} />}
             {error && <SweetAlertPopup message={error.toString()} status={status} resetState={resetStateAction} />}
