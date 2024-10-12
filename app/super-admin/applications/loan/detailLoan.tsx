@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { ListLoan } from "@/types/interface";
+import { DetailLoan, ListLoan } from "@/types/interface";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { capitalizeString, convertDateFormat, handleFormat } from "@/app/utils/helper";
@@ -34,7 +34,7 @@ const DetailLoanMember = ({ data }: { data: ListLoan }) => {
                     </div>
                     <div className="p-4 w-full grid grid-cols-1 gap-10">
                         {/* <DataTable columns={columns} data={data.detail_loans} /> */}
-                        {data.detail_loans.map((data) => (
+                        {data.detail_loans.map((data: DetailLoan) => (
                             <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 border border-solid shadow px-4 py-6">
                                 <div className="absolute left-5 -top-3 rounded text-white bg-blue-400 h-6 text-xs p-1 flex items-center justify-center text-center">
                                     {data.sub_category}
