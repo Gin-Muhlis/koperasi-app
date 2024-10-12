@@ -7,7 +7,7 @@ const DataSavingMember = ({ data, subCategories }: { data: DashboardMember, subC
     const handleTotalSaving = (data: DashboardMember, subCategories: SubCategoryState[]) => {
         let total = 0;
 
-        subCategories.map((item) => {
+        subCategories.map((item: SubCategoryState) => {
             total += data.data_saving[item.name]
         })
 
