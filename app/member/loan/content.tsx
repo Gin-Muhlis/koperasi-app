@@ -4,7 +4,7 @@ import { capitalizeString, convertDateFormat, handleFormat } from '@/app/utils/h
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ListLoan } from '@/types/interface'
+import { DetailLoan, ListLoan } from '@/types/interface'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import React from 'react'
 
@@ -14,7 +14,7 @@ const Content = ({ data }: { data: ListLoan }) => {
            {data.detail_loans.length > 0 ? 
            (
             <>
-                {data.detail_loans.map((data) => (
+                {data.detail_loans.map((data: DetailLoan) => (
                 <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 border border-solid shadow px-4 py-6">
                     <div className="absolute left-5 -top-3 rounded text-white bg-blue-400 h-6 text-xs p-1 flex items-center justify-center text-center">
                         {data.sub_category}
