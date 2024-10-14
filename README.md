@@ -46,14 +46,21 @@ The user interface is designed for cooperative members to access and view their 
 
    ```
 
-2. Install dependencies:
+2. Masuk ke direktori project:
+
+   ```bash
+   cd koperasi-app
+
+   ```
+
+3. Install dependencies:
 
    ```bash
    npm install
 
    ```
 
-3. Atur file environment:
+4. Atur file environment:
 
    ```bash
    - Duplikat file .env.example menjadi .env.local
@@ -61,7 +68,7 @@ The user interface is designed for cooperative members to access and view their 
 
    ```
 
-4. Run the development server:
+5. Run the development server:
    ```bash
    npm run dev
    ```
