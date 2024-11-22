@@ -50,29 +50,46 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
 
     const router = useRouter()
 
+
+
     useEffect(() => {
+        const handleValueAmount = (positionCategoryId: number, id: number) => {
+            if (member.data[subCategoryName].amount) {
+                const lastPayment = member.data[subCategoryName].amount;
+
+                return lastPayment;
+            }
+
+            const defaultAmount: any = positionCategories.find((data) => data.id == positionCategoryId);
+
+            const payment = defaultAmount[subCategoryName] ?? 0
+
+            return payment.toString()
+
+        }
+
         if (member) {
             const payment: string = handleValueAmount(member.position_category_id, member.id)
 
             setAmount(payment)
 
         }
-    }, [member])
+    }, [member, subCategoryName, positionCategories])
 
     const handleModal = () => {
         setModal(!modal);
     };
 
     const handleChangeTime = (type: string, value: string) => {
-       
+
 
         if (type == "MONTH") {
             setMonth(Number(value))
         } else {
             setYear(Number(value))
         }
-        
-      };
+
+    };
 
     const handlePayedMember = (dataPayments: Status[] | undefined) => {
         if (typePayment != 'monthly') {
@@ -92,20 +109,6 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
         return status
     }
 
-    const handleValueAmount = (positionCategoryId: number, id: number) => {
-        if (member.data[subCategoryName].amount) {
-            const lastPayment = member.data[subCategoryName].amount;
-
-            return lastPayment;
-        }
-        
-        const defaultAmount: any = positionCategories.find((data) => data.id == positionCategoryId);
-
-        const payment = defaultAmount[subCategoryName] ?? 0
-
-        return payment.toString()
-
-    }
 
     const handleUpdateAmount = (amount: string, id: number) => {
         const numericValue = amount.replace(/\D/g, '');
@@ -170,7 +173,7 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
         }
 
     }
-    
+
     return (
         <>
             <Button className='bg-blue-400 text-white' onClick={handleModal}>Tambah Simpanan</Button>
@@ -240,7 +243,7 @@ const FormAddSavingMember = ({ member, subCategory, positionCategories, setSubCa
                         </div>
                         <div className="flex items-center justify-end gap-3">
                             <Button onClick={handleModal}>Batal</Button>
-                            { handlePayedMember(member.data[subCategoryName].months_status) ? <Button disabled className={`text-white ${ handlePayedMember(member.data[subCategoryName].months_status).toString() == 'dibayar' ? 'bg-green-500' : 'bg-red-500'}`}>{ handlePayedMember(member.data[subCategoryName].months_status).toString() == 'dibayar' ?  handlePayedMember(member.data[subCategoryName].months_status) : 'Menunggu Pembayaran'}</Button> : <Button className="bg-green-500 text-white" disabled={isLoading} onClick={saveSaving}>{isLoading ? <Loader /> : 'Simpan Data'}</Button>}
+                            {handlePayedMember(member.data[subCategoryName].months_status) ? <Button disabled className={`text-white ${handlePayedMember(member.data[subCategoryName].months_status).toString() == 'dibayar' ? 'bg-green-500' : 'bg-red-500'}`}>{handlePayedMember(member.data[subCategoryName].months_status).toString() == 'dibayar' ? handlePayedMember(member.data[subCategoryName].months_status) : 'Menunggu Pembayaran'}</Button> : <Button className="bg-green-500 text-white" disabled={isLoading} onClick={saveSaving}>{isLoading ? <Loader /> : 'Simpan Data'}</Button>}
                         </div>
                     </div>
 

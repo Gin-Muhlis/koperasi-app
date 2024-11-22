@@ -18,6 +18,7 @@ import { resetState as resetPayment } from "@/redux/features/paymenMember-slice"
 import { resetState as resetReceivable } from "@/redux/features/receivable-slice";
 import { resetState as resetSaving } from "@/redux/features/saving-slice";
 import LogoutDialog from "@/app/components/logoutDialog";
+import Image from "next/image";
 
 const Sidebar = ({ isOpen, handleIsOpen }: { isOpen: boolean, handleIsOpen: () => void }) => {
   const { data: session } = useSession();

@@ -34,10 +34,11 @@ import { updateProfileSchema } from "@/app/utils/formSchema";
 import { MemberState, PositionCategory } from "@/types/interface";
 import { Icon } from '@iconify/react/dist/iconify.js';
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
+import Image from "next/image";
 
 const formSchema = updateProfileSchema;
 
-const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositions: PositionCategory[]}) => {
+const UpdateProfile = ({ member, dataPositions }: { member: MemberState, dataPositions: PositionCategory[] }) => {
     const { data: session } = useSession();
 
     const [imageProfile, setImageProfile] = useState<
@@ -55,7 +56,7 @@ const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositi
     const handleModal = () => {
         setModal(!modal);
     };
-    
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -100,8 +101,8 @@ const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositi
             setModal(!modal)
             setImageProfile(member.imageProfile)
             setPreviewImage(undefined)
-            
-            
+
+
             setSuccess(response.data.message)
         } else if (response.status === 422) {
             const errorsData = response.data.errors
@@ -309,7 +310,7 @@ const UpdateProfile = ({member, dataPositions}: {member: MemberState, dataPositi
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Gambar</FormLabel>
-                                            {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <img src={imageProfile?.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" />}
+                                            {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <img src={imageProfile?.toString() as string} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" />}
                                             <FormControl>
                                                 <Input type="file" {...field} accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
                                             </FormControl>

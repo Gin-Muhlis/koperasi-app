@@ -7,6 +7,7 @@ import { ProductState, StuffState } from '@/types/interface';
 import EditStuff from './editStuff';
 import DeleteStuff from './deleteStuff';
 import { handleFormat } from '@/app/utils/helper';
+import Image from 'next/image';
 
 const Content = ({ stuffs, products }: { stuffs: StuffState[], products: ProductState[] }) => {
 
@@ -18,7 +19,7 @@ const Content = ({ stuffs, products }: { stuffs: StuffState[], products: Product
         {
             accessorKey: "price",
             header: "Harga",
-            cell: ({row}) => {
+            cell: ({ row }) => {
                 const value = row.getValue('price');
 
                 return <>{handleFormat(Number(value))}</>
@@ -33,7 +34,7 @@ const Content = ({ stuffs, products }: { stuffs: StuffState[], products: Product
             header: "Gambar",
             cell: ({ row }) => {
                 return <img src={row.getValue("image")} alt="Gambar barang" className='w-12 h-12 object-cover rounded' />
-              },
+            },
         },
         {
             id: "actions",

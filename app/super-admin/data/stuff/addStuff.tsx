@@ -34,6 +34,7 @@ import SweetAlertPopup from "@/app/components/sweetAlertPopup";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Label } from "@/components/ui/label";
 import { handleFormat } from "@/app/utils/helper";
+import Image from "next/image";
 
 const formSchema = addStuffSchema;
 

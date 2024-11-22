@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import SweetAlertPopup from "./sweetAlertPopup";
+import Image from "next/image";
 
 const FormRegister = ({ positionCategories }: { positionCategories: PositionCategory[] }) => {
   const [imageProfile, setImageProfile] = useState(null);
@@ -205,7 +206,7 @@ const FormRegister = ({ positionCategories }: { positionCategories: PositionCate
             </label>
 
             {previewImage ? (
-              <img src={previewImage} className="w-14 h-14 mb-1 object-cover" />
+              <img src={previewImage} alt="Preview image" className="w-14 h-14 mb-1 object-cover" />
             ) : (
               <div className="w-14 h-14 bg-white mb-1"></div>
             )}

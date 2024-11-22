@@ -9,9 +9,10 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 
-const DetailMember = ({ isModal, resetModal,  member }: { isModal: boolean, member: MemberState | undefined, resetModal: () => void }) => {
+const DetailMember = ({ isModal, resetModal, member }: { isModal: boolean, member: MemberState | undefined, resetModal: () => void }) => {
     const [modal, setModal] = useState(isModal);
 
     const handleModal = () => {
@@ -54,7 +55,7 @@ const DetailMember = ({ isModal, resetModal,  member }: { isModal: boolean, memb
                         </div>
                         <div>
                             <Label>Gambar Profile</Label>
-                            <img src={member?.imageProfile?.toString()} alt="Gambar member" className="w-14 h-14 rounded object-cover" />
+                            <img src={member?.imageProfile?.toString() as string} alt="Gambar member" className="w-14 h-14 rounded object-cover" />
                         </div>
                         <div>
                             <Label>Username</Label>

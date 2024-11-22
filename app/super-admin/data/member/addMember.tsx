@@ -34,6 +34,7 @@ import { createMemberSchema } from "@/app/utils/formSchema";
 import { PositionCategory, RoleState } from "@/types/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
+import Image from "next/image";
 
 const formSchema = createMemberSchema;
 
@@ -163,14 +164,12 @@ const AddMember = ({
         <span>Tambah Data</span>
       </Button>
       <div
-        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${
-          modal ? "block" : "hidden"
-        }`}
+        className={`p-5 fixed inset-0 z-50 w-full min-h-screen bg-black/80 flex items-center justify-center ${modal ? "block" : "hidden"
+          }`}
       >
         <div
-          className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${
-            modal ? "scale-100" : "scale-0"
-          }`}
+          className={`w-11/12 max-w-4xl bg-white rounded h-full transition-transform max-h-[90vh] overflow-y-scroll ${modal ? "scale-100" : "scale-0"
+            }`}
         >
           <div className="p-4 border-b border-b-slate-300 mb-4">
             <h3 className="font-bold text-lg text-black">

@@ -35,6 +35,7 @@ import { MemberState, PositionCategory, RoleState } from "@/types/interface";
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Switch } from "@/components/ui/switch";
 import SweetAlertPopup from "@/app/components/sweetAlertPopup";
+import Image from "next/image";
 
 const formSchema = updateMemberSchema;
 
@@ -362,7 +363,7 @@ const EditMember = ({ isModal, resetModal, member, roles, positionCategories }: 
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Gambar</FormLabel>
-                                            {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <img src={imageProfile?.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" />}
+                                            {previewImage ? <img src={previewImage.toString()} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" /> : <img src={imageProfile?.toString() as string} alt="Gambar member" className="w-14 h-14 object-cover rounded mb-2" />}
                                             <FormControl>
                                                 <Input type="file" {...field} accept=".jpg, .jpeg, .png" onChange={handleImageInput} disabled={isLoading} />
                                             </FormControl>

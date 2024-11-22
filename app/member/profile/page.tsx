@@ -5,6 +5,7 @@ import { getPositionCategories, getProfile } from '@/app/utils/featuresApi'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import UpdateProfile from './updateProfile'
+import Image from 'next/image'
 
 const MemberProfile = async () => {
   const session = await getServerSession(authOptions);
