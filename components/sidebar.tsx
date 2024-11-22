@@ -33,6 +33,7 @@ const Sidebar = ({ isOpen, handleIsOpen }: { isOpen: boolean, handleIsOpen: () =
 
   useEffect(() => {
     if (session) {
+      console.log(session?.user.accessToken)
       getDataProfile(session?.user.accessToken);
 
       const role = session?.user.role
